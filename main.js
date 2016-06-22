@@ -212,7 +212,7 @@ var renderAll = function() {
 
 var blob = null;
 var xhr = new XMLHttpRequest();
-xhr.open("GET", "/assets/attempt3.csv");
+xhr.open("GET", "attempt3.csv");
 xhr.responseType = "blob";//force the HTTP response, response-type header to be blob
 xhr.onload = function()
 {
