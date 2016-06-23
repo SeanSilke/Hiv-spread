@@ -133,7 +133,8 @@ path {
   position: relative;
   width: 212px;
   z-index: 100;
-  font-size: 0px
+  font-size: 0px;
+  border-radius: 3px;
 }
 
 .map_header .item.drop_down {
@@ -159,9 +160,25 @@ path {
   cursor: pointer;
 }
 
+.map_header .scrollable .content .item {
+  font-size: 16px;
+  font-family: 'PTSans-Regular';
+  color: #EEEEEE;
+  cursor: pointer;
+}
 
-.map_header .scrollable .content div:hover  {
-  background-color: green;
+.map_header .scrollable .content .item:hover {
+  font-size: 16px;
+  font-family: 'PTSans-Regular';
+  color: #EEEEEE;
+  cursor: pointer;
+}
+
+.map_header .scrollable .content .active {
+  font-size: 16px;
+  font-family: 'PTSans-Regular';
+  color: #EEEEEE;
+  cursor: pointer;
 }
 
 /*---------------select-style-----------------*/
@@ -211,6 +228,7 @@ path {
   right: 10%;
   top: 35%;
   border-radius: 3px;
+  visibility: hidden;
 }
 
 .banner .head .region {

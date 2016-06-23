@@ -1,7 +1,16 @@
+$(function(){
+
 //----Data----
 let data  = {
   byRegionArr: [],
 }
+
+// -------------Global State----------
+let state = {
+  year: 1999,
+  regionId: "",
+}
+
 
 let regionsArr =
 
@@ -93,11 +102,7 @@ let regionsArr =
 ]
 
 
-// -------------Global State----------
-let state = {
-  year: 1999,
-  regionId: "Иркутская_область",
-}
+
 
 // ------------Data process functions------
 
@@ -133,30 +138,6 @@ let tesFunction =() =>{
 }
 
 
-//------------  .map_header .item.drop_down .close_button    -------------------
-
-
-(function(){
-
-var isOpen = false;
-
-$(".map_header .item.drop_down .close_button").click(
-  function(){
-
-  $(".scrollable").css('visibility', 'visible')
-
-
-    if(isOpen){
-      $(".scrollable").css('visibility', 'hidden')
-       isOpen = false
-     } else {
-      $(".scrollable").css('visibility', 'visible')
-      isOpen = true
-    }
-  }
-)
-
-})()
 
 // ------------------Map---------------
 
@@ -190,10 +171,12 @@ var setRegion = (function(){
   var oldElem = null
 
   var fn = function ( ) {
-    oldElem && oldElem.classList.remove('selected');
-    var elem =  document.getElementById(state.regionId)
-    elem.classList.add('selected')
-    oldElem = elem;
+      oldElem && oldElem.classList.remove('selected');
+      if (state.regionId){
+      var elem =  document.getElementById(state.regionId)
+      elem.classList.add('selected')
+      oldElem = elem;
+    }
   }
 
   return fn;
@@ -209,7 +192,7 @@ var renderMap =  function() {
 
 
 
-// ------------
+// ------------ Region hover------------
 
 $("#svg-map path, #svg-map polygon").mouseover(
   function(e){
@@ -231,6 +214,7 @@ var renderAll = function() {
   renderBanner()
   renderYear();
   setRegion();
+  dropDowdn.render();
 }
 
 
@@ -300,21 +284,90 @@ $(".years .col").on("click", function(){
 })
 
 
-// -----------Build Select---------
-
-var renderSelect = function() {
-
-regionsArr.forEach(
-  function(region){
-    $(".scrollable .content").
-      append(`<div data-regionId="${region}"> ${region} </div>`)
+document.body.addEventListener("click",
+  function(e){
+    dropDowdn.close();
   }
 )
+
+//------------   Drop down close_button    -------------------
+
+
+var dropDowdn = (function(){
+
+var isOpen = false;
+var scrollable = $(".scrollable");
+var closeButton = $(".map_header .item.drop_down .close_button");
+var container =  $(".scrollable .content");
+var head = $(".drop_down .head");
+
+$(".map_header .item.drop_down").click(
+  function(e){
+    e.stopPropagation();
+  }
+)
+
+var close = function() {
+  scrollable.css('visibility', 'hidden')
+   isOpen = false
 }
+
+var open = function() {
+  scrollable.css('visibility', 'visible')
+   isOpen = true;
+}
+
+closeButton.click(
+  function(e){
+    e.stopPropagation();
+    if(isOpen){
+      close();
+     } else {
+      open();
+    }
+  }
+)
+
+
+var render = function() {
+
+  head.text(state.regionId || "Регион")
+  //Dirty Hack
+  container.empty();
+
+  regionsArr.forEach(
+
+    function(region){
+
+      var elem = $(`<div class="item" data-regionId="${region}"> ${region} </div>`);
+
+
+      if (region === state.regionId){
+        elem = $(`<div class="active" data-regionId="${region}"> ${region} </div>`);
+      }
+
+      container.append(elem)
+
+      elem.click(function(){
+        state.regionId = this.dataset.regionid;
+        renderAll();
+        close();
+      })
+    }
+  )
+}
+
+return {
+  open: open,
+  close: close,
+  render: render,
+}
+
+})()
 
 
 //Не вызывать в рендер аллл, а испольняется одни раз
-renderSelect();
+dropDowdn.render();
 
 $("select").change(function(){
   state.regionId =  this.value;
@@ -323,54 +376,72 @@ $("select").change(function(){
 
 
 
-//------------renderPie----------------
-
-var renderPie = ( function(){
-
-var path = null;
-
-
-var renderPie = function(deg){
-
-var svgElem=document.getElementById("svg-pie");
-
-if(path) svgElem.removeChild(path);
-
-
-var cx=50;
-var cy=50;
-var rx=40;
-var ry=40;
-
-var p = svgElem.createSVGPoint();
-    p.x = 0;
-    p.y = 1;
-
-
-var m = svgElem.createSVGMatrix();
-
-
-var p2 = p.matrixTransform(m.rotate(deg));
-    p2.x = cx + p2.x*rx;
-    p2.y = cy + p2.y*ry;
-
-
-path = document.createElementNS("http://www.w3.org/2000/svg","path");
-    svgElem.appendChild(path);
-var d="M"+cx+" "+(cy+ry)+"A"+rx+" "+ry+" 0 0 1"+p2.x+" "+p2.y+"L"+cx+" "+cy+"z";
-    path.setAttribute("d",d);
-    path.setAttribute("fill","url(#img1)");
-
-}
-  return renderPie
-
-})();
-
-
 //------------Render Banner----------------
 
 
-var renderBanner = function() {
+var  renderBanner =  (function () {
+
+      //------------renderPie----------------
+  var renderPie = ( function(){
+
+  var path = null;
+
+
+  var renderPie = function(deg){
+
+  var svgElem=document.getElementById("svg-pie");
+
+  if(path) svgElem.removeChild(path);
+
+
+  var cx=50;
+  var cy=50;
+  var rx=40;
+  var ry=40;
+
+  var p = svgElem.createSVGPoint();
+      p.x = 0;
+      p.y = 1;
+
+
+  var m = svgElem.createSVGMatrix();
+
+
+  var p2 = p.matrixTransform(m.rotate(deg));
+      p2.x = cx + p2.x*rx;
+      p2.y = cy + p2.y*ry;
+
+
+  path = document.createElementNS("http://www.w3.org/2000/svg","path");
+      svgElem.appendChild(path);
+  var d="M"+cx+" "+(cy+ry)+"A"+rx+" "+ry+" 0 0 1"+p2.x+" "+p2.y+"L"+cx+" "+cy+"z";
+      path.setAttribute("d",d);
+      path.setAttribute("fill","url(#img1)");
+
+  }
+    return renderPie
+
+  })();
+
+
+var banner = $(".banner")
+var closeButton = $(".banner .head .btn.close")
+
+
+
+var close = function() {
+  banner.css('visibility', 'hidden')
+  state.regionId = "";
+  renderAll();
+}
+
+var open = function() {
+  banner.css('visibility', 'visible')
+}
+
+closeButton.click(close)
+
+var renderBanner = function( ) {
 
   var infected = infectedInRegion(state.regionId);
   var died = diedInRegion(state.regionId);
@@ -380,5 +451,14 @@ var renderBanner = function() {
   $(".banner .body .data .item .dead").text(died)
 
   renderPie(360*(died/infected))
-
+  if(state.regionId){
+    open();
+  }
 }
+
+return renderBanner
+
+})()
+
+
+})
