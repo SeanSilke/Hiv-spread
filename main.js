@@ -132,6 +132,32 @@ let tesFunction =() =>{
 
 }
 
+
+//------------  .map_header .item.drop_down .close_button    -------------------
+
+
+(function(){
+
+var isOpen = false;
+
+$(".map_header .item.drop_down .close_button").click(
+  function(){
+
+  $(".scrollable").css('visibility', 'visible')
+
+
+    if(isOpen){
+      $(".scrollable").css('visibility', 'hidden')
+       isOpen = false
+     } else {
+      $(".scrollable").css('visibility', 'visible')
+      isOpen = true
+    }
+  }
+)
+
+})()
+
 // ------------------Map---------------
 
 var getColor = function(percent){
@@ -280,17 +306,14 @@ var renderSelect = function() {
 
 regionsArr.forEach(
   function(region){
-    let selected = ""
-    if(region === state.regionId) {
-      selected = "selected"
-    }
-    $("select").append(`<option value="${region}" selected ${selected} >${region}</option>`)
+    $(".scrollable .content").
+      append(`<div data-regionId="${region}"> ${region} </div>`)
   }
 )
 }
 
 
-//Не взодит в рендер аллл испольняется одни раз
+//Не вызывать в рендер аллл, а испольняется одни раз
 renderSelect();
 
 $("select").change(function(){

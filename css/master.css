@@ -60,9 +60,9 @@ body {
 }
 
 
-* {
+/*.map * {
   box-sizing: border-box;
-}
+}*/
 
 polygon {
   transition: fill 0.5s;
@@ -84,6 +84,13 @@ path {
 
 .map_body {
   position: relative;
+}
+
+
+.text{
+  font-size: 16px;
+  font-family: 'PTSans-Regular';
+  color: #EEEEEE;
 }
 
 /*---------------------------------*/
@@ -110,6 +117,51 @@ path {
   border: 2px solid #58595B;
   margin-right: 15px;
   cursor: pointer;
+}
+
+.map_header .item.rel {
+  padding: 13px;
+  border: 2px solid #58595B;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.map_header .item.drop_down {
+  padding: 13px;
+  border: 2px solid #58595B;
+  margin-right: 15px;
+  position: relative;
+  width: 212px;
+  z-index: 100;
+  font-size: 0px
+}
+
+.map_header .item.drop_down {
+  padding: 13px;
+  border: 2px solid #58595B;
+  margin-right: 15px;
+  position: relative;
+  width: 212px;
+  z-index: 100;
+  font-size: 0px
+}
+
+.map_header .item.drop_down  .head{
+  display: inline-block;
+}
+
+.map_header .item.drop_down .close_button {
+  background-color: green;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+}
+
+
+.map_header .scrollable .content div:hover  {
+  background-color: green;
 }
 
 /*---------------select-style-----------------*/
