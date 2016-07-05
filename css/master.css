@@ -45,7 +45,7 @@ body {
   stroke-miterlimit : 10;
 }
 
-#svg-map path:hover, #svg-map polygon:hover ,#svg-map .selected {
+#svg-map path:hover, #svg-map polygon:hover {
   animation: width 1s infinite;
   animation-direction: alternate;
   animation-timing-function: ease-in;
@@ -58,6 +58,13 @@ body {
     stroke-width : 1px;
   }
 }
+
+#svg-map .selected {
+  stroke-width : 1px;
+  stroke: #1A1517;
+}
+
+
 
 
 /*.map * {
@@ -104,6 +111,7 @@ path {
   font-size: 16px;
   font-family: 'PTSans-Regular';
   color: #EEEEEE;
+  border-radius: 3px;
 }
 
 .map_header .item.abs {
@@ -115,56 +123,128 @@ path {
 .map_header .item.rel {
   padding: 13px;
   border: 2px solid #58595B;
-  margin-right: 15px;
+  margin: 0px 5%;
   cursor: pointer;
 }
 
-.map_header .item.rel {
-  padding: 13px;
-  border: 2px solid #58595B;
-  margin-right: 15px;
-  cursor: pointer;
+
+.scrollable {
+/* padding: 0% 10%; */
+position: relative;
+border: 1px solid gray;
+overflow: hidden;
+height: 260px;
+width: 252px;
+background-color: #1B1010;
+border-radius: 3px;
+position: absolute;
+left: -2px;
+top: 47px;
+visibility: hidden;
+}
+
+.scrollable.showScroll::after {
+position: absolute;
+content: '';
+top: 5%;
+right: 21px;
+height: 90%;
+width: 5px;
+border: 1px solid #58595B;
+}
+
+.scrollable .content-wrapper {
+width: 100%;
+height: 100%;
+padding-right: 50%;
+overflow-y: scroll;
+}
+.scroller {
+z-index: 5;
+cursor: pointer;
+position: absolute;
+width: 7px;
+/* border-radius: 5px; */
+background: #58595B;
+top: 5%;
+right: 21px;
+-webkit-transition: top .08s;
+-moz-transition: top .08s;
+-ms-transition: top .08s;
+-o-transition: top .08s;
+transition: top .08s;
+}
+.content-wrapper .content {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+.content-wrapper .content div {
+  font-family: 'PTSans-Regular';
+  font-size: 16px;
+  color: #93A1A8;
+  /*padding-left: 20px;*/
+  padding: 10px 0px 10px 20px
+
 }
 
 .map_header .item.drop_down {
-  padding: 13px;
   border: 2px solid #58595B;
   margin-right: 15px;
   position: relative;
-  width: 212px;
+  width: 250px;
   z-index: 100;
   font-size: 0px;
-  border-radius: 3px;
+
 }
 
-.map_header .item.drop_down {
-  padding: 13px;
-  border: 2px solid #58595B;
-  margin-right: 15px;
-  position: relative;
-  width: 212px;
-  z-index: 100;
-  font-size: 0px
-}
 
 .map_header .item.drop_down  .head{
   display: inline-block;
 }
 
+.map_header .item.drop_down  .head.text {
+  padding: 13px;
+}
+
+.map_header .item.drop_down  .separator {
+  width: 2px;
+  height: 50px;
+  position: fixed;
+  left: 100px;
+  color: green;
+}
+
 .map_header .item.drop_down .close_button {
-  background-color: green;
-  width: 20px;
-  height: 20px;
+  /*background-color: green;*/
+  /*background-image: url("../arrow.svg");*/
+  /*background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;*/
+  /*transform: rotate(180deg);*/
+  width: 46px;
+  height: 46px;
   display: inline-block;
   float: right;
   cursor: pointer;
+  color: red;
+  border-left: 2px solid #58595B;
+  /*border-right: 2px solid red;*/
+  /*padding: 30px;*/
+}
+
+.map_header .item.drop_down .close_button img {
+  padding: 13px;
+  width: 20px;
+  height: 20px;
 }
 
 .map_header .scrollable .content .item {
-  font-size: 16px;
-  font-family: 'PTSans-Regular';
-  color: #EEEEEE;
-  cursor: pointer;
+  display: block;
 }
 
 .map_header .scrollable .content .item:hover {
@@ -190,8 +270,6 @@ path {
 
 .years {
   font-size: 0;
-  border-top: 2px solid #93A1A8;
-  border-bottom: 2px solid #93A1A8;
   width: 100%;
 }
 .col {
@@ -211,10 +289,25 @@ path {
    vertical-align: middle;
    padding-bottom: 15px;
    color:#93A1A8;
+   position: relative;
 }
 
 .col :hover {
-  background-color: rgba(180,32,37,0.5);
+  /*background-color: rgba(180,32,37,0.5);*/
+  /*border-radius: 50%;*/
+}
+
+
+.active.col>div::before {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    content: "";
+    position: absolute;
+    top: -6%;
+    left: 2%;
+    background-color: rgb(180,32,37);
+    z-index: -1;
 }
 
 /*-------------Banner--------------------*/
