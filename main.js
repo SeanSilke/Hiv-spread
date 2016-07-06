@@ -28,9 +28,6 @@ $(function(){
 
   // ------------Data process functions------
 
-  let proseedData = function(csvFile) {
-    return csvFile.split("\n").map(e => e.split(";"));
-  }
 
   let newDataProseed = function(csvFile){
       var r  = {}
@@ -103,7 +100,7 @@ $(function(){
 
   };
 
-  var setColor = function(year) {
+  var setRegsColor = function(year) {
 
     Object.keys(data).forEach(function(reginoId){
 
@@ -135,7 +132,7 @@ $(function(){
 
   //          ---Render Map----
   var renderMap =  function() {
-    setColor(state.year);
+    setRegsColor(state.year);
     setRegion()
   }
 
@@ -428,8 +425,8 @@ $(function(){
         collide =  doElsCollide(popUp[0], r);
       }
 
-      var infected = data[state.regionId].absInfected[state.year]
-      var died = data[state.regionId].absDied[state.year]
+      var infected = data[state.regionId].absInfected[state.year] || "н/д";
+      var died = data[state.regionId].absDied[state.year] || "н/д";
       var name =  data[state.regionId].name;
       var stateNameFeald = $(".banner .head .region span");
       var infectedFeald =   $(".banner .body .data .item .infected");
