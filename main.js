@@ -104,8 +104,18 @@ $(function(){
 
     Object.keys(data).forEach(function(reginoId){
 
+      var value = data[reginoId].absInfected[year];
+      var percent;
+      if (value < 100) {
+        percent = 0;
+      } else {
+        percent = (Math.log2(value / 100)) / 9;
+      }
+
+      console.log(reginoId, value ,percent);
+
       $('#'+ reginoId).css({
-        'fill': getColor(data[reginoId].absInfected[year]/1000) ,
+        'fill': getColor(percent) ,
       });
 
     })
