@@ -10,6 +10,17 @@ doElsCollide = function(el1, el2) {
    rect1.height + rect1.top > rect2.top)
 };
 
+var getColor = function(percent){
+  if (percent>1) return "rgb(180,32,37)"
+
+  var r = Math.floor( 232 - (232 -180)*percent);
+  var g = Math.floor(232 - (232 -32) * percent);
+  var b = Math.floor(232 - (232 -37) * percent);
+
+  return `rgb(${r},${g},${b})`
+
+};
+
 
 
 
@@ -89,17 +100,6 @@ $(function(){
 
   // ------------------Map---------------
 
-  var getColor = function(percent){
-    if (percent>1) return "rgb(180,32,37)"
-
-    var r = Math.floor( 232 - (232 -180)*percent);
-    var g = Math.floor(232 - (232 -32) * percent);
-    var b = Math.floor(232 - (232 -37) * percent);
-
-    return `rgb(${r},${g},${b})`
-
-  };
-
   var setRegsColor = function(year) {
 
     Object.keys(data).forEach(function(reginoId){
@@ -153,14 +153,26 @@ $(function(){
     }
   )
 
-  //----Init legned ------
 
-  var iniLegend = function(){
-    $(".legend .bloc").each(function(id,e){
-      var color = getColor((id+1)/10)
-      $(e).css({"background-color": color})
-    })
-  }
+  var legend = (function() {
+
+    //----Init legned ------
+
+    var init = function(){
+      $(".legend .bloc .color").each(function(id,e){
+        var color = getColor((id+1)/10)
+        $(e).css({"background-color": color})
+      })
+
+      $(".legend .bloc .year").each(function(id,e){
+        $(e).text(100*Math.pow(2, id))
+      })
+    }
+
+    return {"init": init};
+    })();
+
+
 
   //-------renderYear----------------
 
@@ -480,7 +492,7 @@ $(function(){
 
 
       data =  newDataProseed(e.srcElement.result);
-      iniLegend();
+      legend.init();
       dropDowdn.render();
       dropDowdn.createScroller()
       renderAll();
