@@ -21,6 +21,68 @@ var getColor = function(percent){
 
 };
 
+// ------------Data process functions------
+
+
+let newDataProseed = function(csvFile){
+    var r  = {}
+    var regionsArr =  csvFile.split("\n")
+    regionsArr.pop() //remove end line
+
+    regionsArr.forEach (function(e, i){
+        e = e.split(";")
+        key = e.shift();
+        shortName = e.shift();
+        name = e.shift();
+        r[key] = {
+          name: name,
+          shortName: shortName,
+          rowYearsData: e,
+        }
+    })
+
+    var years = []
+    for(var i = 0 ; i <= 20; i++){
+      years.push(1994+i);
+    }
+
+
+
+   Object.keys(r).forEach(function(region) {
+
+     r[region].absDied = {};
+     r[region].absInfected = {};
+     r[region].relInfected = {}
+     years.forEach(function(year){
+       r[region].absInfected[year] = infectedInYear(year,r[region].rowYearsData)
+       r[region].absDied[year] = diedInYear(year,r[region].rowYearsData)
+       r[region].relInfected[year] = relnIfectedInYear(year,r[region].rowYearsData)
+     })
+
+
+   })
+
+  return r;
+
+}
+
+let infectedInYear = function(year, rowRregData) {
+  let ofset = 0 + (2014 - year)*3;
+  return rowRregData[ofset]
+}
+
+
+let diedInYear = function(year, rowRregData){
+  let ofset = 1 + (2014 - year)*3;
+  return rowRregData[ofset];
+}
+
+let relnIfectedInYear = function(year, rowRregData){
+  let ofset = 2 + (2014 - year)*3;
+  return rowRregData[ofset];
+}
+
+
 
 
 
@@ -28,196 +90,179 @@ $(function(){
 
   //----Data----
   let data  = {
-    // byRegionArr: [],
+
   }
 
   // -------------Global State------------
   let state = {
     year: 1999,
     regionId: "",
-  }
-
-  // ------------Data process functions------
-
-
-  let newDataProseed = function(csvFile){
-      var r  = {}
-      var regionsArr =  csvFile.split("\n")
-      regionsArr.pop() //remove end line
-
-      regionsArr.forEach (function(e, i){
-          e = e.split(";")
-          key = e.shift();
-          shortName = e.shift();
-          name = e.shift();
-          r[key] = {
-            name: name,
-            shortName: shortName,
-            rowYearsData: e,
-          }
-      })
-
-      var years = []
-      for(var i = 0 ; i <= 20; i++){
-        years.push(1994+i);
-      }
-
-
-
-     Object.keys(r).forEach(function(region) {
-
-       r[region].absDied = {};
-       r[region].absInfected = {};
-       r[region].relInfected = {}
-       years.forEach(function(year){
-         r[region].absInfected[year] = infectedInYear(year,r[region].rowYearsData)
-         r[region].absDied[year] = diedInYear(year,r[region].rowYearsData)
-         r[region].relInfected[year] = relnIfectedInYear(year,r[region].rowYearsData)
-       })
-
-
-     })
-
-    return r;
-
-  }
-
-  let infectedInYear = function(year, rowRregData) {
-    let ofset = 0 + (2014 - year)*3;
-    return rowRregData[ofset]
-  }
-
-
-  let diedInYear = function(year, rowRregData){
-    let ofset = 1 + (2014 - year)*3;
-    return rowRregData[ofset];
-  }
-
-  let relnIfectedInYear = function(year, rowRregData){
-    let ofset = 2 + (2014 - year)*3;
-    return rowRregData[ofset];
+    display: "abs"
   }
 
   // ------------------Map---------------
 
-  var setRegsColor = function(year) {
-
-    Object.keys(data).forEach(function(reginoId){
-
-      var value = data[reginoId].absInfected[year];
-      var percent;
-      if (value < 100) {
-        percent = 0;
-      } else {
-        percent = (Math.log2(value / 100)) / 9;
-      }
-
-      console.log(reginoId, value ,percent);
-
-      $('#'+ reginoId).css({
-        'fill': getColor(percent) ,
-      });
-
-    })
-  }
+  var map = (function(){
 
 
-  var setRegion = (function(){
+    var regions = $("#svg-map path, #svg-map polygon");
+    var btn = $(".map .map_header .btn")
 
-    var oldElem = null
-
-    var fn = function() {
-        oldElem && oldElem.classList.remove('selected');
-        if (state.regionId){
-          var elem =  document.getElementById(state.regionId)
-          elem.classList.add('selected')
-          oldElem = elem;
-      }
-    }
-
-    return fn;
-
-  })()
-
-
-  //          ---Render Map----
-  var renderMap =  function() {
-    setRegsColor(state.year);
-    setRegion()
-  }
-
-
-
-  // ------------ Region hover------------
-
-  $("#svg-map path, #svg-map polygon").mouseover(
-    function(e){
-      e.target.parentElement.insertBefore(e.target, e.target.firstChild);
-    }
-  )
-
-  $("#svg-map path, #svg-map polygon").click(
-    function(e){
-      state.regionId = e.target.id;
+    btn.click(function(){
+      btn.toggleClass("active")
+      state.display = this.dataset.displaytype
       renderAll();
+    })
+
+    var setRegsColor = function(year) {
+
+      Object.keys(data).forEach(function(reginoId){
+
+        var value, percent;
+
+        if (state.display == "abs"){
+
+          value = data[reginoId].absInfected[year];
+
+          if (value < 100) {
+            percent = 0;
+          } else {
+            percent = (Math.log2(value / 100)) / 9;
+          }
+        }else {
+          value = data[reginoId].relInfected[year];
+
+          if (value < 10) {
+            percent = 0;
+          } else {
+            percent = (Math.log2(value / 10)) / 9;
+          }
+
+        }
+
+        $('#'+ reginoId).css({
+          'fill': getColor(percent) ,
+        });
+      })
     }
-  )
 
 
+    var setActiveRegion = (function(){
+
+      var oldElem = null
+
+      var setActiveRegion = function(regionId) {
+          oldElem && oldElem.classList.remove('selected');
+          if (regionId){
+            var elem =  document.getElementById(regionId)
+            elem.classList.add('selected')
+            oldElem = elem;
+        }
+      }
+
+      return setActiveRegion;
+
+    })()
+
+
+    //          ---Render Map----
+    var render =  function() {
+      setRegsColor(state.year);
+      this.setActiveRegion(state.regionId)
+    }
+
+
+
+    // ------------ Region hover------------
+
+    regions.mouseover(
+      function(e){
+        e.target.parentElement.insertBefore(e.target, e.target.firstChild);
+      }
+    )
+
+    regions.click(
+      function(e){
+        state.regionId = e.target.id;
+        renderAll();
+      }
+    )
+
+
+    return {
+            render: render,
+            setActiveRegion: setActiveRegion
+          }
+
+  })();
+
+  // ---------------Legend----------------
   var legend = (function() {
 
     //----Init legned ------
 
-    var init = function(){
+    var initColors = function () {
       $(".legend .bloc .color").each(function(id,e){
         var color = getColor((id+1)/10)
         $(e).css({"background-color": color})
       })
+    }
+
+    var renderValues = function () {
+      var multiplier = state.display == "abs" ? 100 : 10;
 
       $(".legend .bloc .year").each(function(id,e){
-        $(e).text(100*Math.pow(2, id))
+        $(e).text(multiplier*Math.pow(2, id))
       })
     }
 
-    return {"init": init};
+    var init = function(){
+      initColors();
+      renderValues();
+    }
+
+    var render =  function() {
+      renderValues();
+    }
+
+    return {
+              "init": init,
+              render: render,
+            };
     })();
 
+  //-------Years----------------
 
+  var years = (function(){
 
-  //-------renderYear----------------
+    var render = function() {
 
-  var renderYear = function() {
+      $(".years .col").each( function(id,e){
+        var year = parseInt($(e).attr("id"))
+        if (year === state.year){
+          $(e).addClass( "active" )
+        }else {
+          $(e).removeClass( "active" )
+        }
+      })
 
-  $(".years .col").each( function(id,e){
-    var year = parseInt($(e).attr("id"))
-    if (year === state.year){
-      $(e).addClass( "active" )
-    }else {
-      $(e).removeClass( "active" )
     }
-  })
 
-  }
+    // _____________click__________
 
+    $(".years .col").on("click", function(){
+      var year = parseInt ($(this).attr("id"))
+      state.year = year;
+      renderAll();
+    })
 
-  // _____________Year click__________
-
-
-  $(".years .col").on("click", function(){
-    var year = parseInt ($(this).attr("id"))
-    state.year = year;
-    renderAll();
-  })
+    return {render: render}
 
 
-  document.body.addEventListener("click",
-    function(e){
-      dropDowdn.close();
-    }
-  )
+  })();
+
 
   //------------   Drop down  -------------------
-
 
   var dropDowdn = (function(){
 
@@ -374,14 +419,25 @@ $(function(){
 
   })();
 
+  document.body.addEventListener("click",
+    function(e){
+      dropDowdn.close();
+    }
+  )
 
   //------------ popUp ----------------
-
 
   var  popUp =  (function () {
 
     var popUp = $(".banner")
     var closeButton = $(".banner .head .btn.close")
+    var pieContainer = $(".banner .body .pie");
+
+    var dataFields = $(".banner .body .data .item");
+    var stateNameFeald = popUp.find(".head .region span");
+    var infectedFeald = dataFields.find(".infected");
+    var diedFeald = dataFields.find(".dead");
+    var infectedTextFeald = $(dataFields.find(".leble")[0]);
 
 
     var renderPie = ( function(){
@@ -389,6 +445,7 @@ $(function(){
       var svgElem=document.getElementById("svg-pie");
 
       var renderPie = function(deg){
+        if(!svgElem) return;
         if(path) svgElem.removeChild(path);
 
         var cx=50,
@@ -421,7 +478,6 @@ $(function(){
 
     }
       return renderPie
-
     })();
 
 
@@ -437,28 +493,53 @@ $(function(){
 
     closeButton.click(close)
 
-    var render = function( ) {
-
-      if(!state.regionId) return;
-
+    var isCollide = function(){
       var r = document.getElementById(state.regionId);
 
       if (r && popUp[0]){
         collide =  doElsCollide(popUp[0], r);
       }
+    };
 
-      var infected = data[state.regionId].absInfected[state.year] || "н/д";
-      var died = data[state.regionId].absDied[state.year] || "н/д";
-      var name =  data[state.regionId].name;
-      var stateNameFeald = $(".banner .head .region span");
-      var infectedFeald =   $(".banner .body .data .item .infected");
-      var diedFeald = $(".banner .body .data .item .dead");
+    var render = function( ) {
+
+      if(!state.regionId) return;
+
+      var name, infected, died,infectedText;
+
+
+      name =  data[state.regionId].name;
+
+
+
+
+
+      if(state.display == "rel")
+        {
+          pieContainer.hide();
+          $(dataFields[1]).hide();
+          // console.log($(dataFields[0]).find(".infected"));
+          $(dataFields[0]).find(".infected").css({width:"auto"});
+          died = null;
+          infected = data[state.regionId].relInfected[state.year] || "н/д";
+          infectedText = "Число инфицированных на 100 тысяч населения"
+        }
+      else
+        {
+          infected = data[state.regionId].absInfected[state.year] || "н/д";
+          died = data[state.regionId].absDied[state.year] || "н/д";
+          pieContainer.show()
+          $(dataFields[1]).show();
+          $(dataFields[0]).find(".infected").css({width:"23%"});
+          renderPie(360*(died/infected))
+          infectedText = "Общее число инфицированных";
+        }
 
       stateNameFeald.text(name);
       infectedFeald.text(infected);
+      infectedTextFeald.text(infectedText)
       diedFeald.text(died);
 
-      renderPie(360*(died/infected))
       if(state.regionId){
         open();
       }
@@ -470,14 +551,17 @@ $(function(){
 
   })()
 
-
-
   var renderAll = function() {
-    renderMap();
-    renderYear();
+    map.render();
+    years.render();
     popUp.render()
-    setRegion();
     dropDowdn.render();
+    legend.render();
+  };
+
+  var initAll = function() {
+    legend.init();
+    dropDowdn.createScroller()
   };
 
 
@@ -502,9 +586,7 @@ $(function(){
 
 
       data =  newDataProseed(e.srcElement.result);
-      legend.init();
-      dropDowdn.render();
-      dropDowdn.createScroller()
+      initAll();
       renderAll();
 
   });

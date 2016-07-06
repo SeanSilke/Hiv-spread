@@ -36,6 +36,8 @@ body {
   padding: 0;
   margin: 30px 0;
   background-color: #1A1517;
+  /*max-width: 1000px;*/
+  min-width: 1000px
 }
 
  #svg-map path, #svg-map polygon {
@@ -114,17 +116,23 @@ path {
   border-radius: 3px;
 }
 
-.map_header .item.abs {
-  background-color: #B42025;
-  padding: 15px;
+.map_header .item.btn {
+  border: 2px solid #58595B;
   cursor: pointer;
+  padding: 13px;
 }
 
-.map_header .item.rel {
-  padding: 13px;
-  border: 2px solid #58595B;
-  margin: 0px 5%;
+.map_header .item.btn.active {
+  background-color: #B42025;
   cursor: pointer;
+  border: none;
+  padding: 15px;
+  pointer-events: none;
+}
+
+.map_header> .item:nth-of-type(2) {
+  padding: 13px ;
+  margin: 0px 1%;
 }
 
 
@@ -270,10 +278,11 @@ user-select: none;
 
 .years {
   font-size: 0;
-  width: 100%;
+  border: 0;
+  width: 1000px;
 }
 .col {
- width: 4.73%; /* Ширина колонок */
+ width: 50px; /* Ширина колонок */
  display: inline-block;
  font-size: : 12px;
  font-size: 16px;
@@ -304,8 +313,8 @@ user-select: none;
     border-radius: 50%;
     content: "";
     position: absolute;
-    top: -6%;
-    left: 2%;
+    top: -14%;
+    left: -14%;
     background-color: rgb(180,32,37);
     z-index: -1;
 }
@@ -313,13 +322,13 @@ user-select: none;
 /*-------------Banner--------------------*/
 
 .banner{
-  width: 460px;
-  height: 180px;
+  width: 420px;
+  /*height: 140px;*/
   background-color: rgba(31,66,79,0.74);
   padding: 20px;
   position: absolute;
-  right: 10%;
-  top: 35%;
+  right: 1%;
+  top: 19%;
   border-radius: 3px;
   visibility: hidden;
 }
@@ -330,7 +339,7 @@ user-select: none;
   font-weight: 16px;
   display: inline-block;
   width: 85%;
-  margin-left: 15px;
+  margin-left: 20px;
 }
 
 .banner .head .btn.close {
@@ -348,20 +357,21 @@ user-select: none;
   display: inline-block;
   vertical-align: top;
   margin-top: 20px;
-  width: 25%;
+  /*width: 25%;*/
 }
 
 
 .banner .body .data {
   display: inline-block;
   vertical-align: top;
-  padding: 15px 0;
-  width: 74%;  /*  bad hack*/
+  padding: 15px 0 0 0;
 }
 
 .banner .body .item {
   margin: 15px 0px;
   font-size: 0;
+  /*width: 316px;*/
+  white-space: nowrap;
 }
 
 .banner .body .item span {
@@ -401,7 +411,6 @@ user-select: none;
   position: absolute;
   bottom: 5%;
 }
-
 
 
 .legend .text , .legend .bloc {
