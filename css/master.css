@@ -322,8 +322,6 @@ user-select: none;
   background-color: rgba(31,66,79,0.74);
   padding: 20px;
   position: absolute;
-  /*right: 1%;
-  top: 19%;*/
   border-radius: 3px;
   visibility: hidden;
 }

@@ -179,8 +179,8 @@ $(function(){
     regions.click(
       function(e){
         state.regionId = e.target.id;
-        renderAll();
         e.target.parentElement.insertBefore(e.target, null)
+        renderAll();
       }
     )
 
@@ -489,29 +489,49 @@ $(function(){
 
     closeButton.click(close)
 
+
+
     var isCollide = function(){
       var r = document.getElementById(state.regionId);
 
       if (r && popUp[0]){
-        collide =  doElsCollide(popUp[0], r);
+        var collide =  doElsCollide(popUp[0], r);
       }
+
+      return collide;
     };
 
 
 
-    var position = {
-      legend :["right", "top", "left", "bottom"],
-      position: [[],[],[],[]]
+    var positions = [
+      {top: 19, right: 1},
+      {top: 19, left: 1},
+      {bottom: 19, left:1},
+      {bottom: 19, right: 1},
+    ]
+
+    var findPosition = function() {
+      // popUp.css('visibility', 'hidden');
+      var i = 0;
+      while (isCollide() && i < positions.length){
+        console.log(i, isCollide());
+        setPosition(positions[i])
+        i++;
+      }
+      // popUp.css('visibility', 'visible')
     }
 
+    var setPosition = function(obj){
 
-    var setPosition = function(obj) {
-
-      popUp[0].style.right = "1%"
-      popUp[0].style.top = "19%"
+      var format = ["right", "top", "left", "bottom"];
+      format.forEach(function(prop) {
+        popUp[0].style[prop] = obj[prop] ? obj[prop] + "%" : ""
+      })
     }
 
-    setPosition();
+    //init position
+    setPosition({top: 19, right: 1});
+
 
     var render = function( ) {
 
@@ -547,6 +567,7 @@ $(function(){
       diedFeald.text(died);
 
       if(state.regionId){
+        findPosition();
         open();
       }
     }
