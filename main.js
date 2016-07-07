@@ -5,9 +5,9 @@ doElsCollide = function(el1, el2) {
     var rect2 = el2.getBoundingClientRect();
 
     return  (rect1.left < rect2.left + rect2.width &&
-   rect1.left + rect1.width > rect2.left &&
-   rect1.top < rect2.top + rect2.height &&
-   rect1.height + rect1.top > rect2.top)
+       rect1.left + rect1.width > rect2.left &&
+       rect1.top < rect2.top + rect2.height &&
+       rect1.height + rect1.top > rect2.top)
 };
 
 var getColor = function(percent){
@@ -20,6 +20,10 @@ var getColor = function(percent){
   return `rgb(${r},${g},${b})`
 
 };
+
+function insertAfter(elem, refElem) {
+  return refElem.parentNode.insertBefore(elem, refElem.nextSibling);
+}
 
 // ------------Data process functions------
 
@@ -107,6 +111,7 @@ $(function(){
 
     var regions = $("#svg-map path, #svg-map polygon");
     var btn = $(".map .map_header .btn")
+    var selectReg = null;
 
     btn.click(function(){
       btn.toggleClass("active")
@@ -146,38 +151,28 @@ $(function(){
       })
     }
 
-
-    var setActiveRegion = (function(){
-
-      var oldElem = null
-
-      var setActiveRegion = function(regionId) {
-          oldElem && oldElem.classList.remove('selected');
-          if (regionId){
-            var elem =  document.getElementById(regionId)
-            elem.classList.add('selected')
-            oldElem = elem;
-        }
+    var setSelectRegion = function(regionId) {
+        selectReg && selectReg.classList.remove('selected');
+        if (regionId){
+          var elem =  document.getElementById(regionId)
+          elem.classList.add('selected')
+          selectReg = elem;
       }
-
-      return setActiveRegion;
-
-    })()
-
+    }
 
     //          ---Render Map----
     var render =  function() {
       setRegsColor(state.year);
-      this.setActiveRegion(state.regionId)
+      setSelectRegion(state.regionId)
     }
-
-
-
-    // ------------ Region hover------------
 
     regions.mouseover(
       function(e){
-        e.target.parentElement.insertBefore(e.target, e.target.firstChild);
+        if (selectReg) {
+          e.target.parentElement.insertBefore(e.target, selectReg);
+        } else {
+          e.target.parentElement.insertBefore(e.target, null)
+        }
       }
     )
 
@@ -185,13 +180,13 @@ $(function(){
       function(e){
         state.regionId = e.target.id;
         renderAll();
+        e.target.parentElement.insertBefore(e.target, null)
       }
     )
 
 
     return {
             render: render,
-            setActiveRegion: setActiveRegion
           }
 
   })();
@@ -419,6 +414,7 @@ $(function(){
 
   })();
 
+  // -----------  Close Drop down on document click ----------
   document.body.addEventListener("click",
     function(e){
       dropDowdn.close();
@@ -501,24 +497,34 @@ $(function(){
       }
     };
 
+
+
+    var position = {
+      legend :["right", "top", "left", "bottom"],
+      position: [[],[],[],[]]
+    }
+
+
+    var setPosition = function(obj) {
+
+      popUp[0].style.right = "1%"
+      popUp[0].style.top = "19%"
+    }
+
+    setPosition();
+
     var render = function( ) {
 
       if(!state.regionId) return;
 
       var name, infected, died,infectedText;
 
-
       name =  data[state.regionId].name;
-
-
-
-
 
       if(state.display == "rel")
         {
           pieContainer.hide();
           $(dataFields[1]).hide();
-          // console.log($(dataFields[0]).find(".infected"));
           $(dataFields[0]).find(".infected").css({width:"auto"});
           died = null;
           infected = data[state.regionId].relInfected[state.year] || "н/д";
