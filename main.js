@@ -108,7 +108,7 @@ $(function(){
 
   var map = (function(){
 
-
+    var map = document.getElementById("svg-map")
     var regions = $("#svg-map path, #svg-map polygon");
     var btn = $(".map .map_header .btn")
     var selectReg = null;
@@ -160,10 +160,14 @@ $(function(){
       }
     }
 
-    //          ---Render Map----
     var render =  function() {
       setRegsColor(state.year);
       setSelectRegion(state.regionId)
+      if (state.regionId){
+        map.classList.add('regSelected');
+      }else {
+         map.classList.remove('regSelected');
+      }
     }
 
     regions.mouseover(
@@ -301,7 +305,13 @@ $(function(){
 
     var render = function() {
 
-      state.regionId && head.text(data[state.regionId].shortName || "Регион")
+      if (state.regionId) {
+        head.text(data[state.regionId].shortName)
+      } else {
+        head.text("Регион")
+      }
+
+      // state.regionId && head.text(data[state.regionId].shortName || "Регион")
       // Dirty Hack
       container.empty();
       Object.keys(data).forEach(
@@ -480,6 +490,7 @@ $(function(){
     var close = function() {
       popUp.css('visibility', 'hidden')
       state.regionId = "";
+
       renderAll();
     }
 
@@ -500,6 +511,9 @@ $(function(){
 
       return collide;
     };
+
+
+
 
 
 
@@ -567,7 +581,7 @@ $(function(){
       diedFeald.text(died);
 
       if(state.regionId){
-        findPosition();
+        // findPosition();
         open();
       }
     }

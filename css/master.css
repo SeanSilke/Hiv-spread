@@ -36,35 +36,55 @@ body {
   padding: 0;
   margin: 30px 0;
   background-color: #1A1517;
+  /*background-color: #3c3b86;*/
+
   /*max-width: 1000px;*/
   min-width: 1050px
 }
 
- #svg-map path, #svg-map polygon {
+ #svg-map path , #svg-map polygon {
   fill: rgb(232,232,232);
   stroke: #000000;
-  stroke-width : 0.25;
-  stroke-miterlimit : 10;
+  stroke-width : 0.50;
+  cursor: pointer;
 }
 
+
+#svg-map.regSelected path , #svg-map.regSelected polygon {
+  fill-opacity: 0.5;
+}
+
+
+
 #svg-map path:hover, #svg-map polygon:hover {
-  animation: width 1s infinite;
+  /*animation: width 2s infinite;
   animation-direction: alternate;
   animation-timing-function: ease-in;
 
-  stroke: #ffffff;
+  stroke: #ffffff;*/
+
+    fill-opacity: 0.8;
 }
 
-@keyframes width {
+/*@keyframes width {
   to {
     stroke-width : 1px;
   }
-}
+}*/
 
 #svg-map path.selected , #svg-map polygon.selected {
-  stroke-width : 1px;
-  stroke: #1A1517;
+  /*stroke-width : 2px;
+  stroke: #1A1517;*/
+  pointer-events: none;
+  fill-opacity: 1;
 }
+
+/*#svg-map #Москва.selected  {
+  stroke: #000000;
+  stroke-width : 0.25;
+  stroke-miterlimit : 10;
+  pointer-events: none;
+}*/
 
 
 
@@ -73,12 +93,10 @@ body {
   box-sizing: border-box;
 }*/
 
-polygon {
+#svg-map path, #svg-map polygon {
   transition: fill 0.5s;
-}
-
-path {
-  transition: fill 0.5s;
+  transition: stroke 0.75s;
+  transition: fill-opacity 0.5s;
 }
 
 /*---------------------------------*/
