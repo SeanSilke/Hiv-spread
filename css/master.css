@@ -320,6 +320,10 @@ user-select: none;
    position: relative;
 }
 
+.active.col>div {
+  color: #ffffff;
+}
+
 .active.col>div::before {
     width: 65px;
     height: 65px;
