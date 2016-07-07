@@ -94,9 +94,7 @@ body {
 }*/
 
 #svg-map path, #svg-map polygon {
-  transition: fill 0.5s;
-  transition: stroke 0.75s;
-  transition: fill-opacity 0.5s;
+  transition: fill 0.5s, fill-opacity 0.5s;
 }
 
 /*---------------------------------*/
