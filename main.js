@@ -451,6 +451,7 @@ $(function(){
       var svgElem=document.getElementById("svg-pie");
 
       var renderPie = function(deg){
+        if (deg >359) deg = 359.5
         if(!svgElem) return;
         if(path) svgElem.removeChild(path);
 
@@ -469,15 +470,19 @@ $(function(){
 
         var p2 = p.matrixTransform(m.rotate(deg));
 
-        p2.x = cx + p2.x*rx;
-        p2.y = cy + p2.y*ry;
+        p2.x = cx - p2.x*rx;
+        p2.y = cy - p2.y*ry;
 
 
         path = document.createElementNS("http://www.w3.org/2000/svg","path");
 
         svgElem.appendChild(path);
 
-        var d="M"+cx+" "+(cy+ry)+"A"+rx+" "+ry+" 0 0 1"+p2.x+" "+p2.y+"L"+cx+" "+cy+"z";
+        if (deg > 180) {
+          var d="M"+cx+" "+(cy - ry)+"A"+rx+" "+ry+" 0 1 1"+p2.x+" "+p2.y+"L"+cx+" "+cy+"z";
+        }else {
+          var d="M"+cx+" "+(cy - ry)+"A"+rx+" "+ry+" 0 0 1"+p2.x+" "+p2.y+"L"+cx+" "+cy+"z";
+        }
 
         path.setAttribute("d",d);
         path.setAttribute("fill","url(#img1)");
