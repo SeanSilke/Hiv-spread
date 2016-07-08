@@ -75,7 +75,7 @@ body {
 #svg-map path.selected , #svg-map polygon.selected {
   /*stroke-width : 2px;
   stroke: #1A1517;*/
-  pointer-events: none;
+  /*pointer-events: none;*/
   fill-opacity: 1;
 }
 
@@ -157,7 +157,7 @@ body {
 position: relative;
 border: 1px solid gray;
 overflow: hidden;
-height: 260px;
+height: 245px;
 width: 252px;
 background-color: #1B1010;
 border-radius: 3px;
@@ -223,7 +223,7 @@ user-select: none;
   width: 250px;
   z-index: 100;
   font-size: 0px;
-
+  cursor: pointer;
 }
 
 
@@ -255,7 +255,6 @@ user-select: none;
   display: inline-block;
   float: right;
   cursor: pointer;
-  color: red;
   border-left: 2px solid #58595B;
   /*border-right: 2px solid red;*/
   /*padding: 30px;*/
@@ -441,9 +440,16 @@ user-select: none;
   margin-bottom: 10px;
 }
 
-.legend .bloc .year {
+.legend .bloc .val {
   font-family: 'PTSans-Regular';
   font-size: 16px;
   color: #93A1A8;
   text-align: center;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
 }
