@@ -104,7 +104,13 @@ $(function(){
     display: "abs"
   }
 
-  // ------------------Map---------------
+  /*
+  ███    ███  █████  ██████
+  ████  ████ ██   ██ ██   ██
+  ██ ████ ██ ███████ ██████
+  ██  ██  ██ ██   ██ ██
+  ██      ██ ██   ██ ██
+  */
 
   var map = (function(){
 
@@ -113,7 +119,8 @@ $(function(){
     var btn = $(".map .map_header .btn")
     var selectReg = null;
 
-    btn.click(function(){
+    btn.click(function(e){
+      e.stopPropagation();
       btn.toggleClass("active")
       state.display = this.dataset.displaytype
       renderAll();
@@ -182,8 +189,14 @@ $(function(){
 
     regions.click(
       function(e){
-        state.regionId = e.target.id;
-        e.target.parentElement.insertBefore(e.target, null)
+        e.stopPropagation();
+        if (e.target.id === state.regionId){
+          map.classList.remove('regSelected');
+          state.regionId = "";
+        }else{
+          state.regionId = e.target.id;
+          e.target.parentElement.insertBefore(e.target, null)
+        }
         renderAll();
       }
     )
@@ -195,7 +208,15 @@ $(function(){
 
   })();
 
-  // ---------------Legend----------------
+  /*
+  ██      ███████  ██████  ███████ ███    ██ ██████
+  ██      ██      ██       ██      ████   ██ ██   ██
+  ██      █████   ██   ███ █████   ██ ██  ██ ██   ██
+  ██      ██      ██    ██ ██      ██  ██ ██ ██   ██
+  ███████ ███████  ██████  ███████ ██   ████ ██████
+  */
+
+
   var legend = (function() {
 
     //----Init legned ------
@@ -210,7 +231,7 @@ $(function(){
     var renderValues = function () {
       var multiplier = state.display == "abs" ? 100 : 10;
 
-      $(".legend .bloc .year").each(function(id,e){
+      $(".legend .bloc .val").each(function(id,e){
         $(e).text(multiplier*Math.pow(2, id))
       })
     }
@@ -230,7 +251,13 @@ $(function(){
             };
     })();
 
-  //-------Years----------------
+    /*
+    ██    ██ ███████  █████  ██████  ███████
+     ██  ██  ██      ██   ██ ██   ██ ██
+      ████   █████   ███████ ██████  ███████
+       ██    ██      ██   ██ ██   ██      ██
+       ██    ███████ ██   ██ ██   ██ ███████
+    */
 
   var years = (function(){
 
@@ -249,7 +276,8 @@ $(function(){
 
     // _____________click__________
 
-    $(".years .col").on("click", function(){
+    $(".years .col").on("click", function(e){
+      e.stopPropagation();
       var year = parseInt ($(this).attr("id"))
       state.year = year;
       renderAll();
@@ -261,37 +289,26 @@ $(function(){
   })();
 
 
-  //------------   Drop down  -------------------
+  /*
+    ██  ██     ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
+   ██  ██      ██   ██ ██   ██ ██    ██ ██   ██     ██   ██ ██    ██ ██     ██ ████   ██
+  ██  ██       ██   ██ ██████  ██    ██ ██████      ██   ██ ██    ██ ██  █  ██ ██ ██  ██
+ ██  ██        ██   ██ ██   ██ ██    ██ ██          ██   ██ ██    ██ ██ ███ ██ ██  ██ ██
+██  ██         ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
+*/
+
+
 
   var dropDowdn = (function(){
 
     var isOpen = false;
+    var $select = $(".map_header .text.head, .map_header .close_button")
     var scrollable = $(".scrollable");
-    var closeButton = $(".map_header .item.drop_down .close_button");
     var closeImg = $(".map_header .item.drop_down .close_button img");
     var container =  $(".scrollable .content");
     var head = $(".drop_down .head");
 
-    $(".map_header .item.drop_down").click(
-      function(e){
-        e.stopPropagation();
-      }
-    )
-
-
-    var close = function() {
-      scrollable.css('visibility', 'hidden');
-       isOpen = false;
-       closeImg[0].style.transform = "rotate(0deg)";
-    }
-
-    var open = function() {
-      scrollable.css('visibility', 'visible')
-       isOpen = true;
-       closeImg[0].style.transform = "rotate(180deg)";
-    }
-
-    closeButton.click(
+    $select.click(
       function(e){
         e.stopPropagation();
         if(isOpen){
@@ -303,8 +320,19 @@ $(function(){
     )
 
 
-    var render = function() {
+    var close = function() {
+      scrollable.css('visibility', 'hidden');
+      isOpen = false;
+      closeImg[0].style.transform = "rotate(0deg)";
+    }
 
+    var open = function() {
+      scrollable.css('visibility', 'visible')
+      isOpen = true;
+      closeImg[0].style.transform = "rotate(180deg)";
+    }
+
+    var render = function() {
       if (state.regionId) {
         head.text(data[state.regionId].shortName)
       } else {
@@ -327,13 +355,15 @@ $(function(){
 
           container.append(elem)
 
-          elem.click(function(){
+          elem.click(function(e){
+            e.stopPropagation();
             state.regionId = this.dataset.regionid;
             renderAll();
             close();
           })
         }
       )
+      close();
     };
 
 
@@ -358,7 +388,7 @@ $(function(){
       function moveScroller(evt) {
           // Move Scroll bar to top offset
           var scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
-          topPosition = scrollPercentage * (scrollContainer.offsetHeight *0.92 ) + scrollContainer.offsetHeight *0.05 ; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
+          topPosition = scrollPercentage * (scrollContainer.offsetHeight *0.915 ) + scrollContainer.offsetHeight *0.05 ; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
           scroller.style.top = topPosition + 'px';
       }
 
@@ -424,14 +454,31 @@ $(function(){
 
   })();
 
-  // -----------  Close Drop down on document click ----------
+
+  /*
+  ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████      ██████ ██      ██  ██████ ██   ██ ███████
+  ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██        ██      ██      ██ ██      ██  ██  ██
+  ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██        ██      ██      ██ ██      █████   ███████
+  ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██        ██      ██      ██ ██      ██  ██       ██
+  ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██         ██████ ███████ ██  ██████ ██   ██ ███████
+  */
+
+
   document.body.addEventListener("click",
     function(e){
-      dropDowdn.close();
+      state.regionId = ""
+      renderAll();
     }
   )
 
-  //------------ popUp ----------------
+  /*
+  ██████   ██████  ██████  ██    ██ ██████
+  ██   ██ ██    ██ ██   ██ ██    ██ ██   ██
+  ██████  ██    ██ ██████  ██    ██ ██████
+  ██      ██    ██ ██      ██    ██ ██
+  ██       ██████  ██       ██████  ██
+  */
+
 
   var  popUp =  (function () {
 
@@ -493,19 +540,18 @@ $(function(){
 
 
     var close = function() {
-      popUp.css('visibility', 'hidden')
+      hide();
       state.regionId = "";
-
       renderAll();
+    }
+
+    var hide = function() {
+      popUp.css('visibility', 'hidden')
     }
 
     var open = function() {
       popUp.css('visibility', 'visible')
     }
-
-    closeButton.click(close)
-
-
 
     var isCollide = function(){
       var r = document.getElementById(state.regionId);
@@ -516,10 +562,6 @@ $(function(){
 
       return collide;
     };
-
-
-
-
 
 
     var positions = [
@@ -533,7 +575,6 @@ $(function(){
       // popUp.css('visibility', 'hidden');
       var i = 0;
       while (isCollide() && i < positions.length){
-        console.log(i, isCollide());
         setPosition(positions[i])
         i++;
       }
@@ -548,13 +589,14 @@ $(function(){
       })
     }
 
-    //init position
     setPosition({top: 19, right: 1});
 
 
     var render = function( ) {
 
-      if(!state.regionId) return;
+      if(!state.regionId) {
+        hide(); return;
+      }
 
       var name, infected, died,infectedText;
 
@@ -597,10 +639,20 @@ $(function(){
 
   })()
 
+  /*
+  ██████  ███████ ███    ██ ██████  ███████ ██████
+  ██   ██ ██      ████   ██ ██   ██ ██      ██   ██
+  ██████  █████   ██ ██  ██ ██   ██ █████   ██████
+  ██   ██ ██      ██  ██ ██ ██   ██ ██      ██   ██
+  ██   ██ ███████ ██   ████ ██████  ███████ ██   ██
+  */
+
+
+
   var renderAll = function() {
+    popUp.render()
     map.render();
     years.render();
-    popUp.render()
     dropDowdn.render();
     legend.render();
   };
@@ -611,7 +663,13 @@ $(function(){
   };
 
 
-  // ----------------Read Data---------------
+  /*
+  ██████  ███████  █████  ██████      ██████   █████  ████████  █████
+  ██   ██ ██      ██   ██ ██   ██     ██   ██ ██   ██    ██    ██   ██
+  ██████  █████   ███████ ██   ██     ██   ██ ███████    ██    ███████
+  ██   ██ ██      ██   ██ ██   ██     ██   ██ ██   ██    ██    ██   ██
+  ██   ██ ███████ ██   ██ ██████      ██████  ██   ██    ██    ██   ██
+  */
 
 (function() {
   var blob = null;
