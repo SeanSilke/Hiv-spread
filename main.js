@@ -578,13 +578,11 @@ $(function() {
     }, ]
 
     var findPosition = function() {
-      // popUp.css('visibility', 'hidden');
       var i = 0;
       while (isCollide() && i < positions.length) {
         setPosition(positions[i])
         i++;
       }
-      // popUp.css('visibility', 'visible')
     }
 
     var setPosition = function(obj) {
