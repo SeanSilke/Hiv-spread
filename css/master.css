@@ -38,8 +38,8 @@ body {
   margin: 30px 0;
   background-color: #1A1517;
   min-width: 1050px;
-  margin-top: 1000px;
-  margin-bottom: 1000px;
+  /*margin-top: 1000px;
+  margin-bottom: 1000px;*/
 }
 
  #svg-map path , #svg-map polygon {
