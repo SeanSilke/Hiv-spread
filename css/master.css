@@ -33,13 +33,13 @@
 
 
 body {
+
   padding: 0;
   margin: 30px 0;
   background-color: #1A1517;
-  /*background-color: #3c3b86;*/
-
-  /*max-width: 1000px;*/
-  min-width: 1050px
+  min-width: 1050px;
+  margin-top: 1000px;
+  margin-bottom: 1000px;
 }
 
  #svg-map path , #svg-map polygon {
@@ -57,25 +57,10 @@ body {
 
 
 #svg-map path:hover, #svg-map polygon:hover {
-  /*animation: width 2s infinite;
-  animation-direction: alternate;
-  animation-timing-function: ease-in;
-
-  stroke: #ffffff;*/
-
     fill-opacity: 0.8;
 }
 
-/*@keyframes width {
-  to {
-    stroke-width : 1px;
-  }
-}*/
-
 #svg-map path.selected , #svg-map polygon.selected {
-  /*stroke-width : 2px;
-  stroke: #1A1517;*/
-  /*pointer-events: none;*/
   fill-opacity: 1;
 }
 
@@ -324,9 +309,10 @@ user-select: none;
   /*height: 140px;*/
   background-color: rgba(31,66,79,0.74);
   padding: 20px;
-  position: absolute;
+  position: absolute;;
   border-radius: 3px;
   visibility: hidden;
+  z-index: 1000;
 }
 
 .banner .head .region {

@@ -113,10 +113,16 @@ $(function() {
 
   var map = (function() {
 
-    var map = document.getElementById("svg-map")
+
+    var map = {
+      render: null,
+      selectedReg: null,
+      mapElem: null,
+    };
+    map.mapElem = document.getElementById("svg-map")
     var regions = $("#svg-map path, #svg-map polygon");
     var btn = $(".map .map_header .btn")
-    var selectReg = null;
+    var selectedReg = null;
 
     btn.click(function(e) {
       e.stopPropagation();
@@ -157,40 +163,29 @@ $(function() {
       })
     }
 
-    var setSelectRegion = function(regionId) {
-      selectReg && selectReg.classList.remove('selected');
+    var setSelectedRegion = function(regionId) {
+      map.selectedReg && map.selectedReg.classList.remove('selected');
       if (regionId) {
-        var elem = document.getElementById(regionId)
-        elem.classList.add('selected')
-        selectReg = elem;
+        map.selectedReg = document.getElementById(regionId)
+        map.selectedReg.classList.add('selected')
       }
     }
 
     var render = function() {
       setRegsColor(state.year);
-      setSelectRegion(state.regionId)
+      setSelectedRegion(state.regionId)
       if (state.regionId) {
-        map.classList.add('regSelected');
+        map.mapElem.classList.add('regSelected');
       } else {
-        map.classList.remove('regSelected');
+        map.mapElem.classList.remove('regSelected');
       }
     }
-
-    regions.mouseover(
-      function(e) {
-        if (selectReg) {
-          e.target.parentElement.insertBefore(e.target, selectReg);
-        } else {
-          e.target.parentElement.insertBefore(e.target, null)
-        }
-      }
-    )
 
     regions.click(
       function(e) {
         e.stopPropagation();
         if (e.target.id === state.regionId) {
-          map.classList.remove('regSelected');
+          map.mapElem.classList.remove('regSelected');
           state.regionId = "";
         } else {
           state.regionId = e.target.id;
@@ -200,10 +195,10 @@ $(function() {
       }
     )
 
+    map.render = render;
+    map.selectedReg = selectedReg;
 
-    return {
-      render: render,
-    }
+    return map;
 
   })();
 
@@ -291,14 +286,13 @@ $(function() {
 
   })();
 
-
   /*
-    ██  ██     ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
-   ██  ██      ██   ██ ██   ██ ██    ██ ██   ██     ██   ██ ██    ██ ██     ██ ████   ██
-  ██  ██       ██   ██ ██████  ██    ██ ██████      ██   ██ ██    ██ ██  █  ██ ██ ██  ██
- ██  ██        ██   ██ ██   ██ ██    ██ ██          ██   ██ ██    ██ ██ ███ ██ ██  ██ ██
-██  ██         ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
-*/
+  ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
+  ██   ██ ██   ██ ██    ██ ██   ██     ██   ██ ██    ██ ██     ██ ████   ██
+  ██   ██ ██████  ██    ██ ██████      ██   ██ ██    ██ ██  █  ██ ██ ██  ██
+  ██   ██ ██   ██ ██    ██ ██          ██   ██ ██    ██ ██ ███ ██ ██  ██ ██
+  ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
+  */
 
   var dropDowdn = (function() {
 
@@ -491,6 +485,26 @@ $(function() {
     var diedFeald = dataFields.find(".dead");
     var infectedTextFeald = $(dataFields.find(".leble")[0]);
 
+    var close = function() {
+      hide();
+      state.regionId = "";
+      renderAll();
+    }
+
+    var hide = function() {
+      popUp.css('visibility', 'hidden')
+    }
+
+    var open = function() {
+      popUp.css('visibility', 'visible')
+    }
+    popUp.click(function(e) {
+      e.stopPropagation();
+    })
+
+    closeButton.click(function(e) {
+      close();
+    })
 
     var renderPie = (function() {
       var path = null;
@@ -538,65 +552,39 @@ $(function() {
     })();
 
 
-    var close = function() {
-      hide();
-      state.regionId = "";
-      renderAll();
-    }
-
-    var hide = function() {
-      popUp.css('visibility', 'hidden')
-    }
-
-    var open = function() {
-      popUp.css('visibility', 'visible')
-    }
-
-    var isCollide = function() {
-      var r = document.getElementById(state.regionId);
-
-      if (r && popUp[0]) {
-        var collide = doElsCollide(popUp[0], r);
-      }
-
-      return collide;
-    };
-
-
-    var positions = [{
-      top: 19,
-      right: 1
-    }, {
-      top: 19,
-      left: 1
-    }, {
-      bottom: 19,
-      left: 1
-    }, {
-      bottom: 19,
-      right: 1
-    }, ]
-
     var findPosition = function() {
-      var i = 0;
-      while (isCollide() && i < positions.length) {
-        setPosition(positions[i])
-        i++;
+
+      var mapRect = map.mapElem.getBoundingClientRect();
+      var regRect = map.selectedReg.getBoundingClientRect();
+      var popUpRect = popUp[0].getBoundingClientRect();
+
+      var top, left;
+
+      var left = regRect.left + regRect.width;
+      var top = regRect.top - popUpRect.height;
+      if(top < mapRect.top) {
+        top = mapRect.top + 20;
+      }
+      if(left + popUpRect.width > mapRect.left + mapRect.width) {
+         left = regRect.left - popUpRect.width
+       }
+
+       left = left + pageXOffset;
+       top = top + pageYOffset;
+
+      return {
+        top: top ,
+        left: left,
       }
     }
 
     var setPosition = function(obj) {
-
       var format = ["right", "top", "left", "bottom"];
       format.forEach(function(prop) {
-        popUp[0].style[prop] = obj[prop] ? obj[prop] + "%" : ""
+        popUp[0].style[prop] = obj[prop] ? obj[prop] + "px" : ""
       })
     }
 
-    setPosition({
-      top: 19,
-      right: 1
-    });
 
 
     var render = function() {
@@ -637,13 +625,18 @@ $(function() {
       diedFeald.text(died);
 
       if (state.regionId) {
-        // findPosition();
+        setPosition(findPosition())
         open();
       }
     }
 
+    var onresize = function(){
+      setPosition(findPosition());
+    }
+
     return {
       render: render,
+      onresize: onresize,
     }
 
   })()
@@ -657,16 +650,20 @@ $(function() {
   */
 
   var renderAll = function() {
-    popUp.render()
     map.render();
     years.render();
     dropDowdn.render();
     legend.render();
+    popUp.render();
   };
 
   var initAll = function() {
     legend.init();
     dropDowdn.createScroller()
+  };
+
+  window.onresize = function(){
+    popUp.onresize();
   };
 
 

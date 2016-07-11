@@ -9,12 +9,38 @@
   <body>
 
 
-    <!-- <div class="scrollable">
-        <div class="content-wrapper">
-            <div class="content">
-           </div>
+    <div class="banner">
+      <div class="head">
+        <div class="region">
+          <span>Республика Северная Осетия — Алания</span>
         </div>
-    </div> -->
+        <div class="btn close"></div>
+      </div>
+      <div class="body">
+        <div class="pie">
+          <svg id="svg-pie" height="100" width="100">
+
+            <defs>
+                <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
+                    <image xlink:href="stripes.png" x="0" y="0"
+                        width="130" height="130" /><!-- Image from http://silviahartmann.com/background-tile/6-grass-meadow-tile.php-->
+                </pattern>
+            </defs>
+            <circle cx="50" cy="50" r="40" fill="#ffffff" />
+          </svg>
+        </div>
+        <div class="data">
+          <div class="item">
+            <span class="infected">32888</span>
+            <span class ="leble">Общее число инфицированных</span>
+          </div>
+          <div class="item">
+            <span class="dead"> 7783 </span>
+            <span class ="leble"> Число умерших от инфекции </span>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   <div class="map">
@@ -40,40 +66,6 @@
     </div>
 
     <div class="map_body">
-
-      <div class="banner">
-        <div class="head">
-          <div class="region">
-            <span>Республика Северная Осетия — Алания</span>
-          </div>
-          <div class="btn close"></div>
-        </div>
-        <div class="body">
-          <div class="pie">
-            <svg id="svg-pie" height="100" width="100">
-
-              <defs>
-                  <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
-                      <image xlink:href="stripes.png" x="0" y="0"
-                          width="130" height="130" /><!-- Image from http://silviahartmann.com/background-tile/6-grass-meadow-tile.php-->
-                  </pattern>
-              </defs>
-              <circle cx="50" cy="50" r="40" fill="#ffffff" />
-            </svg>
-          </div>
-          <div class="data">
-            <div class="item">
-              <span class="infected">32888</span>
-              <span class ="leble">Общее число инфицированных</span>
-            </div>
-            <div class="item">
-              <span class="dead"> 7783 </span>
-              <span class ="leble"> Число умерших от инфекции </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
 
       <div class="legend">
         <div class="bloc">
@@ -134,8 +126,9 @@
                   id="svg-map"
                   xmlns="http://www.w3.org/2000/svg"
                   xmlns:xlink="http://www.w3.org/1999/xlink"
-                  viewBox="50 365 1430 815">
 
+                  viewBox="50 350 1400 850">
+    <!-- viewBox="50 365 1430 815" -->
             <path id="Сахалинская_область" d="M1394.35,1037.47l-0.12,0.96l-0.68,0.73l-0.38,0.56l-1.55,2.35l-1.03,0.59
             	l-0.61,0.92l-0.21,0.99l0.07,1.17l-0.14,1.06l-0.14,0.96l-0.05,0.92l-0.05,0.8v1.22l0.16,0.89v0.87l0.07,1.17l-0.07,1.03l-0.31,1.03
               l-0.54,0.52l-0.99-0.33l-0.82-0.63l-0.68-1.25l-0.12-1.6l0.52-1.17l0.52-1.27l0.19-1.64l0.05-1.55l0.12-2.04l0.28-0.92l0.19-0.89
