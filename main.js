@@ -126,7 +126,7 @@ $(function() {
 
     btn.click(function(e) {
       e.stopPropagation();
-      btn.toggleClass("active");
+      // btn.toggleClass("active");
       state.display = this.dataset.displaytype;
       renderAll();
     });
@@ -171,9 +171,17 @@ $(function() {
       }
     };
 
+    var setButtons = function(display){
+      btn.each(function(i,elem){
+        if(elem.dataset.displaytype == display) elem.classList.add('active');
+        else elem.classList.remove('active');
+      });
+    };
+
     var render = function() {
       setRegsColor(state.year);
       setSelectedRegion(state.regionId);
+      setButtons(state.display);
       if (state.regionId) {
         map.mapElem.classList.add('regSelected');
       } else {
@@ -492,11 +500,11 @@ $(function() {
     };
 
     var hide = function() {
-      popUp.css('visibility', 'hidden');
+      popUp.css('opacity', 0);
     };
 
     var open = function() {
-      popUp.css('visibility', 'visible');
+      popUp.css('opacity', 1);
     };
     popUp.click(function(e) {
       e.stopPropagation();
@@ -511,12 +519,24 @@ $(function() {
       var svgElem = document.getElementById("svg-pie");
 
       var renderPie = function(deg) {
-        if (deg > 359) deg = 359.5;
         if (!svgElem) return;
-        if (path) svgElem.removeChild(path);
+        if (path) {
+          svgElem.removeChild(path);
+          path = null;
+        }
+        if (isNaN(deg)) return;
 
-        var cx = 50,
-          cy = 50,
+        if (deg > 359) {
+          path = svgElem.querySelector("circle").cloneNode(true);
+          path.setAttribute("fill", "url(#img1)" );
+          svgElem.appendChild(path);
+          return;
+        }
+
+
+
+        var cx = 40,
+          cy = 40,
           rx = 40,
           ry = 40;
 
@@ -533,10 +553,8 @@ $(function() {
         p2.x = cx - p2.x * rx;
         p2.y = cy - p2.y * ry;
 
-
         path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 
-        svgElem.appendChild(path);
 
         if (deg > 180) {
           var d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
@@ -546,6 +564,8 @@ $(function() {
 
         path.setAttribute("d", d);
         path.setAttribute("fill", "url(#img1)");
+
+        svgElem.appendChild(path);
 
       };
       return renderPie;
@@ -678,7 +698,6 @@ $(function() {
   (function() {
     var blob = null;
     var xhr = new XMLHttpRequest();
-    // xhr.open("GET", "attempt3.csv");
     xhr.open("GET", "HIV_Data_by_reg.csv");
     xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
     xhr.onload = function() {
@@ -689,7 +708,6 @@ $(function() {
 
     var myReader = new FileReader();
     myReader.addEventListener("loadend", function(e) {
-
 
       data = newDataProseed(e.srcElement.result);
       initAll();

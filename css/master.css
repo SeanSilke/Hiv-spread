@@ -89,7 +89,7 @@ body {
   /*min-height: 340px;*/
   max-width: 1525px;
   /*max-height: 925px;*/
-  padding: 0px 20px;
+  padding: 0 20px;
 }
 
 .map_body {
@@ -128,7 +128,7 @@ body {
   cursor: pointer;
   border: none;
   padding: 15px;
-  pointer-events: none;
+  /*pointer-events: none;*/
 }
 
 .map_header> .item:nth-of-type(2) {
@@ -207,7 +207,7 @@ user-select: none;
   position: relative;
   width: 250px;
   z-index: 100;
-  font-size: 0px;
+  font-size: 0;
   cursor: pointer;
 }
 
@@ -269,7 +269,7 @@ user-select: none;
 .col {
  width: 50px; /* Ширина колонок */
  display: inline-block;
- font-size: : 12px;
+ font-size: 12px;
  font-size: 16px;
  font-family: 'PTSans-Regular';
  text-align: center;
@@ -308,11 +308,12 @@ user-select: none;
   width: 420px;
   /*height: 140px;*/
   background-color: rgba(31,66,79,0.74);
-  padding: 20px;
+  padding: 27px 20px 20px 35px;
   position: absolute;;
   border-radius: 3px;
-  visibility: hidden;
+  opacity: 0;
   z-index: 1000;
+  transition: opacity 0.5s, top 1s, left 1s;
 }
 
 .banner .head .region {
@@ -321,15 +322,15 @@ user-select: none;
   font-weight: 16px;
   display: inline-block;
   width: 85%;
-  margin-left: 20px;
 }
 
 .banner .head .btn.close {
   width: 15px;
   height: 15px;
-  float: right;
+  position: absolute;
+  right: 15px;
+  top: 15px;
   background-image: url("../close_button.svg");
-  display: inline-block;
   cursor: pointer;
 
 }
@@ -338,7 +339,7 @@ user-select: none;
 .banner .body .pie {
   display: inline-block;
   vertical-align: top;
-  margin-top: 20px;
+  margin-top: 25px;
   /*width: 25%;*/
 }
 
@@ -346,11 +347,11 @@ user-select: none;
 .banner .body .data {
   display: inline-block;
   vertical-align: top;
-  padding: 15px 0 0 0;
+  padding: 20px 0 0 0;
 }
 
 .banner .body .item {
-  margin: 15px 0px;
+  margin: 10px 0;
   font-size: 0;
   /*width: 316px;*/
   white-space: nowrap;
@@ -363,11 +364,11 @@ user-select: none;
   font-size: 16px;
 }
 
-.banner .body .item span.leble {
+.banner .body .item .leble {
   padding-left: 15px;
 }
 
-.banner .body .item span.infected {
+.banner .body .item .infected {
   color: #ffffff;
   font-family:  'PTSans-Bold';
   display: inline-block;
@@ -376,7 +377,7 @@ user-select: none;
   text-align: right;
 }
 
-.banner .body .item span.dead {
+.banner .body .item .dead {
   color: #18B3AC;
   font-family:  'PTSans-Bold';
   display: inline-block;
