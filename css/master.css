@@ -31,22 +31,123 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'PTSerif-Regular';
+  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.eot');
+  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.eot?#iefix') format('embedded-opentype'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.woff') format('woff'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.ttf') format('truetype'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.svg#PTSerif-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
+@font-face {
+  font-family: 'PTSerif-Bold';
+  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.eot');
+  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.eot?#iefix') format('embedded-opentype'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.woff') format('woff'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.ttf') format('truetype'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.svg#PTSerif-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PTSerif-Italic';
+  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.eot');
+  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.eot?#iefix') format('embedded-opentype'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.woff') format('woff'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.ttf') format('truetype'),
+       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.svg#PTSerif-Italic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
 
 body {
-
   padding: 0;
   margin: 0;
   background-color: #1A1517;
-
 }
 
-/*.topline {
+.line {
   background-color: #A9242C;
   width: 100%;
   height: 50px;
-}*/
+}
+
+.bottom {
+  margin-top: 20px;
+}
+
+.line .center {
+  width: 955px;
+  height: 100%;
+  margin: auto;
+  /*background-color: green;*/
+}
+
+#ramblerIG{
+  padding: 21px;
+}
+
+#gazeta {
+  padding: 17px;
+  float: right;
+}
+
+.first-plait{
+  width: 100%;
+  height: 860px;
+  min-width: 955px;
+  /*background-color: green;*/
+  background-image: url("../ribon1.png");
+  background-repeat: no-repeat;
+  background-position:center 116%;
+}
+
+.first-plait .content {
+  margin: 0 auto;
+  max-width: 955px;
+  height: 100%;
+  /*background-color: rgba(0, 128, 0, 0.25);*/
+  font-size: 0;
+}
+
+.first-plait .content .item {
+  box-sizing: border-box;
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: top;
+  width: 50%;
+  height: 100%;
+  padding: 60px 0;
+}
+
+.first-plait .content .item .head {
+  font-size: 58px;
+  color: #EEEEEE;
+  font-family: 'PTSerif-Regular';
+}
+
+.first-plait .content .item img:first-child {
+  padding-left: 338px;
+  padding-top: 15px;
+}
+
+
+
+.first-plait .content .item .head em {
+  color: #B42025;
+}
+
+.first-plait .content .item .text {
+  font-size: 22px;
+  color: #EEEEEE;
+  font-family: 'PTSerif-Regular';
+  padding-top: 60px;
+}
 
  #svg-map path , #svg-map polygon {
   fill: rgb(232,232,232);
