@@ -501,10 +501,13 @@ $(function() {
 
     var hide = function() {
       popUp.css('opacity', 0);
+      popUp.css('visibility', "hidden");
+
     };
 
     var open = function() {
       popUp.css('opacity', 1);
+      popUp.css('visibility', "visible");
     };
     popUp.click(function(e) {
       e.stopPropagation();
@@ -574,6 +577,8 @@ $(function() {
 
     var findPosition = function() {
 
+      if (!map.selectedReg) return;
+
       var mapRect = map.mapElem.getBoundingClientRect();
       var regRect = map.selectedReg.getBoundingClientRect();
       var popUpRect = popUp[0].getBoundingClientRect();
@@ -599,6 +604,7 @@ $(function() {
     };
 
     var setPosition = function(obj) {
+      if(!obj) return;
       var format = ["right", "top", "left", "bottom"];
       format.forEach(function(prop) {
         popUp[0].style[prop] = obj[prop] ? obj[prop] + "px" : "";
