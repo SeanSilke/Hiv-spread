@@ -32,14 +32,22 @@
 }
 
 
+
+
 body {
 
   padding: 0;
-  margin: 30px 0;
+  margin: 0;
   background-color: #1A1517;
   /*margin-top: 1000px;
   margin-bottom: 1000px;*/
 }
+
+/*.topline {
+  background-color: #A9242C;
+  width: 100%;
+  height: 50px;
+}*/
 
  #svg-map path , #svg-map polygon {
   fill: rgb(232,232,232);
@@ -63,19 +71,6 @@ body {
   fill-opacity: 1;
 }
 
-/*#svg-map #Москва.selected  {
-  stroke: #000000;
-  stroke-width : 0.25;
-  stroke-miterlimit : 10;
-  pointer-events: none;
-}*/
-
-
-
-
-/*.map * {
-  box-sizing: border-box;
-}*/
 
 #svg-map path, #svg-map polygon {
   transition: fill 0.5s, fill-opacity 0.5s;
@@ -85,9 +80,7 @@ body {
 
 .map {
   min-width: 955px;
-  /*min-height: 340px;*/
   max-width: 1525px;
-  /*max-height: 925px;*/
   padding: 0 20px;
 }
 
@@ -137,7 +130,6 @@ body {
 
 
 .scrollable {
-/* padding: 0% 10%; */
 position: relative;
 border: 1px solid gray;
 overflow: hidden;
@@ -172,7 +164,6 @@ z-index: 5;
 cursor: pointer;
 position: absolute;
 width: 7px;
-/* border-radius: 5px; */
 background: #58595B;
 top: 5%;
 right: 21px;
@@ -195,14 +186,12 @@ user-select: none;
   font-family: 'PTSans-Regular';
   font-size: 16px;
   color: #93A1A8;
-  /*padding-left: 20px;*/
   padding: 10px 0px 10px 20px
 
 }
 
 .map_header .item.drop_down {
   border: 2px solid #58595B;
-  /*margin-right: 15px;*/
   position: relative;
   width: 250px;
   z-index: 100;
@@ -251,11 +240,6 @@ user-select: none;
   color: #EEEEEE;
   cursor: pointer;
 }
-
-/*---------------select-style-----------------*/
-
-
-
 
 /*------------Years---------------------*/
 
@@ -346,7 +330,6 @@ user-select: none;
   display: inline-block;
   vertical-align: top;
   margin-top: 25px;
-  /*width: 25%;*/
 }
 
 
@@ -359,7 +342,6 @@ user-select: none;
 .banner .body .item {
   margin: 10px 0;
   font-size: 0;
-  /*width: 316px;*/
   white-space: nowrap;
 }
 
