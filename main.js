@@ -1,7 +1,7 @@
-var doElsCollide = function(el1, el2) {
+let doElsCollide = function(el1, el2) {
 
-  var rect1 = el1.getBoundingClientRect();
-  var rect2 = el2.getBoundingClientRect();
+  let rect1 = el1.getBoundingClientRect();
+  let rect2 = el2.getBoundingClientRect();
 
   return (rect1.left < rect2.left + rect2.width &&
     rect1.left + rect1.width > rect2.left &&
@@ -9,12 +9,12 @@ var doElsCollide = function(el1, el2) {
     rect1.height + rect1.top > rect2.top);
 };
 
-var getColor = function(percent) {
+let getColor = function(percent) {
   if (percent > 1) return "rgb(180,32,37)";
 
-  var r = Math.floor(232 - (232 - 180) * percent);
-  var g = Math.floor(232 - (232 - 32) * percent);
-  var b = Math.floor(232 - (232 - 37) * percent);
+  let r = Math.floor(232 - (232 - 180) * percent);
+  let g = Math.floor(232 - (232 - 32) * percent);
+  let b = Math.floor(232 - (232 - 37) * percent);
 
   return `rgb(${r},${g},${b})`;
 
@@ -28,8 +28,8 @@ function insertAfter(elem, refElem) {
 
 
 let newDataProseed = function(csvFile) {
-  var r = {};
-  var regionsArr = csvFile.split("\n");
+  let r = {};
+  let regionsArr = csvFile.split("\n");
   regionsArr.pop(); //remove end line
 
   regionsArr.forEach(function(e, i) {
@@ -44,8 +44,8 @@ let newDataProseed = function(csvFile) {
     };
   });
 
-  var years = [];
-  for (var i = 0; i <= 20; i++) {
+  let years = [];
+  for (let i = 0; i <= 20; i++) {
     years.push(1994 + i);
   }
 
@@ -111,18 +111,18 @@ $(function() {
   ██      ██ ██   ██ ██
   */
 
-  var map = (function() {
+  let map = (function() {
 
 
-    var map = {
+    let map = {
       render: null,
       selectedReg: null,
       mapElem: null,
     };
     map.mapElem = document.getElementById("svg-map");
-    var regions = $("#svg-map path, #svg-map polygon");
-    var btn = $(".map .map_header .btn");
-    var selectedReg = null;
+    let regions = $("#svg-map path, #svg-map polygon");
+    let btn = $(".map .map_header .btn");
+    let selectedReg = null;
 
     btn.click(function(e) {
       e.stopPropagation();
@@ -131,11 +131,11 @@ $(function() {
       renderAll();
     });
 
-    var setRegsColor = function(year) {
+    let setRegsColor = function(year) {
 
       Object.keys(data).forEach(function(reginoId) {
 
-        var value, percent;
+        let value, percent;
 
         if (state.display == "abs") {
 
@@ -163,7 +163,7 @@ $(function() {
       });
     };
 
-    var setSelectedRegion = function(regionId) {
+    let setSelectedRegion = function(regionId) {
       map.selectedReg && map.selectedReg.classList.remove('selected');
       if (regionId) {
         map.selectedReg = document.getElementById(regionId);
@@ -171,14 +171,14 @@ $(function() {
       }
     };
 
-    var setButtons = function(display){
+    let setButtons = function(display){
       btn.each(function(i,elem){
         if(elem.dataset.displaytype == display) elem.classList.add('active');
         else elem.classList.remove('active');
       });
     };
 
-    var render = function() {
+    let render = function() {
       setRegsColor(state.year);
       setSelectedRegion(state.regionId);
       setButtons(state.display);
@@ -219,33 +219,33 @@ $(function() {
   */
 
 
-  var legend = (function() {
+  let legend = (function() {
 
     //----Init legned ------
 
-    var initColors = function() {
+    let initColors = function() {
       $(".legend .bloc .color").each(function(id, e) {
-        var color = getColor((id + 1) / 10);
+        let color = getColor((id + 1) / 10);
         $(e).css({
           "background-color": color
         });
       });
     };
 
-    var renderValues = function() {
-      var multiplier = state.display == "abs" ? 100 : 10;
+    let renderValues = function() {
+      let multiplier = state.display == "abs" ? 100 : 10;
 
       $(".legend .bloc .val").each(function(id, e) {
         $(e).text(multiplier * Math.pow(2, id));
       });
     };
 
-    var init = function() {
+    let init = function() {
       initColors();
       renderValues();
     };
 
-    var render = function() {
+    let render = function() {
       renderValues();
     };
 
@@ -263,12 +263,12 @@ $(function() {
      ██    ███████ ██   ██ ██   ██ ███████
   */
 
-  var years = (function() {
+  let years = (function() {
 
-    var render = function() {
+    let render = function() {
 
       $(".years .col").each(function(id, e) {
-        var year = parseInt($(e).attr("id"));
+        let year = parseInt($(e).attr("id"));
         if (year === state.year) {
           $(e).addClass("active");
         } else {
@@ -282,7 +282,7 @@ $(function() {
 
     $(".years .col").on("click", function(e) {
       e.stopPropagation();
-      var year = parseInt($(this).attr("id"));
+      let year = parseInt($(this).attr("id"));
       state.year = year;
       renderAll();
     });
@@ -302,14 +302,14 @@ $(function() {
   ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
   */
 
-  var dropDowdn = (function() {
+  let dropDowdn = (function() {
 
-    var isOpen = false;
-    var $select = $(".map_header .drop_down .head");
-    var scrollable = $(".scrollable");
-    var closeImg = $(".map_header .item.drop_down .close_button img");
-    var container = $(".scrollable .content");
-    var head = $(".drop_down .text");
+    let isOpen = false;
+    let $select = $(".map_header .drop_down .head");
+    let scrollable = $(".scrollable");
+    let closeImg = $(".map_header .item.drop_down .close_button img");
+    let container = $(".scrollable .content");
+    let head = $(".drop_down .text");
 
     $select.click(
       function(e) {
@@ -323,19 +323,19 @@ $(function() {
     );
 
 
-    var close = function() {
+    let close = function() {
       scrollable.css('visibility', 'hidden');
       isOpen = false;
       closeImg[0].style.transform = "rotate(0deg)";
     };
 
-    var open = function() {
+    let open = function() {
       scrollable.css('visibility', 'visible');
       isOpen = true;
       closeImg[0].style.transform = "rotate(180deg)";
     };
 
-    var render = function() {
+    let render = function() {
       if (state.regionId) {
         head.text(data[state.regionId].shortName);
       } else {
@@ -350,7 +350,7 @@ $(function() {
 
           let shortName = data[region].shortName;
 
-          var elem = $(`<div class="item" data-regionId="${region}"> ${shortName} </div>`);
+          let elem = $(`<div class="item" data-regionId="${region}"> ${shortName} </div>`);
 
           if (region === state.regionId) {
             elem = $(`<div class="active" data-regionId="${region}"> ${shortName} </div>`);
@@ -370,9 +370,9 @@ $(function() {
     };
 
 
-    var createScroller = (function() {
+    let createScroller = (function() {
 
-      var scrollContainer = document.querySelector('.scrollable'),
+      let scrollContainer = document.querySelector('.scrollable'),
         scrollContentWrapper = document.querySelector('.scrollable .content-wrapper'),
         scrollContent = document.querySelector('.scrollable .content'),
         contentPosition = 0,
@@ -383,14 +383,14 @@ $(function() {
 
       function calculateScrollerHeight() {
         // *Calculation of how tall scroller should be
-        var visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
+        let visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
         visibleRatio = 0.05;
         return visibleRatio * scrollContainer.offsetHeight;
       }
 
       function moveScroller(evt) {
         // Move Scroll bar to top offset
-        var scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
+        let scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
         topPosition = scrollPercentage * (scrollContainer.offsetHeight * 0.915) + scrollContainer.offsetHeight * 0.05; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
         scroller.style.top = topPosition + 'px';
       }
@@ -407,8 +407,8 @@ $(function() {
 
       function scrollBarScroll(evt) {
         if (scrollerBeingDragged === true) {
-          var mouseDifferential = evt.pageY - normalizedPosition;
-          var scrollEquivalent = mouseDifferential * (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
+          let mouseDifferential = evt.pageY - normalizedPosition;
+          let scrollEquivalent = mouseDifferential * (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
           scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
         }
       }
@@ -481,31 +481,31 @@ $(function() {
   */
 
 
-  var popUp = (function() {
+  let popUp = (function() {
 
-    var popUp = $(".banner");
-    var closeButton = $(".banner .head .btn.close");
-    var pieContainer = $(".banner .body .pie");
+    let popUp = $(".banner");
+    let closeButton = $(".banner .head .btn.close");
+    let pieContainer = $(".banner .body .pie");
 
-    var dataFields = $(".banner .body .data .item");
-    var stateNameFeald = popUp.find(".head .region span");
-    var infectedFeald = dataFields.find(".infected");
-    var diedFeald = dataFields.find(".dead");
-    var infectedTextFeald = $(dataFields.find(".leble")[0]);
+    let dataFields = $(".banner .body .data .item");
+    let stateNameFeald = popUp.find(".head .region span");
+    let infectedFeald = dataFields.find(".infected");
+    let diedFeald = dataFields.find(".dead");
+    let infectedTextFeald = $(dataFields.find(".leble")[0]);
 
-    var close = function() {
+    let close = function() {
       hide();
       state.regionId = "";
       renderAll();
     };
 
-    var hide = function() {
+    let hide = function() {
       popUp.css('opacity', 0);
       popUp.css('visibility', "hidden");
 
     };
 
-    var open = function() {
+    let open = function() {
       popUp.css('opacity', 1);
       popUp.css('visibility', "visible");
     };
@@ -517,11 +517,11 @@ $(function() {
       close();
     });
 
-    var renderPie = (function() {
-      var path = null;
-      var svgElem = document.getElementById("svg-pie");
+    let renderPie = (function() {
+      let path = null;
+      let svgElem = document.getElementById("svg-pie");
 
-      var renderPie = function(deg) {
+      let renderPie = function(deg) {
         if (!svgElem) return;
         if (path) {
           svgElem.removeChild(path);
@@ -538,20 +538,20 @@ $(function() {
 
 
 
-        var cx = 40,
+        let cx = 40,
           cy = 40,
           rx = 40,
           ry = 40;
 
-        var p = svgElem.createSVGPoint();
+        let p = svgElem.createSVGPoint();
         p.x = 0;
         p.y = 1;
 
 
-        var m = svgElem.createSVGMatrix();
+        let m = svgElem.createSVGMatrix();
 
 
-        var p2 = p.matrixTransform(m.rotate(deg));
+        let p2 = p.matrixTransform(m.rotate(deg));
 
         p2.x = cx - p2.x * rx;
         p2.y = cy - p2.y * ry;
@@ -560,9 +560,9 @@ $(function() {
 
 
         if (deg > 180) {
-          var d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+          let d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
         } else {
-          var d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+          let d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
         }
 
         path.setAttribute("d", d);
@@ -575,18 +575,18 @@ $(function() {
     })();
 
 
-    var findPosition = function() {
+    let findPosition = function() {
 
       if (!map.selectedReg) return;
 
-      var mapRect = map.mapElem.getBoundingClientRect();
-      var regRect = map.selectedReg.getBoundingClientRect();
-      var popUpRect = popUp[0].getBoundingClientRect();
+      let mapRect = map.mapElem.getBoundingClientRect();
+      let regRect = map.selectedReg.getBoundingClientRect();
+      let popUpRect = popUp[0].getBoundingClientRect();
 
-      var top, left;
+      let top, left;
 
-      var left = regRect.left + regRect.width;
-      var top = regRect.top - popUpRect.height;
+      left = regRect.left + regRect.width;
+      top = regRect.top - popUpRect.height;
       if(top < mapRect.top) {
         top = mapRect.top + 20;
       }
@@ -603,9 +603,9 @@ $(function() {
       };
     };
 
-    var setPosition = function(obj) {
+    let setPosition = function(obj) {
       if(!obj) return;
-      var format = ["right", "top", "left", "bottom"];
+      let format = ["right", "top", "left", "bottom"];
       format.forEach(function(prop) {
         popUp[0].style[prop] = obj[prop] ? obj[prop] + "px" : "";
       });
@@ -613,14 +613,14 @@ $(function() {
 
 
 
-    var render = function() {
+    let render = function() {
 
       if (!state.regionId) {
         hide();
         return;
       }
 
-      var name, infected, died, infectedText;
+      let name, infected, died, infectedText;
 
       name = data[state.regionId].name;
 
@@ -656,7 +656,7 @@ $(function() {
       }
     };
 
-    var onresize = function(){
+    let onresize = function(){
       setPosition(findPosition());
     };
 
@@ -675,7 +675,7 @@ $(function() {
   ██   ██ ███████ ██   ████ ██████  ███████ ██   ██
   */
 
-  var renderAll = function() {
+  let renderAll = function() {
     map.render();
     years.render();
     dropDowdn.render();
@@ -683,7 +683,7 @@ $(function() {
     popUp.render();
   };
 
-  var initAll = function() {
+  let initAll = function() {
     legend.init();
     dropDowdn.createScroller();
   };
@@ -702,8 +702,8 @@ $(function() {
   */
 
   (function() {
-    var blob = null;
-    var xhr = new XMLHttpRequest();
+    let blob = null;
+    let xhr = new XMLHttpRequest();
     xhr.open("GET", "HIV_Data_by_reg.csv");
     xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
     xhr.onload = function() {
@@ -712,7 +712,7 @@ $(function() {
     };
     xhr.send();
 
-    var myReader = new FileReader();
+    let myReader = new FileReader();
     myReader.addEventListener("loadend", function(e) {
 
       data = newDataProseed(e.srcElement.result);

@@ -119,7 +119,8 @@ $(function () {
 
       Object.keys(data).forEach(function (reginoId) {
 
-        var value, percent;
+        var value = void 0,
+            percent = void 0;
 
         if (state.display == "abs") {
 
@@ -346,9 +347,9 @@ $(function () {
           scrollContent = document.querySelector('.scrollable .content'),
           contentPosition = 0,
           scrollerBeingDragged = false,
-          scroller,
-          topPosition,
-          scrollerHeight;
+          scroller = void 0,
+          topPosition = void 0,
+          scrollerHeight = void 0;
 
       function calculateScrollerHeight() {
         // *Calculation of how tall scroller should be
@@ -516,9 +517,9 @@ $(function () {
         path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 
         if (deg > 180) {
-          var d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+          var _d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
         } else {
-          var d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+          var _d2 = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
         }
 
         path.setAttribute("d", d);
@@ -537,10 +538,11 @@ $(function () {
       var regRect = map.selectedReg.getBoundingClientRect();
       var popUpRect = popUp[0].getBoundingClientRect();
 
-      var top, left;
+      var top = void 0,
+          left = void 0;
 
-      var left = regRect.left + regRect.width;
-      var top = regRect.top - popUpRect.height;
+      left = regRect.left + regRect.width;
+      top = regRect.top - popUpRect.height;
       if (top < mapRect.top) {
         top = mapRect.top + 20;
       }
@@ -572,7 +574,10 @@ $(function () {
         return;
       }
 
-      var name, infected, died, infectedText;
+      var name = void 0,
+          infected = void 0,
+          died = void 0,
+          infectedText = void 0;
 
       name = data[state.regionId].name;
 
