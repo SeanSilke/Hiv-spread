@@ -39,8 +39,7 @@ body {
   padding: 0;
   margin: 0;
   background-color: #1A1517;
-  /*margin-top: 1000px;
-  margin-bottom: 1000px;*/
+
 }
 
 /*.topline {
@@ -79,9 +78,9 @@ body {
 /*---------------------------------*/
 
 .map {
-  min-width: 955px;
-  max-width: 1525px;
   padding: 0 20px;
+  width: 955px;
+  margin: auto;
 }
 
 .map_body {
@@ -117,7 +116,7 @@ body {
 
 .map_header .item.btn.active {
   background-color: #B42025;
-  cursor: pointer;
+  cursor: default;
   border: none;
   padding: 15px;
   /*pointer-events: none;*/
@@ -160,7 +159,7 @@ padding-right: 50%;
 overflow-y: scroll;
 }
 .scroller {
-z-index: 5;
+z-index: 100;
 cursor: pointer;
 position: absolute;
 width: 7px;
@@ -254,7 +253,7 @@ user-select: none;
  display: inline-block;
  font-size: 16px;
  font-family: 'PTSans-Regular';
- text-align: center;
+ text-align: left;
  transition: background-color 0.7s;
  cursor: pointer;
 
@@ -279,7 +278,7 @@ user-select: none;
   content: "";
   position: absolute;
   top: -14%;
-  left: -19%;
+  left: -33%;
   z-index: -1;
   background: none;
   transition: background-color 1s;
@@ -302,7 +301,7 @@ user-select: none;
   border-radius: 3px;
   opacity: 0;
   visibility: ;
-  z-index: 1000;
+  z-index: 50;
   transition: opacity 0.5s, top 1s, left 1s, visibility 0.5s;
 }
 
@@ -385,25 +384,31 @@ user-select: none;
 
 .legend .text , .legend .bloc {
   display: inline-block;
+  position: relative;
   vertical-align: top;
-  width: 50px;
+  /*width: 50px;*/
   height: 43px;
+  margin-right: 27px;
 }
 
 
 .legend .bloc .color {
   width: 21px;
   height: 21px;
-  background-color: red;
-  margin: auto;
+  /*background-color: red;*/
+  /*margin: auto;*/
   margin-bottom: 10px;
 }
 
 .legend .bloc .val {
+  width: 50px;
   font-family: 'PTSans-Regular';
   font-size: 16px;
   color: #93A1A8;
   text-align: center;
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */
   -khtml-user-select: none;    /* Konqueror */
@@ -411,4 +416,11 @@ user-select: none;
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
+}
+
+
+.legend .bloc:first-child .val {
+  text-align: left;
+  left: 0;
+  margin-left: 0;
 }
