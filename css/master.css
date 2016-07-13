@@ -1,527 +1,628 @@
-@font-face {
-  font-family: 'PTSans-Regular';
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.eot');
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.eot?#iefix') format('embedded-opentype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.woff') format('woff'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.ttf') format('truetype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.svg#PTSans-Regular') format('svg');
-  font-weight: normal;
-  font-style: normal;
+em {
+    font-style: normal;
 }
-
 @font-face {
-  font-family: 'PTSans-Bold';
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.eot');
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.eot?#iefix') format('embedded-opentype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.woff') format('woff'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.ttf') format('truetype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.svg#PTSans-Bold') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'PTSans-Regular';
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.eot');
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.eot?#iefix') format('embedded-opentype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.woff') format('woff'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.ttf') format('truetype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.svg#PTSans-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-
 @font-face {
-  font-family: 'PTSans-Italic';
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.eot');
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.eot?#iefix') format('embedded-opentype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.woff') format('woff'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.ttf') format('truetype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.svg#PTSans-Italic') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'PTSans-Bold';
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.eot');
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.eot?#iefix') format('embedded-opentype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.woff') format('woff'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.ttf') format('truetype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Bold.svg#PTSans-Bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-
 @font-face {
-  font-family: 'PTSerif-Regular';
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.eot');
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.eot?#iefix') format('embedded-opentype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.woff') format('woff'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.ttf') format('truetype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.svg#PTSerif-Regular') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'PTSans-Italic';
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.eot');
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.eot?#iefix') format('embedded-opentype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.woff') format('woff'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.ttf') format('truetype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Italic.svg#PTSans-Italic') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-
 @font-face {
-  font-family: 'PTSerif-Bold';
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.eot');
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.eot?#iefix') format('embedded-opentype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.woff') format('woff'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.ttf') format('truetype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.svg#PTSerif-Bold') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'PTSerif-Regular';
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.eot');
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.eot?#iefix') format('embedded-opentype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.woff') format('woff'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.ttf') format('truetype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Regular.svg#PTSerif-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-
 @font-face {
-  font-family: 'PTSerif-Italic';
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.eot');
-  src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.eot?#iefix') format('embedded-opentype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.woff') format('woff'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.ttf') format('truetype'),
-       url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.svg#PTSerif-Italic') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'PTSerif-Bold';
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.eot');
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.eot?#iefix') format('embedded-opentype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.woff') format('woff'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.ttf') format('truetype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Bold.svg#PTSerif-Bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-
-
+@font-face {
+    font-family: 'PTSerif-Italic';
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.eot');
+    src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.eot?#iefix') format('embedded-opentype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.woff') format('woff'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.ttf') format('truetype'), url('//dyn.ig.rambler.ru/fontcss/fonts/PTSerif/PTSerif-Italic.svg#PTSerif-Italic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 body {
-  padding: 0;
-  margin: 0;
-  background-color: #1A1517;
+    padding: 0;
+    margin: 0;
+    background-color: #1A1517;
 }
-
 .line {
-  background-color: #A9242C;
-  width: 100%;
-  height: 50px;
+    background-color: #A9242C;
+    width: 100%;
+    height: 50px;
 }
-
 .bottom {
-  margin-top: 20px;
+    margin-top: 20px;
 }
-
 .line .center {
-  width: 955px;
-  height: 100%;
-  margin: auto;
-  /*background-color: green;*/
+    width: 955px;
+    height: 100%;
+    margin: auto;
+    /*background-color: green;*/
 }
-
-#ramblerIG{
-  padding: 21px;
+#ramblerIG {
+    padding: 21px;
 }
-
 #gazeta {
-  padding: 17px;
-  float: right;
+    padding: 17px;
+    float: right;
+}
+.plate1 {
+    width: 100%;
+    height: 800px;
+    min-width: 955px;
+    /*background-color: green;*/
+    background-image: url("../ribon1.png");
+    background-repeat: no-repeat;
+    background-position: center 394px;
+}
+.plate1 .content {
+    position: relative;
+    margin: 0 auto;
+    max-width: 955px;
+    height: 100%;
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+    font-size: 0;
+}
+.plate1 .content .item {
+    box-sizing: border-box;
+    font-size: 16px;
+    display: inline-block;
+    vertical-align: top;
+    width: 50%;
+    height: 70%;
+    padding: 60px 0;
+}
+.plate1 .content .item .head {
+    font-size: 58px;
+    color: #EEEEEE;
+    font-family: 'PTSerif-Regular';
+}
+.plate1 .content .item img:first-child {
+    padding-left: 338px;
+    padding-top: 15px;
+}
+.plate1 .content .item .head em {
+    color: #B42025;
+}
+.plate1 .content .item .text {
+    font-size: 22px;
+    color: #EEEEEE;
+    font-family: 'PTSerif-Regular';
+    padding-top: 60px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.footer img {
+    display: block;
+    margin: auto;
+}
+.plate2 {
+    margin-top: 65px;
+    height: 420px;
+    width: 100%;
+}
+.plate2 .content {
+    width: 1024px;
+    height: 100%;
+    margin: 0 auto;
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+}
+.plate2 .content .question {
+    font-size: 24px;
+    color: #ffffff;
+    font-family: "TSans-Bold";
+    text-align: center;
+}
+.plate2 .answers {
+    font-size: 0;
+    color: #ffffff;
+    font-family: "PTSans-Regular"
+}
+.plate2 .answers .item {
+    box-sizing: border-box;
+    font-size: 16px;
+    display: inline-block;
+    width: 50%;
+    /*height: 140px;*/
+    margin-top: 35px;
+    padding-left: 40px;
+    padding-right: 40px;
+    /*padding: 40px;*/
+}
+.plate2 .answers .item:nth-child(1) .elem {
+    text-align: right;
+}
+.plate2 .answers .item:nth-child(2) .elem {
+    text-align: left;
+}
+.plate2 .answers .item .elem {
+    margin-bottom: 20px;
+}
+.answerButton {
+    border: 2px solid #18B3AC;
+    width: 168px;
+    height: 36px;
+    border-radius: 40px;
+    position: relative;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+.answerButton .text {
+    font-size: 16px;
+    font-family: 'PTSans-Bold';
+    color: #18B3AC;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.plate2 .comment {
+    font-size: 16px;
+    font-family: 'PTSerif-Regular';
+    color: #ffffff;
+    width: 553px;
+    margin: 0 auto;
+    margin-top: 65px;
+}
+.plate3 {
+    width: 100%;
+    height: 640px;
+    min-width: 1024px;
+    /*background-color: green;*/
+    background-image: url("../ribon2.png");
+    background-repeat: no-repeat;
+    background-position: 45% 25px;
+    position: relative;
+}
+.plate3 .text {
+    display: inline-block;
+    font-family: "PTSerif-Regular";
+    font-size: 24px;
+    color: #ffffff;
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+}
+.plate3 .text .item:nth-child(2) {
+    font-size: 63px;
+}
+.plate4 {
+    width: 100%;
+    /*height: 640px;*/
+    min-width: 1024px;
+    /*background-color: green;*/
+    position: relative;
+}
+.plate4 .content {
+    width: 1024px;
+    /*height: 100%;*/
+    margin: 0 auto;
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+}
+.plate4 .content .question {
+    font-size: 24px;
+    color: #ffffff;
+    font-family: "TSans-Bold";
+    text-align: center;
+}
+.plate4 .answers {
+    font-size: 0;
+    color: #ffffff;
+    font-family: "PTSans-Regular"
+}
+.plate4 .answers .item {
+    box-sizing: border-box;
+    font-size: 16px;
+    display: inline-block;
+    width: 50%;
+    /*height: 140px;*/
+    margin-top: 35px;
+    padding-left: 40px;
+    padding-right: 40px;
+    /*padding: 40px;*/
+}
+.plate4 .answers .item:nth-child(1) .elem {
+    text-align: right;
+}
+.plate4 .answers .item:nth-child(2) .elem {
+    text-align: left;
+}
+.plate4 .answers .item .elem {
+    margin-bottom: 20px;
+}
+.plate4 .comment {
+    font-size: 16px;
+    font-family: 'PTSerif-Regular';
+    color: #ffffff;
+    width: 670px;
+    margin: 0 auto;
+    margin-top: 65px;
+    text-align: center;
 }
 
-.first-plait{
-  width: 100%;
-  height: 860px;
-  min-width: 955px;
-  /*background-color: green;*/
-  background-image: url("../ribon1.png");
-  background-repeat: no-repeat;
-  background-position:center 116%;
+.plate5  {
+  margin-top: 45px;
 }
 
-.first-plait .content {
-  margin: 0 auto;
-  max-width: 955px;
-  height: 100%;
-  /*background-color: rgba(0, 128, 0, 0.25);*/
-  font-size: 0;
+.plate5 .comment {
+  font-size: 0px;
+  width: 948px;
+  margin: auto;
+  padding-top: 40px;
+
 }
 
-.first-plait .content .item {
+.plate5 .comment .item {
   box-sizing: border-box;
-  font-size: 16px;
   display: inline-block;
   vertical-align: top;
   width: 50%;
-  height: 100%;
-  padding: 60px 0;
+  font-size: 16px;
+  font-family: "PTSans-Bold";
+  color: #ffffff;
 }
 
-.first-plait .content .item .head {
-  font-size: 58px;
-  color: #EEEEEE;
-  font-family: 'PTSerif-Regular';
+.plate5 .comment .item:nth-child(1) {
+  padding-right: 30px
 }
 
-.first-plait .content .item img:first-child {
-  padding-left: 338px;
-  padding-top: 15px;
+.plate5 .comment .item:nth-child(2) {
+  padding-left: 30px
 }
 
-
-
-.first-plait .content .item .head em {
-  color: #B42025;
+#svg-map path, #svg-map polygon {
+    fill: rgb(232, 232, 232);
+    stroke: #000000;
+    stroke-width: 0.50;
+    cursor: pointer;
 }
-
-.first-plait .content .item .text {
-  font-size: 22px;
-  color: #EEEEEE;
-  font-family: 'PTSerif-Regular';
-  padding-top: 60px;
+#svg-map.regSelected path, #svg-map.regSelected polygon {
+    fill-opacity: 0.5;
 }
-
- #svg-map path , #svg-map polygon {
-  fill: rgb(232,232,232);
-  stroke: #000000;
-  stroke-width : 0.50;
-  cursor: pointer;
-}
-
-
-#svg-map.regSelected path , #svg-map.regSelected polygon {
-  fill-opacity: 0.5;
-}
-
-
-
 #svg-map path:hover, #svg-map polygon:hover {
     fill-opacity: 0.8;
 }
-
-#svg-map path.selected , #svg-map polygon.selected {
-  fill-opacity: 1;
+#svg-map path.selected, #svg-map polygon.selected {
+    fill-opacity: 1;
 }
-
-
 #svg-map path, #svg-map polygon {
-  transition: fill 0.5s, fill-opacity 0.5s;
+    transition: fill 0.5s, fill-opacity 0.5s;
 }
 
 /*---------------------------------*/
 
 .map {
-  padding: 0 20px;
-  width: 955px;
-  margin: auto;
+    padding: 0 20px;
+    width: 955px;
+    margin: auto;
 }
-
 .map_body {
-  position: relative;
+    position: relative;
 }
-
-
-.text{
-  font-size: 16px;
-  font-family: 'PTSans-Regular';
-  color: #EEEEEE;
+.text {
+    font-size: 16px;
+    font-family: 'PTSans-Regular';
+    color: #EEEEEE;
 }
 
 /*---------------------------------*/
 
 .map_header {
-  font-size: 0;
+    font-size: 0;
 }
-
-.map_header .item{
-  display: inline-block;
-  font-size: 16px;
-  font-family: 'PTSans-Regular';
-  color: #EEEEEE;
-  border-radius: 3px;
+.map_header .item {
+    display: inline-block;
+    font-size: 16px;
+    font-family: 'PTSans-Regular';
+    color: #EEEEEE;
+    border-radius: 3px;
 }
-
 .map_header .item.btn {
-  border: 2px solid #58595B;
-  cursor: pointer;
-  padding: 13px;
+    border: 2px solid #58595B;
+    cursor: pointer;
+    padding: 13px;
 }
-
 .map_header .item.btn.active {
-  background-color: #B42025;
-  cursor: default;
-  border: none;
-  padding: 15px;
-  /*pointer-events: none;*/
+    background-color: #B42025;
+    cursor: default;
+    border: none;
+    padding: 15px;
+    /*pointer-events: none;*/
 }
-
 .map_header> .item:nth-of-type(2) {
-  padding: 13px ;
-  margin: 0px 3%;
+    padding: 13px;
+    margin: 0px 3%;
 }
-
-
 .scrollable {
-position: relative;
-border: 1px solid gray;
-overflow: hidden;
-height: 245px;
-width: 252px;
-background-color: #1B1010;
-border-radius: 3px;
-position: absolute;
-left: -2px;
-top: 47px;
-visibility: hidden;
+    position: relative;
+    border: 1px solid gray;
+    overflow: hidden;
+    height: 245px;
+    width: 252px;
+    background-color: #1B1010;
+    border-radius: 3px;
+    position: absolute;
+    left: -2px;
+    top: 47px;
+    visibility: hidden;
 }
-
 .scrollable.showScroll::after {
-position: absolute;
-content: '';
-top: 5%;
-right: 21px;
-height: 90%;
-width: 5px;
-border: 1px solid #58595B;
+    position: absolute;
+    content: '';
+    top: 5%;
+    right: 21px;
+    height: 90%;
+    width: 5px;
+    border: 1px solid #58595B;
 }
-
 .scrollable .content-wrapper {
-width: 100%;
-height: 100%;
-padding-right: 50%;
-overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+    padding-right: 50%;
+    overflow-y: scroll;
 }
 .scroller {
-z-index: 100;
-cursor: pointer;
-position: absolute;
-width: 7px;
-background: #58595B;
-top: 5%;
-right: 21px;
--webkit-transition: top .08s;
--moz-transition: top .08s;
--ms-transition: top .08s;
--o-transition: top .08s;
-transition: top .08s;
+    z-index: 100;
+    cursor: pointer;
+    position: absolute;
+    width: 7px;
+    background: #58595B;
+    top: 5%;
+    right: 21px;
+    -webkit-transition: top .08s;
+    -moz-transition: top .08s;
+    -ms-transition: top .08s;
+    -o-transition: top .08s;
+    transition: top .08s;
 }
 .content-wrapper .content {
--webkit-touch-callout: none;
--webkit-user-select: none;
--khtml-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-
 .content-wrapper .content div {
-  font-family: 'PTSans-Regular';
-  font-size: 16px;
-  color: #93A1A8;
-  padding: 10px 0px 10px 20px
-
+    font-family: 'PTSans-Regular';
+    font-size: 16px;
+    color: #93A1A8;
+    padding: 10px 0px 10px 20px
 }
-
 .map_header .item.drop_down {
-  border: 2px solid #58595B;
-  position: relative;
-  width: 250px;
-  z-index: 100;
-  font-size: 0;
-  cursor: pointer;
+    border: 2px solid #58595B;
+    position: relative;
+    width: 250px;
+    z-index: 100;
+    font-size: 0;
+    cursor: pointer;
 }
-
-
-
 .map_header .item.drop_down .text {
-  padding: 13px;
-  display: inline-block;
+    padding: 13px;
+    display: inline-block;
 }
-
-
 .map_header .item.drop_down .close_button {
-  display: inline-block;
-  width: 46px;
-  height: 46px;
-  display: inline-block;
-  float: right;
-  cursor: pointer;
-  border-left: 2px solid #58595B;
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+    border-left: 2px solid #58595B;
 }
-
 .map_header .item.drop_down .close_button img {
-  padding: 13px;
-  width: 20px;
-  height: 20px;
+    padding: 13px;
+    width: 20px;
+    height: 20px;
 }
-
 .map_header .scrollable .content .item {
-  display: block;
+    display: block;
 }
-
 .map_header .scrollable .content .item:hover {
-  font-size: 16px;
-  font-family: 'PTSans-Regular';
-  color: #EEEEEE;
-  cursor: pointer;
+    font-size: 16px;
+    font-family: 'PTSans-Regular';
+    color: #EEEEEE;
+    cursor: pointer;
 }
-
 .map_header .scrollable .content .active {
-  font-size: 16px;
-  font-family: 'PTSans-Regular';
-  color: #EEEEEE;
-  cursor: pointer;
+    font-size: 16px;
+    font-family: 'PTSans-Regular';
+    color: #EEEEEE;
+    cursor: pointer;
 }
 
 /*------------Years---------------------*/
 
 .years {
-  font-size: 0;
-  border: 0;
-  width: 955px;
-  margin: auto;
+    font-size: 0;
+    border: 0;
+    width: 955px;
+    margin: auto;
 }
 .col {
- width: 4.76190476%; /* Ширина колонок */
- display: inline-block;
- font-size: 16px;
- font-family: 'PTSans-Regular';
- text-align: left;
- transition: background-color 0.7s;
- cursor: pointer;
-
+    width: 4.76190476%;
+    /* Ширина колонок */
+    display: inline-block;
+    font-size: 16px;
+    font-family: 'PTSans-Regular';
+    text-align: left;
+    transition: background-color 0.7s;
+    cursor: pointer;
 }
-
 .col>div {
-   padding-top: 15px;
-   vertical-align: middle;
-   padding-bottom: 15px;
-   color:#93A1A8;
-   position: relative;
+    padding-top: 15px;
+    vertical-align: middle;
+    padding-bottom: 15px;
+    color: #93A1A8;
+    position: relative;
 }
-
 .active.col>div {
-  color: #ffffff;
+    color: #ffffff;
 }
-
 .col>div::before {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  content: "";
-  position: absolute;
-  top: -14%;
-  left: -33%;
-  z-index: -1;
-  background: none;
-  transition: background-color 1s;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    content: "";
+    position: absolute;
+    top: -14%;
+    left: -33%;
+    z-index: -1;
+    background: none;
+    transition: background-color 1s;
 }
-
 .active.col>div::before {
-    background-color: rgb(180,32,37);
+    background-color: rgb(180, 32, 37);
 }
-
-
 
 /*-------------Banner--------------------*/
 
-.banner{
-  width: 420px;
-  /*height: 140px;*/
-  background-color: rgba(31,66,79,0.74);
-  padding: 27px 20px 20px 35px;
-  position: absolute;;
-  border-radius: 3px;
-  opacity: 0;
-  visibility: ;
-  z-index: 50;
-  transition: opacity 0.5s, top 1s, left 1s, visibility 0.5s;
+.banner {
+    width: 420px;
+    /*height: 140px;*/
+    background-color: rgba(31, 66, 79, 0.74);
+    padding: 27px 20px 20px 35px;
+    position: absolute;
+    ;
+    border-radius: 3px;
+    opacity: 0;
+    visibility: ;
+    z-index: 50;
+    transition: opacity 0.5s, top 1s, left 1s, visibility 0.5s;
 }
-
 .banner .head .region {
-  color: #ffffff;
-  font-family:  'PTSans-Bold';
-  font-weight: 16px;
-  display: inline-block;
-  width: 85%;
+    color: #ffffff;
+    font-family: 'PTSans-Bold';
+    font-weight: 16px;
+    display: inline-block;
+    width: 85%;
 }
-
 .banner .head .btn.close {
-  width: 15px;
-  height: 15px;
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background-image: url("../close_button.svg");
-  cursor: pointer;
-
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background-image: url("../close_button.svg");
+    cursor: pointer;
 }
-
-
 .banner .body .pie {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 25px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 25px;
 }
-
-
 .banner .body .data {
-  display: inline-block;
-  vertical-align: top;
-  padding: 20px 0 0 0;
+    display: inline-block;
+    vertical-align: top;
+    padding: 20px 0 0 0;
 }
-
 .banner .body .item {
-  margin: 10px 0;
-  font-size: 0;
-  white-space: nowrap;
+    margin: 10px 0;
+    font-size: 0;
+    white-space: nowrap;
 }
-
 .banner .body .item span {
-  color: #ffffff;
-  font-family: 'PTSans-Regular';
-  display: inline-block;
-  font-size: 16px;
+    color: #ffffff;
+    font-family: 'PTSans-Regular';
+    display: inline-block;
+    font-size: 16px;
 }
-
 .banner .body .item .leble {
-  padding-left: 15px;
+    padding-left: 15px;
 }
-
 .banner .body .item .infected {
-  color: #ffffff;
-  font-family:  'PTSans-Bold';
-  display: inline-block;
-  font-size: 24px;
-  width: 23%;
-  text-align: right;
+    color: #ffffff;
+    font-family: 'PTSans-Bold';
+    display: inline-block;
+    font-size: 24px;
+    width: 23%;
+    text-align: right;
 }
-
 .banner .body .item .dead {
-  color: #18B3AC;
-  font-family:  'PTSans-Bold';
-  display: inline-block;
-  font-size: 24px;
-  width: 23%;
-  text-align: right;
+    color: #18B3AC;
+    font-family: 'PTSans-Bold';
+    display: inline-block;
+    font-size: 24px;
+    width: 23%;
+    text-align: right;
 }
-
 
 /*---Legend--*/
 
 .legend {
-  font-size: 0;
-  position: absolute;
-  bottom: 5%;
+    font-size: 0;
+    position: absolute;
+    bottom: 5%;
 }
-
-.legend .text , .legend .bloc {
-  display: inline-block;
-  position: relative;
-  vertical-align: top;
-  /*width: 50px;*/
-  height: 43px;
-  margin-right: 27px;
+.legend .text, .legend .bloc {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    /*width: 50px;*/
+    height: 43px;
+    margin-right: 27px;
 }
-
-
 .legend .bloc .color {
-  width: 21px;
-  height: 21px;
-  /*background-color: red;*/
-  /*margin: auto;*/
-  margin-bottom: 10px;
+    width: 21px;
+    height: 21px;
+    /*background-color: red;*/
+    /*margin: auto;*/
+    margin-bottom: 10px;
 }
-
 .legend .bloc .val {
-  width: 50px;
-  font-family: 'PTSans-Regular';
-  font-size: 16px;
-  color: #93A1A8;
-  text-align: center;
-  position: absolute;
-  left: 50%;
-  margin-left: -25px;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;           /* Non-prefixed version, currently
+    width: 50px;
+    font-family: 'PTSans-Regular';
+    font-size: 16px;
+    color: #93A1A8;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    margin-left: -25px;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Chrome/Safari/Opera */
+    -khtml-user-select: none;
+    /* Konqueror */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
                                   not supported by any browser */
 }
-
-
 .legend .bloc:first-child .val {
-  text-align: left;
-  left: 0;
-  margin-left: 0;
+    text-align: left;
+    left: 0;
+    margin-left: 0;
 }
