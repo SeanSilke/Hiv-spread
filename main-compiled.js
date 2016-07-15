@@ -76,7 +76,7 @@ var relnIfectedInYear = function relnIfectedInYear(year, rowRregData) {
   return rowRregData[ofset];
 };
 
-$(function () {
+var mapMain = function mapMain() {
 
   //----Data----
   var data = {};
@@ -677,4 +677,9 @@ $(function () {
       renderAll();
     });
   })();
+};
+
+$(".map_body").load("map.svg", function () {
+  mapMain();
+  window.scrollTo(0, document.body.scrollHeight);
 });

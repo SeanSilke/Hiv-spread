@@ -89,7 +89,7 @@ let relnIfectedInYear = function(year, rowRregData) {
 
 
 
-$(function() {
+let mapMain = function() {
 
   //----Data----
   let data = {
@@ -723,4 +723,55 @@ $(function() {
     });
   })();
 
+};
+
+
+
+let getColorMeta = function(startColor, endColor, percent) {
+  var noName = function(start,end, percent ){
+    return  Math.abs(
+      Math.floor(start *(1-percent) + end*percent)
+    );
+  };
+
+
+  return startColor.map(function(elem,i){
+    return  noName(elem, endColor[i], percent);
+  }).join(",");
+};
+
+console.log(
+getColorMeta([26,14,14],[22,47,57], 0.5)
+);
+
+$( ".map_body" ).load( "map.svg", function() {
+  mapMain();
+  // window.scrollTo(0,document.body.scrollHeight);
+
+  // window.onscroll = doThisStuffOnScroll;
+
+  let H = document.body.offsetHeight
+
+  window.document.body.style.background = 'linear-gradient(rgb(26,14,14), rgb(44,108,111))'
+
+  function doThisStuffOnScroll() {
+    let scrolled = window.pageYOffset || document.documentElement.scrollTop;
+    let percent = (scrolled + window.innerHeight) / H;
+
+    let color =  getColorMeta([26,14,14], [44,108,111], percent)
+    console.log(`rgb(${color})`);
+
+      window.document.body.style.backgroundColor =`rgb(${color})`;
+  }
 });
+
+
+// Шапка  + волна #rgb(26,14,14)
+// 1 вопрос + ответ #rgb(22,47,57)
+// 2 вопрос + карта #rgb(26,14,14)
+// 3 вопрос + график + волна #rgb(19,50,61)
+// 4 вопрос + волна #rgb(19,50,61)
+// 5 вопрос + график #rgb(12,35,42)
+// 6 вопрос + график #rgb(12,35,42)
+// 7 вопрос + волна + карта #rgb(22,47,57)
+// подвал с результатами  #rgb(44,108,111)

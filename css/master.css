@@ -47,6 +47,7 @@ body {
     padding: 0;
     margin: 0;
     background-color: #1A1517;
+    font-size: 0;
 }
 .line {
     background-color: #A9242C;
@@ -62,16 +63,15 @@ body {
     margin: auto;
     /*background-color: green;*/
 }
-#ramblerIG {
+.ramblerIG {
     padding: 21px;
 }
-#gazeta {
+.gazeta {
     padding: 17px;
     float: right;
 }
 .plate1 {
     width: 100%;
-    height: 800px;
     min-width: 955px;
     /*background-color: green;*/
     background-image: url("../ribon1.png");
@@ -114,18 +114,23 @@ body {
     padding-top: 60px;
 }
 .footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
 }
 .footer img {
     display: block;
     margin: auto;
 }
+
+.plate1 .footer {
+  margin-top: 230px;
+}
+
+.plate3 .footer {
+  padding-top: 585px;
+}
+
 .plate2 {
     margin-top: 65px;
-    height: 420px;
     width: 100%;
 }
 .plate2 .content {
@@ -174,7 +179,7 @@ body {
     margin: 0 auto;
     margin-top: 20px;
 }
-.answerButton .text {
+.answerButton> .text {
     font-size: 16px;
     font-family: 'PTSans-Bold';
     color: #18B3AC;
@@ -193,9 +198,7 @@ body {
 }
 .plate3 {
     width: 100%;
-    height: 640px;
     min-width: 1024px;
-    /*background-color: green;*/
     background-image: url("../ribon2.png");
     background-repeat: no-repeat;
     background-position: 45% 25px;
@@ -217,14 +220,12 @@ body {
 }
 .plate4 {
     width: 100%;
-    /*height: 640px;*/
     min-width: 1024px;
-    /*background-color: green;*/
     position: relative;
+    margin-top: 60px;
 }
 .plate4 .content {
     width: 1024px;
-    /*height: 100%;*/
     margin: 0 auto;
     /*background-color: rgba(0, 128, 0, 0.25);*/
 }
@@ -625,4 +626,465 @@ body {
     text-align: left;
     left: 0;
     margin-left: 0;
+}
+
+
+.plate6 {
+    margin-top: 65px;
+    width: 100%;
+    background-image: url("../ribon3.png");
+    background-repeat: no-repeat;
+    background-position: 50% 850px;
+}
+.plate6 .content {
+    width: 1024px;
+    height: 100%;
+    margin: 0 auto;
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+}
+.plate6 .content .question {
+    font-size: 24px;
+    color: #ffffff;
+    font-family: "TSans-Bold";
+    text-align: center;
+}
+.plate6 .answers {
+    font-size: 0;
+    color: #ffffff;
+    font-family: "PTSans-Regular"
+}
+.plate6 .answers .item {
+    box-sizing: border-box;
+    font-size: 16px;
+    display: inline-block;
+    width: 50%;
+    /*height: 140px;*/
+    margin-top: 35px;
+    padding-left: 40px;
+    padding-right: 40px;
+    /*padding: 40px;*/
+}
+.plate6 .answers .item:nth-child(1) .elem {
+    text-align: right;
+}
+.plate6 .answers .item:nth-child(2) .elem {
+    text-align: left;
+}
+.plate6 .answers .item .elem {
+    margin-bottom: 20px;
+}
+
+.plate6 .comment {
+    font-size: 16px;
+    font-family: 'PTSerif-Regular';
+    color: #ffffff;
+    width: 553px;
+    margin: 0 auto;
+    margin-top: 65px;
+}
+
+.chart.newInfected {
+  margin-top: 40px;
+}
+
+.chart.newInfected .header.text{
+    font-family: 'PTSans-Bold';
+    font-size: 24px;
+    text-align: center;
+}
+
+.chart.newInfected .body {
+  height: 320px;
+  width: 700px;
+  margin: 0 auto;
+  background-color: rgba(0, 128, 0, 0.25);
+}
+
+.plate6 .text2 {
+    display: block;
+    font-family: "PTSerif-Regular";
+    font-size: 24px;
+    color: #ffffff;
+    text-align: center;
+    margin: 150px auto 0 auto;
+}
+.plate6 .text2 .item:nth-child(2) {
+    font-size: 63px;
+}
+
+.plate6 .footer {
+  margin-top: 140px;
+}
+
+
+.plate7 {
+    margin-top: 65px;
+    width: 100%;
+    background-image: url("../ribon4.png");
+    background-repeat: no-repeat;
+    background-position: 50% 490px;
+}
+.plate7 .content {
+    width: 1024px;
+    height: 100%;
+    margin: 0 auto;
+}
+.plate7 .content .question {
+    font-size: 24px;
+    color: #ffffff;
+    font-family: "TSans-Bold";
+    text-align: center;
+}
+
+.plate7 .content .answers {
+    width: 500px;
+    height: 400px;
+    background-color: rgba(0, 128, 0, 0.25);
+    margin: 0 auto;
+}
+
+.plate7 .answers {
+    font-size: 0;
+    color: #ffffff;
+    font-family: "PTSans-Regular"
+}
+
+.plate7 .answerButton{
+  margin-bottom: 80px;
+}
+
+.plate7 .head {
+    margin: 0 auto;
+    background-image: url("../women1.svg");
+    background-repeat: no-repeat;
+    width: 250px;
+    height: 180px;
+    margin: 0 auto;
+    background-size: 258px;
+}
+
+.plate7 .head_text {
+  font-family:'PTSerif-Regular';
+  font-size: 24px;
+  width: 590px;
+  margin: 20px auto 0 auto;
+  color: #ffffff;
+}
+
+.plate7 .footer {
+  margin-top: 90px;
+}
+
+
+
+.plate8 {
+    margin-top: 65px;
+    width: 100%;
+}
+.plate8 .content {
+    width: 1024px;
+    height: 100%;
+    margin: 0 auto;
+}
+.plate8 .content .question {
+    font-size: 24px;
+    color: #ffffff;
+    font-family: "TSans-Bold";
+    text-align: center;
+}
+
+.plate8 .content .answers {
+    width: 1000px;
+    height: 200px;
+    background-color: rgba(0, 128, 0, 0.25);
+    margin: 0 auto;
+}
+
+
+.plate8 .answerButton{
+  margin-bottom: 80px;
+}
+
+.plate8 .comment {
+    font-size: 16px;
+    font-family: 'PTSerif-Regular';
+    color: #ffffff;
+    width: 553px;
+    margin: 0 auto;
+    margin-top: 65px;
+}
+
+.plate8 .chart.key-reason {
+  background-color: rgba(0, 128, 0, 0.25);
+  width: 970px;
+  height: 630px;
+  margin: 40px auto 0 auto;
+
+}
+
+.plate8 .chart.key-reason .head {
+  font-family: 'PTSans-Bold';
+  font-size: 24px;
+  color: #ffffff;
+  margin: 0 auto;
+  width: 330px;
+}
+
+.plate8 .footer {
+  margin-top: 70px;
+}
+
+
+.plate9 {
+
+}
+
+
+.plate9 {
+    margin-top: 65px;
+    width: 100%;
+}
+.plate9 .content {
+    width: 1024px;
+    height: 100%;
+    margin: 0 auto;
+}
+.plate9 .content .question {
+    font-size: 24px;
+    color: #ffffff;
+    font-family: "TSans-Bold";
+    text-align: center;
+}
+
+.plate9 .content .answers {
+    width: 1000px;
+    height: 200px;
+    background-color: rgba(0, 128, 0, 0.25);
+    margin: 0 auto;
+}
+
+
+.plate9 .answerButton{
+  margin-bottom: 80px;
+}
+
+
+.plate9 .footer {
+  margin-top: 70px;
+}
+
+.plate9 .chart.top-infected {
+  text-align: center;
+  background-color: rgba(0, 128, 0, 0.25);
+  width:  570px;
+  height: 620px;
+  margin: 0 auto;
+
+}
+
+.plate9 .chart.top-infected .header{
+  font-family: 'PTSans-Bold';
+  font-size: 24px;
+  color: #ffffff;
+  display: inline-block;
+  /*display: block;*/
+  /*width: 570px;*/
+  /*margin: 0 auto;*/
+}
+
+
+.plate10 {
+    margin-top: 65px;
+    width: 100%;
+    background-image: url("../ribon5.png");
+    background-repeat: no-repeat;
+    background-position: 50% 190px;
+}
+.plate10 .content {
+    text-align: center;
+    width: 1024px;
+    height: 100%;
+    margin: 0 auto;
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+}
+.plate10 .content .question {
+    font-size: 24px;
+    color: #ffffff;
+    font-family: "TSans-Bold";
+    text-align: center;
+}
+.plate10 .answers {
+    font-size: 0;
+    color: #ffffff;
+    font-family: "PTSans-Regular"
+}
+.plate10 .answers .item {
+    box-sizing: border-box;
+    font-size: 16px;
+    display: inline-block;
+    width: 50%;
+    /*height: 140px;*/
+    margin-top: 35px;
+    padding-left: 40px;
+    padding-right: 40px;
+    /*padding: 40px;*/
+}
+.plate10 .answers .item:nth-child(1) .elem {
+    text-align: right;
+}
+.plate10 .answers .item:nth-child(2) .elem {
+    text-align: left;
+}
+.plate10 .answers .item .elem {
+    margin-bottom: 20px;
+}
+
+.plate10 .head {
+    margin: 0 auto;
+    background-image: url("../men1.svg");
+    background-repeat: no-repeat;
+    width: 260px;
+    height: 214px;
+    background-size: 258px;
+    margin-top: 90px;
+}
+
+.plate10 .head-name {
+  font-family:'PTSans-Bold';
+  font-size: 24px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.plate10 .head-function {
+  font-family:'PTSans-Bold';
+  font-size: 16px;
+  text-align: center;
+  color: #93A1A8;
+  margin-top: 5px;
+}
+
+.plate10 .head-text {
+  font-family:'PTSerif-Regular';
+  font-size: 24px;
+  /*width: 590px;*/
+  text-align: left;
+  display: inline-block;
+  margin: 20px auto 0 auto;
+  color: #ffffff;
+}
+
+.chart.top-spread {
+  margin-top: 180px;
+}
+
+.chart.top-spread .header.text{
+    font-family: 'PTSans-Bold';
+    font-size: 24px;
+    text-align: center;
+}
+
+.chart.top-spread .body {
+  height: 370px;
+  width: 700px;
+  margin: 0 auto;
+  background-color: rgba(0, 128, 0, 0.25);
+}
+
+.plate10 .comment {
+  margin: 60px auto 0 auto;
+  text-align: left;
+  width: 570px;
+  font-family: 'PTSerif-Regular';
+}
+
+.plate10 .footer {
+  margin-top: 55px;
+}
+
+.plate10 {
+    margin-top: 65px;
+    width: 100%;
+    background-image: url("../ribon5.png");
+    background-repeat: no-repeat;
+    background-position: 50% 190px;
+}
+
+
+
+.plate11 {
+    margin-top: 65px;
+    width: 100%;
+    background-image: url("../ribon6.png");
+    background-repeat: no-repeat;
+    background-position: 50% 295px;
+}
+.plate11 .content {
+    text-align: center;
+    width: 1024px;
+    height: 100%;
+    margin: 0 auto;
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+}
+
+.plate11 .result {
+  margin: 70px 0;
+}
+
+.plate11 .score {
+
+  font-family: 'PTSans-Bold';
+  font-size: 24px;
+}
+
+.plate11 .grade {
+  margin-top: 30px;
+  font-family: 'PTSans-Bold';
+  font-size: 24px;
+  color: #18B3AC;
+}
+
+.plate11 .result .comment {
+
+  font-family: 'PTSerif-Regular';
+  font-size: 16px;
+  width: 300px;
+  margin: auto;
+  margin-top: 30px;
+
+}
+
+.plate11 .have-exam {
+  margin: 180px 0 160px 0;
+}
+
+.plate11 .have-exam .question {
+  font-family: 'PTSans-Bold';
+  font-size: 32px;
+  color:  #18B3AC;
+}
+
+.plate11 .have-exam .comment {
+  font-family: 'PTSerif-Regular';
+  font-size: 16px;
+  width: 700px;
+  margin: 43px auto 30px auto;
+  text-align: left;
+}
+
+.plate11 .have-exam .adress .text{
+  font-family:'PTSans-Bold';
+  font-size: 24px;
+}
+
+.plate11 .have-exam .adress .text a{
+  font-family:'PTSans-Bold';
+  font-size: 24px;
+  color:  #18B3AC;
+}
+
+.plate11 .social .text {
+  font-family:'PTSans-Bold';
+  font-size: 24px;
+    padding-bottom: 40px;
 }
