@@ -1,3 +1,4 @@
+"use strict";
 let doElsCollide = function(el1, el2) {
 
   let rect1 = el1.getBoundingClientRect();
@@ -171,9 +172,9 @@ let mapMain = function() {
       }
     };
 
-    let setButtons = function(display){
-      btn.each(function(i,elem){
-        if(elem.dataset.displaytype == display) elem.classList.add('active');
+    let setButtons = function(display) {
+      btn.each(function(i, elem) {
+        if (elem.dataset.displaytype == display) elem.classList.add('active');
         else elem.classList.remove('active');
       });
     };
@@ -408,7 +409,8 @@ let mapMain = function() {
       function scrollBarScroll(evt) {
         if (scrollerBeingDragged === true) {
           let mouseDifferential = evt.pageY - normalizedPosition;
-          let scrollEquivalent = mouseDifferential * (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
+          let scrollEquivalent = mouseDifferential *
+            (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
           scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
         }
       }
@@ -531,7 +533,7 @@ let mapMain = function() {
 
         if (deg > 359) {
           path = svgElem.querySelector("circle").cloneNode(true);
-          path.setAttribute("fill", "url(#img1)" );
+          path.setAttribute("fill", "url(#img1)");
           svgElem.appendChild(path);
           return;
         }
@@ -588,24 +590,24 @@ let mapMain = function() {
 
       left = regRect.left + regRect.width;
       top = regRect.top - popUpRect.height;
-      if(top < mapRect.top) {
+      if (top < mapRect.top) {
         top = mapRect.top + 20;
       }
-      if(left + popUpRect.width > mapRect.left + mapRect.width) {
-         left = regRect.left - popUpRect.width;
-       }
+      if (left + popUpRect.width > mapRect.left + mapRect.width) {
+        left = regRect.left - popUpRect.width;
+      }
 
-       left = left + pageXOffset;
-       top = top + pageYOffset;
+      left = left + pageXOffset;
+      top = top + pageYOffset;
 
       return {
-        top: top ,
+        top: top,
         left: left,
       };
     };
 
     let setPosition = function(obj) {
-      if(!obj) return;
+      if (!obj) return;
       let format = ["right", "top", "left", "bottom"];
       format.forEach(function(prop) {
         popUp[0].style[prop] = obj[prop] ? obj[prop] + "px" : "";
@@ -657,7 +659,7 @@ let mapMain = function() {
       }
     };
 
-    let onresize = function(){
+    let onresize = function() {
       setPosition(findPosition());
     };
 
@@ -689,7 +691,7 @@ let mapMain = function() {
     dropDowdn.createScroller();
   };
 
-  window.onresize = function(){
+  window.onresize = function() {
     popUp.onresize();
   };
 
@@ -728,41 +730,48 @@ let mapMain = function() {
 
 
 let getColorMeta = function(startColor, endColor, percent) {
-  var noName = function(start,end, percent ){
-    return  Math.abs(
-      Math.floor(start *(1-percent) + end*percent)
+  var noName = function(start, end, percent) {
+    return Math.abs(
+      Math.floor(start * (1 - percent) + end * percent)
     );
   };
 
-
-  return startColor.map(function(elem,i){
-    return  noName(elem, endColor[i], percent);
+  return startColor.map(function(elem, i) {
+    return noName(elem, endColor[i], percent);
   }).join(",");
 };
 
-console.log(
-getColorMeta([26,14,14],[22,47,57], 0.5)
-);
+// console.log(
+// getColorMeta([26,14,14],[22,47,57], 0.5)
+// );
 
-$( ".map_body" ).load( "map.svg", function() {
-  mapMain();
-  // window.scrollTo(0,document.body.scrollHeight);
+let onscroll = (function() {
+  let bgColor = null;
+  let H = document.body.offsetHeight;
 
-  // window.onscroll = doThisStuffOnScroll;
-
-  let H = document.body.offsetHeight
-
-  window.document.body.style.background = 'linear-gradient(rgb(26,14,14), rgb(44,108,111))'
-
-  function doThisStuffOnScroll() {
+  let onscroll = function() {
     let scrolled = window.pageYOffset || document.documentElement.scrollTop;
     let percent = (scrolled + window.innerHeight) / H;
+    let color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
+    if (color !== bgColor) {
+      window.requestAnimationFrame(function() {
+        window.document.body.style.backgroundColor = `rgb(${color})`;
+      });
+      bgColor = color;
+    }
+  };
 
-    let color =  getColorMeta([26,14,14], [44,108,111], percent)
-    console.log(`rgb(${color})`);
+  onscroll();
 
-      window.document.body.style.backgroundColor =`rgb(${color})`;
-  }
+  return onscroll;
+
+})();
+
+$(".map_body").load("map.svg", function() {
+  mapMain();
+  // window.scrollTo(0,document.body.scrollHeight);
+  window.onscroll = onscroll;
+
 });
 
 
@@ -775,3 +784,197 @@ $( ".map_body" ).load( "map.svg", function() {
 // 6 вопрос + график #rgb(12,35,42)
 // 7 вопрос + волна + карта #rgb(22,47,57)
 // подвал с результатами  #rgb(44,108,111)
+
+// let data = {
+//   1994: 100,
+//   1995: 203,
+//   1996: 1513,
+//   1997: 4315,
+//   1998: 3971,
+//   1999: 19758,
+//   2000: 59609,
+//   2001: 88739,
+//   2002: 52170,
+//   2003: 39232,
+//   2004: 37002,
+//   2005: 39407,
+//   2006: 43007,
+//   2007: 44713,
+//   2008: 54563,
+//   2009: 58410,
+//   2010: 58298,
+//   2011: 62387,
+//   2012: 70832,
+//   2013: 79764,
+//   2014: 89667,
+//   2015: 93000,
+// };
+
+
+let data = [
+  100,
+  203,
+  1513,
+  4315,
+  3971,
+  19758,
+  59609,
+  88739,
+  52170,
+  39232,
+  37002,
+  39407,
+  43007,
+  44713,
+  54563,
+  58410,
+  58298,
+  62387,
+  70832,
+  79764,
+  89667,
+  93000,
+];
+
+
+
+(function() {
+
+  let bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
+
+  //rgb(24,179,172)
+  //rgb(203,132,125)
+  let startColor = [228, 152, 152];
+  //rgb(190,32,37)
+  let endColor = [190, 32, 37];
+  let max = 100 * 1000;
+
+  let i = 0;
+
+  let rendernewInfected = function() {
+    if (i >= data.length) {
+      let labels = document.querySelectorAll('.newInfected_label_text');
+      [].forEach.call(labels, elem => elem.style.opacity = 0.9);
+      return;
+    }
+    let val = data[i];
+    if (val < 4000) {
+      bars[i].style.backgroundColor = 'rgb(24,179,172)';
+      bars[i].style.marginTop = 260 * 0.98 + "px";
+    } else {
+      let color = getColorMeta(startColor, endColor, val / max);
+      bars[i].style.backgroundColor = `rgb(${color})`;
+      bars[i].style.marginTop = (1 - val / max) * 260 + "px";
+    }
+
+    if (i == 3) {
+      bars[i].style.backgroundColor = 'rgb(24,179,172)';
+    }
+
+    i++;
+    setTimeout(rendernewInfected, 30);
+  };
+
+
+  setTimeout(function() {
+    rendernewInfected();
+  }, 200);
+
+})();
+
+
+
+$(function() {
+
+let circle = document.querySelector('.guess-growth-main-small');
+let textFeald = document.querySelector('.guess-growth-main-text');
+let r = 46;
+let text = "1 000 000";
+
+let valToText = val => {
+  val = Math.round(val/100)*100;
+
+  var arr =  (val +"").split("");
+  arr.splice(4,0," ");
+  arr.splice(1,0," ");
+  return arr.join("");
+};
+
+// console.log(valToText(7089193));
+// console.log(textFeald);
+// textFeald.innerHTML = "Hello";
+
+
+
+let changeR = function( ){
+  circle.style.width = r +"px";
+  circle.style.height = r +"px";
+};
+
+let  changeText = () => textFeald.innerHTML = text;
+
+
+let calculeteNewR = h =>  46 + (230-46)*(1-h/230);
+
+let calculeteNewVal = h => 1000000 + (4000000)*(1-h/230);
+
+
+
+  $(".valuepicker-picker").draggable({
+    containment: "parent",
+     axis: "y",
+     drag: function( event, ui ) {
+       let h = ui.position.top;
+       r = calculeteNewR(ui.position.top);
+       text = valToText(calculeteNewVal(h));
+       requestAnimationFrame(changeR);
+       requestAnimationFrame(changeText);
+     }
+  });
+});
+
+
+$(function() {
+
+  let meter = document.querySelector('.red-meter-8');
+  let greenMeter = document.querySelector('.thermometer .green-meter');
+  let ribbonSlider = document.querySelector('#ribbon-slider-8');
+  let percent = 0.4;
+  let max = 848;
+  let text = document.querySelector('.red-meter-8>div');
+
+
+  let render = (percent) => {
+    ribbonSlider.style.left = percent*max + "px";
+    meter.style.left = (0 - (1  -  percent)*100) + "%";
+    text.innerHTML = Math.round(percent*100) + "%";
+    if(percent<0.075){
+      meter.classList.add("small");
+    }else {
+      meter.classList.remove("small");
+    }
+    if(percent>0.92){
+      greenMeter.classList.add("big");
+    }else {
+      greenMeter.classList.remove("big");
+    }
+  };
+
+  render(percent);
+
+
+
+
+  $(ribbonSlider).draggable({
+    containment: "parent",
+     axis: "x",
+     drag: function( event, ui ) {
+      ui.position.left = Math.min( 848, ui.position.left);
+      let percent = ui.position.left/848;
+      render(percent);
+      // console.log(100 - percent*100 + "%");
+      // meter.style.left = "-" + (100 *(1- percent)) + "%";
+
+     }
+  });
+});

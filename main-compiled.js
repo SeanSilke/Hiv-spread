@@ -679,7 +679,214 @@ var mapMain = function mapMain() {
   })();
 };
 
+var getColorMeta = function getColorMeta(startColor, endColor, percent) {
+  var noName = function noName(start, end, percent) {
+    return Math.abs(Math.floor(start * (1 - percent) + end * percent));
+  };
+
+  return startColor.map(function (elem, i) {
+    return noName(elem, endColor[i], percent);
+  }).join(",");
+};
+
+// console.log(
+// getColorMeta([26,14,14],[22,47,57], 0.5)
+// );
+
+var onscroll = function () {
+  var bgColor = null;
+  var H = document.body.offsetHeight;
+
+  var onscroll = function onscroll() {
+    var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+    var percent = (scrolled + window.innerHeight) / H;
+    var color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
+    if (color !== bgColor) {
+      window.requestAnimationFrame(function () {
+        window.document.body.style.backgroundColor = "rgb(" + color + ")";
+      });
+      bgColor = color;
+    }
+  };
+
+  onscroll();
+
+  return onscroll;
+}();
+
 $(".map_body").load("map.svg", function () {
   mapMain();
-  window.scrollTo(0, document.body.scrollHeight);
+  // window.scrollTo(0,document.body.scrollHeight);
+  window.onscroll = onscroll;
+});
+
+// Шапка  + волна #rgb(26,14,14)
+// 1 вопрос + ответ #rgb(22,47,57)
+// 2 вопрос + карта #rgb(26,14,14)
+// 3 вопрос + график + волна #rgb(19,50,61)
+// 4 вопрос + волна #rgb(19,50,61)
+// 5 вопрос + график #rgb(12,35,42)
+// 6 вопрос + график #rgb(12,35,42)
+// 7 вопрос + волна + карта #rgb(22,47,57)
+// подвал с результатами  #rgb(44,108,111)
+
+// let data = {
+//   1994: 100,
+//   1995: 203,
+//   1996: 1513,
+//   1997: 4315,
+//   1998: 3971,
+//   1999: 19758,
+//   2000: 59609,
+//   2001: 88739,
+//   2002: 52170,
+//   2003: 39232,
+//   2004: 37002,
+//   2005: 39407,
+//   2006: 43007,
+//   2007: 44713,
+//   2008: 54563,
+//   2009: 58410,
+//   2010: 58298,
+//   2011: 62387,
+//   2012: 70832,
+//   2013: 79764,
+//   2014: 89667,
+//   2015: 93000,
+// };
+
+var data = [100, 203, 1513, 4315, 3971, 19758, 59609, 88739, 52170, 39232, 37002, 39407, 43007, 44713, 54563, 58410, 58298, 62387, 70832, 79764, 89667, 93000];
+
+(function () {
+
+  var bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
+
+  //rgb(24,179,172)
+  //rgb(203,132,125)
+  var startColor = [228, 152, 152];
+  //rgb(190,32,37)
+  var endColor = [190, 32, 37];
+  var max = 100 * 1000;
+
+  var i = 0;
+
+  var rendernewInfected = function rendernewInfected() {
+    if (i >= data.length) {
+      var labels = document.querySelectorAll('.newInfected_label_text');
+      [].forEach.call(labels, function (elem) {
+        return elem.style.opacity = 0.9;
+      });
+      return;
+    }
+    var val = data[i];
+    if (val < 4000) {
+      bars[i].style.backgroundColor = 'rgb(24,179,172)';
+      bars[i].style.marginTop = 260 * 0.98 + "px";
+    } else {
+      var color = getColorMeta(startColor, endColor, val / max);
+      bars[i].style.backgroundColor = "rgb(" + color + ")";
+      bars[i].style.marginTop = (1 - val / max) * 260 + "px";
+    }
+
+    if (i == 3) {
+      bars[i].style.backgroundColor = 'rgb(24,179,172)';
+    }
+
+    i++;
+    setTimeout(rendernewInfected, 30);
+  };
+
+  setTimeout(function () {
+    rendernewInfected();
+  }, 200);
+})();
+
+$(function () {
+
+  var circle = document.querySelector('.guess-growth-main-small');
+  var textFeald = document.querySelector('.guess-growth-main-text');
+  var r = 46;
+  var text = "1 000 000";
+
+  var valToText = function valToText(val) {
+    val = Math.round(val / 100) * 100;
+
+    var arr = (val + "").split("");
+    arr.splice(4, 0, " ");
+    arr.splice(1, 0, " ");
+    return arr.join("");
+  };
+
+  // console.log(valToText(7089193));
+  // console.log(textFeald);
+  // textFeald.innerHTML = "Hello";
+
+  var changeR = function changeR() {
+    circle.style.width = r + "px";
+    circle.style.height = r + "px";
+  };
+
+  var changeText = function changeText() {
+    return textFeald.innerHTML = text;
+  };
+
+  var calculeteNewR = function calculeteNewR(h) {
+    return 46 + (230 - 46) * (1 - h / 230);
+  };
+
+  var calculeteNewVal = function calculeteNewVal(h) {
+    return 1000000 + 4000000 * (1 - h / 230);
+  };
+
+  $(".valuepicker-picker").draggable({
+    containment: "parent",
+    axis: "y",
+    drag: function drag(event, ui) {
+      var h = ui.position.top;
+      r = calculeteNewR(ui.position.top);
+      text = valToText(calculeteNewVal(h));
+      requestAnimationFrame(changeR);
+      requestAnimationFrame(changeText);
+    }
+  });
+});
+
+$(function () {
+
+  var meter = document.querySelector('.red-meter-8');
+  var greenMeter = document.querySelector('.thermometer .green-meter');
+  var ribbonSlider = document.querySelector('#ribbon-slider-8');
+  var percent = 0.4;
+  var max = 848;
+  var text = document.querySelector('.red-meter-8>div');
+
+  var render = function render(percent) {
+    ribbonSlider.style.left = percent * max + "px";
+    meter.style.left = 0 - (1 - percent) * 100 + "%";
+    text.innerHTML = Math.round(percent * 100) + "%";
+    if (percent < 0.075) {
+      meter.classList.add("small");
+    } else {
+      meter.classList.remove("small");
+    }
+    if (percent > 0.92) {
+      greenMeter.classList.add("big");
+    } else {
+      greenMeter.classList.remove("big");
+    }
+  };
+
+  render(percent);
+
+  $(ribbonSlider).draggable({
+    containment: "parent",
+    axis: "x",
+    drag: function drag(event, ui) {
+      ui.position.left = Math.min(848, ui.position.left);
+      var percent = ui.position.left / 848;
+      render(percent);
+      // console.log(100 - percent*100 + "%");
+      // meter.style.left = "-" + (100 *(1- percent)) + "%";
+    }
+  });
 });

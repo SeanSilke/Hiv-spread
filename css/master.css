@@ -691,14 +691,93 @@ body {
     font-family: 'PTSans-Bold';
     font-size: 24px;
     text-align: center;
+    margin-bottom: 35px;
 }
 
 .chart.newInfected .body {
-  height: 320px;
-  width: 700px;
+  height: 285px;
+  width: 910px;
   margin: 0 auto;
-  background-color: rgba(0, 128, 0, 0.25);
+  /*background-color: rgba(0, 128, 0, 0.25);*/
 }
+
+
+.chart.newInfected .body .canvas {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  border-bottom: 2px solid #D4D4D4;
+  border-top: 2px dotted #1F424F;
+  overflow: hidden;
+}
+
+
+
+.chart.newInfected .body .canvas .center.axis{
+  position: relative;
+  top: 50%;
+  width: 100%;
+  height: 50%;
+  border-top: 2px dotted #1F424F;
+}
+
+.chart.newInfected .body .canvas .text_1,.text_2 {
+  position: absolute;;
+  /*display: inline-block;*/
+
+  font-family:'PTSans-Regular';
+  font-size: 16px;
+  color: #93A1A8;
+  top: 5px;
+}
+
+.chart.newInfected .body .x-axis .block {
+  display: inline-block;
+  text-align: center;
+  width: 4.54545454545%;
+  font-family:'PTSans-Regular';
+  font-size: 16px;
+  color: #93A1A8;
+}
+
+.chart.newInfected .body .canvas .year {
+  position: relative;
+  display: inline-block;
+  width: 4.54545454545%;
+  height: 100%;
+  text-align: center;
+  /*overflow: hidden;*/
+}
+
+.chart.newInfected .body .canvas .year .count {
+  font-family:'PTSans-Regular';
+  font-size: 16px;
+  color: #93A1A8;
+}
+
+.newInfected_label_text {
+  font-family:'PTSans-Regular';
+  font-size: 16px;
+  color: #93A1A8;
+  transition: opacity 1s;
+  opacity: 0;
+}
+
+
+
+.chart.newInfected .body .canvas .bar {
+  display: inline-block;
+  vertical-align: top;
+  width: 40%;
+  height: 100%;
+  background-color: #B42025;
+  border-radius: 20px 20px 0 0;
+  margin-top: 260px;
+  /*transition-timing-function: ease-in-out;*/
+  transition: margin-top 0.3s ease-out;
+}
+
+
 
 .plate6 .text2 {
     display: block;
@@ -722,12 +801,13 @@ body {
     width: 100%;
     background-image: url("../ribon4.png");
     background-repeat: no-repeat;
-    background-position: 50% 490px;
+    background-position: 50% 420px;
 }
 .plate7 .content {
     width: 1024px;
     height: 100%;
     margin: 0 auto;
+    text-align: center;
 }
 .plate7 .content .question {
     font-size: 24px;
@@ -736,31 +816,123 @@ body {
     text-align: center;
 }
 
-.plate7 .content .answers {
-    width: 500px;
-    height: 400px;
-    background-color: rgba(0, 128, 0, 0.25);
+.plate7 .content .guess-growth {
+    width: 540px;
+    height: 250px;
+    /*background-color: rgba(150, 90, 0, 0.25);*/
     margin: 0 auto;
-}
-
-.plate7 .answers {
+    text-align: left;
     font-size: 0;
-    color: #ffffff;
-    font-family: "PTSans-Regular"
 }
 
-.plate7 .answerButton{
-  margin-bottom: 80px;
+.plate7 .content .header{
+  font-family: 'PTSans-Regular';
+  font-size: 16pt;
+  color: #93A1A8;
+  margin: 25px 0 35px 0;
+  display: inline-block;
+
 }
+
+.plate7 .content .guess-growth .valuepicker {
+  height: 100%;
+  width: 10%;
+  display: inline-block;
+  text-align: center;
+  /*border-right: 2px solid #D4D4D4;*/
+  position: relative;
+}
+
+.valuepicker-picker {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 5px solid #18B3AC;
+  position: absolute;
+  bottom: -1px;
+  left: 30.8%;
+  z-index: 1000;
+}
+
+.valuepicker-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  height: 90%;
+  width: 2px;
+  background-color: #D4D4D4
+}
+
+.guess-growth-main {
+  height: 100%;
+  display: inline-block;
+  width: 60%;
+  position: relative;
+}
+
+.guess-growth-main-big {
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background-color: #B42025;
+  opacity: 0.3;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.guess-growth-main-small {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: #B42025;
+  /*opacity: 0.3;*/
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.guess-growth-main-text {
+  color: #ffffff;
+  font-family: 'PTSans-Regular';
+  font-size: 16px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.plate7 .content .guess-growth  .guess-growth-legend{
+  vertical-align: top;
+  height: 100%;
+  width: 10%;
+  display: inline-block;
+  font-family: 'PTSans-Regular';
+  font-size: 16pt;
+  color: #93A1A8;
+  position: relative;
+}
+
+.guess-growth-legend>div:last-child {
+  position: absolute;
+  bottom: 0px;
+}
+
 
 .plate7 .head {
-    margin: 0 auto;
     background-image: url("../women1.svg");
     background-repeat: no-repeat;
     width: 250px;
     height: 180px;
     margin: 0 auto;
     background-size: 258px;
+    margin-top: 80px;
 }
 
 .plate7 .head_text {
@@ -794,15 +966,66 @@ body {
 }
 
 .plate8 .content .answers {
-    width: 1000px;
-    height: 200px;
-    background-color: rgba(0, 128, 0, 0.25);
-    margin: 0 auto;
+    position: relative;
+    width: 1024px;
+    /*height: 200px;*/
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+    margin: 65px auto 0 auto;
+}
+
+
+.thermometer .green-meter {
+  position: relative;
+  height: 30px;
+  width: 848px;
+  margin: 0 auto;
+  background-color: #18B3AC;
+  border-radius: 0 15px 15px 0;
+  font-size: 16px;
+  font-family:'PTSans-Regular';
+  color: #000000;
+  text-align: right;
+  box-sizing: border-box;
+  padding: 6px 15px 6px 0;
+  overflow: hidden;
+  transition: color 0.5s ease-in-out;
+}
+
+.thermometer .green-meter.big {
+  color: transparent;
+}
+
+.thermometer .red-meter-8 {
+  position: absolute;
+  left: -60%;
+  bottom: 0px;
+  height: 30px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #B42025;
+  border-radius: 0 15px 15px 0;
+  font-size: 16px;
+  font-family:'PTSans-Regular';
+  color: #ffffff;
+  text-align: right;
+  box-sizing: border-box;
+  padding: 6px 15px 6px 0;
+}
+
+.thermometer .red-meter-8> div {
+  position: absolute;
+  right: 2%;
+  transition: right 0.5s ease-in-out;
+}
+
+.thermometer .red-meter-8.small> div {
+  right: -4%;
 }
 
 
 .plate8 .answerButton{
   margin-bottom: 80px;
+  margin-top: 40px;
 }
 
 .plate8 .comment {
