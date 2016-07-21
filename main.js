@@ -314,12 +314,19 @@ let mapMain = function() {
 
     $select.click(
       function(e) {
+        console.log($select);
         e.stopPropagation();
         if (isOpen) {
           close();
         } else {
           open();
         }
+      }
+    );
+
+    $(".scrollable").click(
+      function(e){
+        e.stopPropagation();
       }
     );
 
@@ -380,7 +387,8 @@ let mapMain = function() {
         scrollerBeingDragged = false,
         scroller,
         topPosition,
-        scrollerHeight;
+        scrollerHeight,
+        normalizedPosition;
 
       function calculateScrollerHeight() {
         // *Calculation of how tall scroller should be
@@ -513,6 +521,7 @@ let mapMain = function() {
     };
     popUp.click(function(e) {
       e.stopPropagation();
+
     });
 
     closeButton.click(function(e) {
@@ -771,8 +780,14 @@ $(".map_body").load("map.svg", function() {
   mapMain();
   // window.scrollTo(0,document.body.scrollHeight);
   window.onscroll = onscroll;
-
 });
+
+// console.log($(".chart.top-spread .body"));
+
+// $(".top-spread-map").load("top-spread.svg", function() {
+//   // console.log("Done");
+//
+// });
 
 
 // Шапка  + волна #rgb(26,14,14)
@@ -963,6 +978,128 @@ $(function() {
   render(percent);
 
 
+
+
+  $(ribbonSlider).draggable({
+    containment: "parent",
+     axis: "x",
+     drag: function( event, ui ) {
+      ui.position.left = Math.min( 848, ui.position.left);
+      let percent = ui.position.left/848;
+      render(percent);
+      // console.log(100 - percent*100 + "%");
+      // meter.style.left = "-" + (100 *(1- percent)) + "%";
+
+     }
+  });
+});
+
+
+$(function(){
+
+  // let valArr = [10, 80, 5, 5];
+
+  //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
+
+
+
+
+  //как расположенны бары на диограмме
+  let barsPosition = ["drags", "fromMather","hetero", "homo"];
+
+
+  //как представленые данные в элементе матрици
+  let legend = {
+    drags : 0,
+    hetero : 1,
+    homo : 2,
+    fromMather: 3
+  };
+
+  let valMatrix = [
+  [3.3,43,53,0.7],
+  [6,41,52.9,0.1],
+  [84,7,8.7,0.3],
+  [87,10.9,1.9,0.2],
+  [79.1,	17.8,	2.7,	0.4],
+  [91.8,	7.4,	0.6,	0.1],
+  [95.5,	4.2,	0.2,	0.1],
+  [93.3,	6.4,	0.2,	0.2],
+  [81.2,	17.7,	0.4,	0.7],
+  [72.3,	25.4,	0.5,	1.7],
+  [66.7,	29.9,	0.8,	2.5],
+  [64.2,	31.8,	1.1,	3.0],
+  [63.3,	33.0,	0.7,	2.9],
+  [61.5,	35.2,	1.0,	2.3],
+  [61.3,	35.6,	1.1,	2.0],
+  [59.8,	37.1,	1.4,	1.8],
+  [57.9,	39.7,	1.3,	1.1],
+  [56.2,	41.4,	1.3, 1.1],
+  [56.4,	41.7,	1.1,	0.8],
+  [54.9,	43.1,	1,	1.0],
+  [58.4,	39.7,	1.1,	0.8]];
+
+  let years =  document.querySelectorAll('.key-reason-canvas .year');
+
+  let setValue = function(year,valArr){
+    let bars =  year.querySelectorAll(".bar");
+    [].forEach.call(bars,function(elem,i){
+        let name = barsPosition[i];
+        let percent = valArr[legend[name]];
+        elem.classList.add(name);
+        elem.style.height = percent + "%";
+    });
+  };
+
+  let setYears = (i,fn, years) =>{
+    if (i>years.length - 1) return;
+    fn(years[i],valMatrix[i]);
+    setTimeout(setYears,200, ++i,fn,years);
+  };
+
+
+  let initYears = (i,fn) =>{
+    if (i>20) return;
+    fn(years[i],[25,25,25,25]);
+    initYears(++i,fn);
+  };
+
+  //move init to some global init
+  initYears(0,setValue );
+
+  setTimeout(setYears ,700, 0,setValue, years);
+
+});
+
+
+
+$(function() {
+
+  let meter = document.querySelector('.red-meter-9');
+  let greenMeter = document.querySelector('.thermometer-9 .green-meter-9');
+  let ribbonSlider = document.querySelector('#ribbon-slider-9');
+  let percent = 0.4;
+  let max = 848;
+  let text = document.querySelector('.red-meter-9>div');
+
+
+  let render = (percent) => {
+    ribbonSlider.style.left = percent*max + "px";
+    meter.style.left = (0 - (1  -  percent)*100) + "%";
+    text.innerHTML = Math.round(percent*194) + 1;
+    if(percent<0.075){
+      meter.classList.add("small");
+    }else {
+      meter.classList.remove("small");
+    }
+    if(percent>0.92){
+      greenMeter.classList.add("big");
+    }else {
+      greenMeter.classList.remove("big");
+    }
+  };
+
+  render(percent);
 
 
   $(ribbonSlider).draggable({

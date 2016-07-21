@@ -1,6 +1,3 @@
-em {
-    font-style: normal;
-}
 @font-face {
     font-family: 'PTSans-Regular';
     src: url('//dyn.ig.rambler.ru/fontcss/fonts/PTSans/PTSans-Regular.eot');
@@ -155,11 +152,9 @@ body {
     font-size: 16px;
     display: inline-block;
     width: 50%;
-    /*height: 140px;*/
     margin-top: 35px;
     padding-left: 40px;
     padding-right: 40px;
-    /*padding: 40px;*/
 }
 .plate2 .answers .item:nth-child(1) .elem {
     text-align: right;
@@ -167,9 +162,63 @@ body {
 .plate2 .answers .item:nth-child(2) .elem {
     text-align: left;
 }
-.plate2 .answers .item .elem {
+
+.answers .item .elem {
+    cursor: pointer;
     margin-bottom: 20px;
+    position: relative;
+    transition: color 1s;
 }
+
+.answers .elem:hover {
+  color: #18B3AC;
+}
+
+.answers .item .elem div {
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.answer-dot {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    /*background-color: red;*/
+    border-radius: 50%;
+    margin-top:2px;
+    margin-right:18px;
+    border: 1px solid #ffffff;
+    transition: border-color 1s;
+}
+
+.elem:hover .answer-dot {
+  border-color: #18B3AC;
+}
+
+
+.answer-dot-inner  {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  border-radius: 10px;
+  transition: background-color 1s;
+}
+
+.elem:hover .answer-dot-inner {
+    background-color: #18B3AC;
+}
+
+
+
+.wrong .answer-dot-inner {
+    background-color: red;
+}
+
 .answerButton {
     border: 2px solid #18B3AC;
     width: 168px;
@@ -252,7 +301,8 @@ body {
     /*padding: 40px;*/
 }
 .plate4 .answers .item:nth-child(1) .elem {
-    text-align: right;
+  padding-left: 50px;
+    text-align: left;
 }
 .plate4 .answers .item:nth-child(2) .elem {
     text-align: left;
@@ -328,6 +378,8 @@ body {
 }
 .map_body {
     position: relative;
+    width: 955px;
+    height: 580px;
 }
 .text {
     font-size: 16px;
@@ -1038,28 +1090,124 @@ body {
 }
 
 .plate8 .chart.key-reason {
-  background-color: rgba(0, 128, 0, 0.25);
+  /*background-color: rgba(0, 128, 0, 0.25);*/
   width: 970px;
   height: 630px;
   margin: 40px auto 0 auto;
-
 }
 
-.plate8 .chart.key-reason .head {
+.key-reason-legend {
+  font-size: 0;
+}
+
+.key-reason-legend .coll {
+  display: inline-block;
+  width: 23.3333%;
+}
+
+.key-reason-legend .coll:first-child {
+  display: inline-block;
+  width: 30%;
+}
+
+.square {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 3px;
+  margin-right: 15px;
+}
+
+.hetero {
+background-color: #18B3AC;
+}
+
+.homo {
+  /*background-color: #198886*/
+  background-color: #ffffff;
+}
+
+.drags {
+  background-color:#B42025;
+}
+
+.fromMather {
+  background-color: #F0C20F
+}
+
+.coll .description {
+  display: inline-block;
+  vertical-align: top;
+  width: 80%;
+  font-size:16px;
+  font-family: 'PTSerif-Regular';
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.key-reason-body {
+  margin-top: 50px;
+}
+
+
+.key-reason-canvas {
+    height: 435px;
+    width: 100%;
+    margin: 0 auto;
+    /*background-color: rgba(0, 128, 0, 0.25);*/
+    border-bottom:2px solid #D4D4D4;
+    margin-bottom: 10px;
+}
+
+.key-reason-canvas .year {
+  position: relative;
+  display: inline-block;
+  width: 4.7619%;
+  height: 100%;
+}
+
+.key-reason-canvas .bar {
+  /*position: relative;*/
+  /*display: inline-block;*/
+  /*width: 4.54545454545%;*/
+  /*height: 100%;*/
+
+  width: 15px;
+  height: 25%;
+  margin: 0 auto;
+  /*transition: width 1s;*/
+  /*background-color: #B42025;*/
+  /*border-radius: 20px 20px 0 0;*/
+  transition: height 1s;
+}
+
+.key-reason-canvas .bar:first-child {
+  border-radius: 20px 20px 0 0;
+}
+
+.key-reason-body .x-axis .block {
+  display: inline-block;
+  text-align: center;
+  width: 4.7619%;
+  font-family:'PTSans-Regular';
+  font-size: 16px;
+  color: #93A1A8;
+}
+
+
+
+.plate8 .chart.key-reason .title {
   font-family: 'PTSans-Bold';
   font-size: 24px;
   color: #ffffff;
   margin: 0 auto;
+  margin-bottom: 45px;
   width: 330px;
 }
 
 .plate8 .footer {
   margin-top: 70px;
-}
-
-
-.plate9 {
-
 }
 
 
@@ -1080,14 +1228,65 @@ body {
 }
 
 .plate9 .content .answers {
-    width: 1000px;
-    height: 200px;
-    background-color: rgba(0, 128, 0, 0.25);
-    margin: 0 auto;
+    width: 100%;
+    /*height: 200px;
+    background-color: rgba(0, 128, 0, 0.25);*/
+    margin: 65px auto 0 auto;
 }
 
 
+.thermometer-9 .green-meter-9 {
+  position: relative;
+  height: 30px;
+  width: 848px;
+  margin: 0 auto;
+  background-color: #18B3AC;
+  border-radius: 0 15px 15px 0;
+  font-size: 16px;
+  font-family:'PTSans-Regular';
+  color: #000000;
+  text-align: right;
+  box-sizing: border-box;
+  padding: 6px 15px 6px 0;
+  overflow: hidden;
+  transition: color 0.5s ease-in-out;
+}
+
+.thermometer-9 .green-meter-9.big {
+  color: transparent;
+}
+
+.thermometer-9 .red-meter-9 {
+  position: absolute;
+  left: -60%;
+  bottom: 0px;
+  height: 30px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #B42025;
+  border-radius: 0 15px 15px 0;
+  font-size: 16px;
+  font-family:'PTSans-Regular';
+  color: #ffffff;
+  text-align: right;
+  box-sizing: border-box;
+  padding: 6px 15px 6px 0;
+}
+
+.thermometer-9 .red-meter-9> div {
+  position: absolute;
+  right: 2%;
+  transition: right 0.5s ease-in-out;
+}
+
+.thermometer-9 .red-meter-9.small> div {
+  right: -4%;
+}
+
+
+
 .plate9 .answerButton{
+  margin-top: 60px;
   margin-bottom: 80px;
 }
 
@@ -1098,9 +1297,8 @@ body {
 
 .plate9 .chart.top-infected {
   text-align: center;
-  background-color: rgba(0, 128, 0, 0.25);
+  /*background-color: rgba(0, 128, 0, 0.25);*/
   width:  570px;
-  height: 620px;
   margin: 0 auto;
 
 }
@@ -1110,18 +1308,60 @@ body {
   font-size: 24px;
   color: #ffffff;
   display: inline-block;
+  margin-bottom: 35px;
   /*display: block;*/
   /*width: 570px;*/
   /*margin: 0 auto;*/
 }
 
+.top-infected-row {
+  width: 100%;
+  height: 30px;
+  background-color: rgba(24,179,172,0.3);
+  margin-bottom: 5px;
+  /*opacity: 0.3;*/
+  border-radius: 20px;
+  color: #93A1A8;
+  font-family:'PTSans-Regular';
+}
+
+
+.top-infected-row:nth-child(12) {
+  background-color: #FFFFFF;
+  opacity: 1;
+  color:#B42025;
+  font-family:'PTSans-Bold';
+}
+
+.top-infected-row>div {
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 16px;
+  width: 20%;
+  padding: 6px 0;
+}
+
+.top-infected-row>div:nth-child(2) {
+  width: 60%;
+  text-align: center;
+}
+
+.top-infected-row>div:nth-child(1) {
+    text-align: left;
+    padding-left: 15px;
+}
+
+.top-infected-row>div:nth-child(3) {
+  text-align: right;
+  padding-right: 20px;
+}
 
 .plate10 {
     margin-top: 65px;
     width: 100%;
     background-image: url("../ribon5.png");
     background-repeat: no-repeat;
-    background-position: 50% 190px;
+    background-position: 50% 166px;
 }
 .plate10 .content {
     text-align: center;
@@ -1208,29 +1448,81 @@ body {
 }
 
 .chart.top-spread .body {
-  height: 370px;
-  width: 700px;
+  height: 372px;
+  /*width: 902px;*/
   margin: 0 auto;
-  background-color: rgba(0, 128, 0, 0.25);
+  /*background-color: rgba(0, 128, 0, 0.25);*/
+}
+
+.top-spread-chart {
+  vertical-align: top;
+  display: inline-block;
+  width: 515px;
+  height: 100%
+}
+
+.top-spread-chart-row {
+  box-sizing: border-box;
+  width: 100%;
+  height: 10%;
+  /*background-color:#18B3AC*/
+  padding-bottom: 5px;
+  padding-right: 3px;
+}
+
+.top-spread-chart-row .coll {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(24,179,172,0.3);
+  border-radius: 20px 0px 0px 20px;
+  color: #93A1A8;
+  font-family:'PTSans-Regular';
+  font-size: 0;
+}
+
+.top-spread-chart-row .coll>div {
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 16px;
+  width: 20%;
+  height: 100%;
+  margin: 6px 0
+}
+
+.top-spread-chart-row .coll>div:nth-child(2) {
+  width: 60%;
+}
+
+.top-spread-chart-row .coll>div:nth-child(1) {
+  text-align: left;
+  padding-left: 15px;
+}
+
+.top-spread-chart-row .coll>div:nth-child(3) {
+  text-align: right;
+  padding-right: 15px;
+}
+
+
+.top-spread-map {
+  /*float: right;*/
+  display: inline-block;
+  width: 380px;
+  /*height: 372px;*/
+}
+
+.top-spread-map>img {
+  /*width: 100%;*/
+  width: 374px;
+  height: 100%;
 }
 
 .plate10 .comment {
-  margin: 60px auto 0 auto;
+  margin: 60px auto 60px auto;
   text-align: left;
   width: 570px;
   font-family: 'PTSerif-Regular';
-}
-
-.plate10 .footer {
-  margin-top: 55px;
-}
-
-.plate10 {
-    margin-top: 65px;
-    width: 100%;
-    background-image: url("../ribon5.png");
-    background-repeat: no-repeat;
-    background-position: 50% 190px;
 }
 
 
