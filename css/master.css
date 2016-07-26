@@ -45,6 +45,7 @@ body {
     margin: 0;
     background-color: #1A1517;
     font-size: 0;
+    overflow-y:scroll;
 }
 .line {
     background-color: #A9242C;
@@ -101,7 +102,7 @@ body {
     padding-left: 338px;
     padding-top: 15px;
 }
-.plate1 .content .item .head em {
+.plate1 .content .item .head .important {
     color: #B42025;
 }
 .plate1 .content .item .text {
@@ -116,6 +117,7 @@ body {
 .footer img {
     display: block;
     margin: auto;
+    cursor: pointer;
 }
 
 .plate1 .footer {
@@ -167,12 +169,23 @@ body {
     cursor: pointer;
     margin-bottom: 20px;
     position: relative;
-    transition: color 1s;
+    transition: color 1s, opacity 1s;
 }
 
-.answers .elem:hover {
+.answers .elem:hover, .elem.selected {
+  color: #18B3AC;
+  opacity: 0.6;
+}
+
+.answers .elem.right {
+  opacity: 1;
   color: #18B3AC;
 }
+
+.answers .elem.wrong {
+  color: #B42025;
+}
+
 
 .answers .item .elem div {
     box-sizing: border-box;
@@ -180,22 +193,35 @@ body {
     vertical-align: top;
 }
 
+
 .answer-dot {
     position: relative;
     width: 18px;
     height: 18px;
-    /*background-color: red;*/
     border-radius: 50%;
     margin-top:2px;
     margin-right:18px;
     border: 1px solid #ffffff;
-    transition: border-color 1s;
+    box-shadow: 0 0 1px 0px white inset, 0 0 1px 0px white;
+    transition: border-color 1s, opacity 1s;
 }
 
-.elem:hover .answer-dot {
+.elem:hover .answer-dot , .elem.selected .answer-dot {
   border-color: #18B3AC;
+  box-shadow: 0 0 1px 0px #18B3AC inset, 0 0 1px 0px #18B3AC;
+  opacity: 0.6;
 }
 
+.elem.right .answer-dot {
+  border-color: #18B3AC;
+  box-shadow: 0 0 1px 0px #18B3AC inset, 0 0 1px 0px #18B3AC;
+  opacity: 1;
+}
+
+.elem.wrong .answer-dot {
+  border-color: #B42025;
+  box-shadow: 0 0 1px 0px #B42025 inset, 0 0 1px 0px #B42025;
+}
 
 .answer-dot-inner  {
   position: absolute;
@@ -209,34 +235,67 @@ body {
   transition: background-color 1s;
 }
 
-.elem:hover .answer-dot-inner {
+.elem.wrong .answer-dot-inner {
+    background-color: #B42025;
+}
+
+.elem:hover .answer-dot-inner, .elem.selected .answer-dot-inner {
     background-color: #18B3AC;
+    opacity: 0.6;
 }
 
-
-
-.wrong .answer-dot-inner {
-    background-color: red;
+.elem.right .answer-dot-inner {
+  background-color: #18B3AC;
+  opacity: 1;
 }
+
 
 .answerButton {
-    border: 2px solid #18B3AC;
+    border: 2px solid #ffffff;
     width: 168px;
     height: 36px;
     border-radius: 40px;
     position: relative;
     margin: 0 auto;
     margin-top: 20px;
+    opacity: 0.5;
+    transition: opacity 0.8s, background-color 0.5s;
+    pointer-events: none;
 }
 .answerButton> .text {
     font-size: 16px;
     font-family: 'PTSans-Bold';
-    color: #18B3AC;
+    color: #ffffff;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    opacity: 0.5;
 }
+
+.answerButton.active {
+  border: 2px solid #18B3AC;
+  opacity: 0.5;
+  background-color:  #18B3AC;
+  opacity: 1;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.answerButton.active:not(.aswered):hover{
+  background-color:  #18B3AC;
+  opacity: 0.6;
+}
+
+.answerButton.active .text {
+  color: #ffffff;
+  opacity: 1;
+}
+
+/*.comment {
+  transition: display 1s, ;
+}*/
+
 .plate2 .comment {
     font-size: 16px;
     font-family: 'PTSerif-Regular';
@@ -849,12 +908,25 @@ body {
 
 
 .plate7 {
+    position:relative;
     margin-top: 65px;
     width: 100%;
-    background-image: url("../ribon4.png");
-    background-repeat: no-repeat;
-    background-position: 50% 420px;
+
 }
+
+.plate7-after {
+  content: "";
+  background-image: url("../ribon4.png");
+  background-repeat: no-repeat;
+  background-position: 50% 420px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
 .plate7 .content {
     width: 1024px;
     height: 100%;
@@ -906,6 +978,7 @@ body {
   bottom: -1px;
   left: 30.8%;
   z-index: 1000;
+  cursor: pointer;
 }
 
 .valuepicker-line {
@@ -1025,6 +1098,10 @@ body {
     margin: 65px auto 0 auto;
 }
 
+
+#ribbon-slider-8 , #ribbon-slider-9 {
+  cursor: pointer;
+}
 
 .thermometer .green-meter {
   position: relative;

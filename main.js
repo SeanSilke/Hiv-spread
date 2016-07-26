@@ -1,4 +1,22 @@
 "use strict";
+
+
+let showElem = ($elem) => {
+  $elem.css({
+    display: "block",
+  }).animate({
+    opacity: 1
+  }, 1000 );
+};
+
+let hideElem = ($elem) => {
+  $elem.css({
+    display: "none",
+    opacity: 0,
+    transition: "opacity 1s"
+  });
+};
+
 let doElsCollide = function(el1, el2) {
 
   let rect1 = el1.getBoundingClientRect();
@@ -314,7 +332,6 @@ let mapMain = function() {
 
     $select.click(
       function(e) {
-        console.log($select);
         e.stopPropagation();
         if (isOpen) {
           close();
@@ -325,7 +342,7 @@ let mapMain = function() {
     );
 
     $(".scrollable").click(
-      function(e){
+      function(e) {
         e.stopPropagation();
       }
     );
@@ -901,217 +918,455 @@ let data = [
 
 $(function() {
 
-let circle = document.querySelector('.guess-growth-main-small');
-let textFeald = document.querySelector('.guess-growth-main-text');
-let r = 46;
-let text = "1 000 000";
+  let circle = document.querySelector('.guess-growth-main-small');
+  let textFeald = document.querySelector('.guess-growth-main-text');
+  let r = 46;
+  let text = "1 000 000";
 
-let valToText = val => {
-  val = Math.round(val/100)*100;
+  let valToText = val => {
+    val = Math.round(val / 100) * 100;
 
-  var arr =  (val +"").split("");
-  arr.splice(4,0," ");
-  arr.splice(1,0," ");
-  return arr.join("");
-};
-
-// console.log(valToText(7089193));
-// console.log(textFeald);
-// textFeald.innerHTML = "Hello";
+    var arr = (val + "").split("");
+    arr.splice(4, 0, " ");
+    arr.splice(1, 0, " ");
+    return arr.join("");
+  };
 
 
+  let changeR = function() {
+    circle.style.width = r + "px";
+    circle.style.height = r + "px";
+  };
 
-let changeR = function( ){
-  circle.style.width = r +"px";
-  circle.style.height = r +"px";
-};
+  let changeText = () => textFeald.innerHTML = text;
 
-let  changeText = () => textFeald.innerHTML = text;
+  let calculeteNewR = h => 46 + (230 - 46) * (1 - h / 230);
 
+  let calculeteNewVal = h => 1000000 + (4000000) * (1 - h / 230);
 
-let calculeteNewR = h =>  46 + (230-46)*(1-h/230);
-
-let calculeteNewVal = h => 1000000 + (4000000)*(1-h/230);
-
-
+  let onDrag = (event, ui) => {
+    let h = ui.position.top;
+    r = calculeteNewR(ui.position.top);
+    text = valToText(calculeteNewVal(h));
+    requestAnimationFrame(changeR);
+    requestAnimationFrame(changeText);
+  };
 
   $(".valuepicker-picker").draggable({
     containment: "parent",
-     axis: "y",
-     drag: function( event, ui ) {
-       let h = ui.position.top;
-       r = calculeteNewR(ui.position.top);
-       text = valToText(calculeteNewVal(h));
-       requestAnimationFrame(changeR);
-       requestAnimationFrame(changeText);
-     }
+    axis: "y",
+    drag: onDrag,
   });
 });
+
 
 
 $(function() {
-
-  let meter = document.querySelector('.red-meter-8');
-  let greenMeter = document.querySelector('.thermometer .green-meter');
-  let ribbonSlider = document.querySelector('#ribbon-slider-8');
-  let percent = 0.4;
-  let max = 848;
-  let text = document.querySelector('.red-meter-8>div');
-
-
-  let render = (percent) => {
-    ribbonSlider.style.left = percent*max + "px";
-    meter.style.left = (0 - (1  -  percent)*100) + "%";
-    text.innerHTML = Math.round(percent*100) + "%";
-    if(percent<0.075){
-      meter.classList.add("small");
-    }else {
-      meter.classList.remove("small");
-    }
-    if(percent>0.92){
-      greenMeter.classList.add("big");
-    }else {
-      greenMeter.classList.remove("big");
-    }
-  };
-
-  render(percent);
-
-
-
-
-  $(ribbonSlider).draggable({
-    containment: "parent",
-     axis: "x",
-     drag: function( event, ui ) {
-      ui.position.left = Math.min( 848, ui.position.left);
-      let percent = ui.position.left/848;
-      render(percent);
-      // console.log(100 - percent*100 + "%");
-      // meter.style.left = "-" + (100 *(1- percent)) + "%";
-
-     }
-  });
-});
-
-
-$(function(){
 
   // let valArr = [10, 80, 5, 5];
 
   //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
 
-
-
-
   //как расположенны бары на диограмме
-  let barsPosition = ["drags", "fromMather","hetero", "homo"];
+  let barsPosition = ["drags", "fromMather", "hetero", "homo"];
 
 
   //как представленые данные в элементе матрици
   let legend = {
-    drags : 0,
-    hetero : 1,
-    homo : 2,
+    drags: 0,
+    hetero: 1,
+    homo: 2,
     fromMather: 3
   };
 
   let valMatrix = [
-  [3.3,43,53,0.7],
-  [6,41,52.9,0.1],
-  [84,7,8.7,0.3],
-  [87,10.9,1.9,0.2],
-  [79.1,	17.8,	2.7,	0.4],
-  [91.8,	7.4,	0.6,	0.1],
-  [95.5,	4.2,	0.2,	0.1],
-  [93.3,	6.4,	0.2,	0.2],
-  [81.2,	17.7,	0.4,	0.7],
-  [72.3,	25.4,	0.5,	1.7],
-  [66.7,	29.9,	0.8,	2.5],
-  [64.2,	31.8,	1.1,	3.0],
-  [63.3,	33.0,	0.7,	2.9],
-  [61.5,	35.2,	1.0,	2.3],
-  [61.3,	35.6,	1.1,	2.0],
-  [59.8,	37.1,	1.4,	1.8],
-  [57.9,	39.7,	1.3,	1.1],
-  [56.2,	41.4,	1.3, 1.1],
-  [56.4,	41.7,	1.1,	0.8],
-  [54.9,	43.1,	1,	1.0],
-  [58.4,	39.7,	1.1,	0.8]];
+    [3.3, 43, 53, 0.7],
+    [6, 41, 52.9, 0.1],
+    [84, 7, 8.7, 0.3],
+    [87, 10.9, 1.9, 0.2],
+    [79.1, 17.8, 2.7, 0.4],
+    [91.8, 7.4, 0.6, 0.1],
+    [95.5, 4.2, 0.2, 0.1],
+    [93.3, 6.4, 0.2, 0.2],
+    [81.2, 17.7, 0.4, 0.7],
+    [72.3, 25.4, 0.5, 1.7],
+    [66.7, 29.9, 0.8, 2.5],
+    [64.2, 31.8, 1.1, 3.0],
+    [63.3, 33.0, 0.7, 2.9],
+    [61.5, 35.2, 1.0, 2.3],
+    [61.3, 35.6, 1.1, 2.0],
+    [59.8, 37.1, 1.4, 1.8],
+    [57.9, 39.7, 1.3, 1.1],
+    [56.2, 41.4, 1.3, 1.1],
+    [56.4, 41.7, 1.1, 0.8],
+    [54.9, 43.1, 1, 1.0],
+    [58.4, 39.7, 1.1, 0.8]
+  ];
 
-  let years =  document.querySelectorAll('.key-reason-canvas .year');
+  let years = document.querySelectorAll('.key-reason-canvas .year');
 
-  let setValue = function(year,valArr){
-    let bars =  year.querySelectorAll(".bar");
-    [].forEach.call(bars,function(elem,i){
-        let name = barsPosition[i];
-        let percent = valArr[legend[name]];
-        elem.classList.add(name);
-        elem.style.height = percent + "%";
+  let setValue = function(year, valArr) {
+    let bars = year.querySelectorAll(".bar");
+    [].forEach.call(bars, function(elem, i) {
+      let name = barsPosition[i];
+      let percent = valArr[legend[name]];
+      elem.classList.add(name);
+      elem.style.height = percent + "%";
     });
   };
 
-  let setYears = (i,fn, years) =>{
-    if (i>years.length - 1) return;
-    fn(years[i],valMatrix[i]);
-    setTimeout(setYears,200, ++i,fn,years);
+  let setYears = (i, fn, years) => {
+    if (i > years.length - 1) return;
+    fn(years[i], valMatrix[i]);
+    setTimeout(setYears, 200, ++i, fn, years);
   };
 
 
-  let initYears = (i,fn) =>{
-    if (i>20) return;
-    fn(years[i],[25,25,25,25]);
-    initYears(++i,fn);
+  let initYears = (i, fn) => {
+    if (i > 20) return;
+    fn(years[i], [25, 25, 25, 25]);
+    initYears(++i, fn);
   };
 
   //move init to some global init
-  initYears(0,setValue );
+  initYears(0, setValue);
 
-  setTimeout(setYears ,700, 0,setValue, years);
+  setTimeout(setYears, 700, 0, setValue, years);
 
 });
 
 
-
 $(function() {
 
-  let meter = document.querySelector('.red-meter-9');
-  let greenMeter = document.querySelector('.thermometer-9 .green-meter-9');
-  let ribbonSlider = document.querySelector('#ribbon-slider-9');
-  let percent = 0.4;
-  let max = 848;
-  let text = document.querySelector('.red-meter-9>div');
+  let valPicker = function(fn, state) {
+
+    let meter = document.querySelector('.red-meter-9');
+    let greenMeter = document.querySelector('.thermometer-9 .green-meter-9');
+    let ribbonSlider = document.querySelector('#ribbon-slider-9');
+    let percent;
+    let max = 848;
+    let text = document.querySelector('.red-meter-9>div');
 
 
-  let render = (percent) => {
-    ribbonSlider.style.left = percent*max + "px";
-    meter.style.left = (0 - (1  -  percent)*100) + "%";
-    text.innerHTML = Math.round(percent*194) + 1;
-    if(percent<0.075){
-      meter.classList.add("small");
-    }else {
-      meter.classList.remove("small");
-    }
-    if(percent>0.92){
-      greenMeter.classList.add("big");
-    }else {
-      greenMeter.classList.remove("big");
-    }
+    let render = (percent) => {
+      ribbonSlider.style.left = percent * max + "px";
+      meter.style.left = (0 - (1 - percent) * 100) + "%";
+      text.innerHTML = Math.round(percent * 14) + 1;
+      if (percent < 0.075) {
+        meter.classList.add("small");
+      } else {
+        meter.classList.remove("small");
+      }
+      if (percent > 0.92) {
+        greenMeter.classList.add("big");
+      } else {
+        greenMeter.classList.remove("big");
+      }
+    };
+
+    render(0.4);
+
+    let onDrag = (event, ui) => {
+      ui.position.left = Math.min(848, ui.position.left);
+      let percent = ui.position.left / 848;
+      render(percent);
+      state.selected = Math.round(percent * 14) + 1;
+      fn();
+    };
+
+    $(ribbonSlider).draggable({
+      containment: "parent",
+      axis: "x",
+      drag: onDrag,
+    });
   };
 
-  render(percent);
+  let valPicker2 = function(fn, state) {
+    let meter = document.querySelector('.red-meter-8');
+    let greenMeter = document.querySelector('.thermometer .green-meter');
+    let ribbonSlider = document.querySelector('#ribbon-slider-8');
+    let percent;
+    let max = 848;
+    let text = document.querySelector('.red-meter-8>div');
 
 
-  $(ribbonSlider).draggable({
-    containment: "parent",
-     axis: "x",
-     drag: function( event, ui ) {
-      ui.position.left = Math.min( 848, ui.position.left);
-      let percent = ui.position.left/848;
+    let render = (percent) => {
+      ribbonSlider.style.left = percent * max + "px";
+      meter.style.left = (0 - (1 - percent) * 100) + "%";
+      text.innerHTML = Math.round(percent * 100) + "%";
+      if (percent < 0.075) {
+        meter.classList.add("small");
+      } else {
+        meter.classList.remove("small");
+      }
+      if (percent > 0.92) {
+        greenMeter.classList.add("big");
+      } else {
+        greenMeter.classList.remove("big");
+      }
+    };
+
+    render(0.5);
+
+    let onDrag = (event, ui) => {
+      ui.position.left = Math.min(848, ui.position.left);
+      let percent = ui.position.left / 848;
       render(percent);
-      // console.log(100 - percent*100 + "%");
-      // meter.style.left = "-" + (100 *(1- percent)) + "%";
+      state.selected = Math.round(percent * 14) + 1;
+      fn();
+    };
 
-     }
-  });
+    $(ribbonSlider).draggable({
+      containment: "parent",
+      axis: "x",
+      drag: onDrag,
+    });
+
+  };
+
+  let valPicker3 = function(fn, state) {
+    let circle = document.querySelector('.guess-growth-main-small');
+    let textFeald = document.querySelector('.guess-growth-main-text');
+    let r = 46;
+    let text = "1 000 000";
+
+    let valToText = val => {
+      val = Math.round(val / 100) * 100;
+
+      var arr = (val + "").split("");
+      arr.splice(4, 0, " ");
+      arr.splice(1, 0, " ");
+      return arr.join("");
+    };
+
+
+    let changeR = function() {
+      circle.style.width = r + "px";
+      circle.style.height = r + "px";
+    };
+
+    let changeText = () => textFeald.innerHTML = text;
+
+    let calculeteNewR = h => 46 + (230 - 46) * (1 - h / 230);
+
+    let calculeteNewVal = h => 1000000 + (4000000) * (1 - h / 230);
+
+    let onDrag = (event, ui) => {
+      let h = ui.position.top;
+      r = calculeteNewR(ui.position.top);
+      text = valToText(calculeteNewVal(h));
+      requestAnimationFrame(changeR);
+      requestAnimationFrame(changeText);
+      //что записывать в состояние
+      state.selected = h / 230;
+      fn();
+    };
+
+    $(".valuepicker-picker").draggable({
+      containment: "parent",
+      axis: "y",
+      drag: onDrag,
+    });
+  };
+
+
+
+  let hookUpValQueston = (question, valPicker, AnswerSelectors) => {
+
+    let answerButton = question.find(".answerButton");
+
+    let answer = $(AnswerSelectors);
+
+
+    let initAnswers = () => {
+      hideElem(answer)
+    };
+
+    let showAnswers = () => {
+      showElem(answer);
+    };
+
+    initAnswers();
+
+    let initQuestion = () => {
+      hideElem(question);
+    };
+
+    let showQuestin = () => {
+      showElem(question)
+    };
+
+    initQuestion();
+
+    let state = {
+      selected: null,
+      isAnswered: false,
+      right: 12,
+    };
+
+    let render = function() {
+      if (state.isAnswered) {
+        removeButton();
+        showAnswers();
+        question.css({
+          "pointer-events": "none"
+        });
+      }
+      if (state.selected !== null) {
+        answerButton.addClass("active");
+      };
+    };
+
+    let removeButton = () => {
+      answerButton.css({
+        opacity: 0,
+        pointerEvents: "none"
+      });
+    };
+
+    answerButton.click(function() {
+      state.isAnswered = true;
+      render();
+    });
+
+    valPicker(render, state);
+
+    return {
+      show: showQuestin
+    };
+
+  };
+
+  let hookUpQueston = function(question, right, AnswerSelectors) {
+
+
+    let answerButton = question.find(".answerButton");
+    let answer = $(AnswerSelectors);
+
+
+    let initAnswers = () => {
+      hideElem(answer)
+    };
+
+    let showAnswers = () => {
+      showElem(answer);
+    };
+
+    initAnswers();
+
+    let initQuestion = () => {
+      hideElem(question);
+    };
+
+    let showQuestin = () => {
+      showElem(question)
+    };
+
+    initQuestion();
+
+    let options = question.find(".answers .item .elem");
+
+    let state = {
+      selected: null,
+      isAnswered: false,
+      right: right,
+    };
+
+    let render = function() {
+      if (state.isAnswered) {
+        removeButton();
+        showAnswers();
+        question.css({
+          "pointer-events": "none"
+        });
+
+      } else {
+        if (state.selected !== null) {
+          answerButton.addClass("active");
+        }
+      }
+      renderOptions();
+    };
+
+    let renderOptions = () => {
+      if (!state.isAnswered) {
+        $.each(options, function(i, elem) {
+          if (i == state.selected) {
+            $(elem).addClass("selected");
+          } else {
+            $(elem).removeClass("selected");
+          }
+        });
+      } else {
+        if (state.selected !== state.right) {
+          options[state.selected].classList.add("wrong");
+          options[state.selected].classList.remove("selected");
+        }
+        options[state.right].classList.add("right");
+      };
+    };
+
+    let initOptions = () => {
+      let onSelect = (event) => {
+        state.selected = parseInt(event.currentTarget.dataset.id);
+        render();
+      };
+      options.on("click", onSelect);
+    };
+
+    initOptions();
+
+    let removeButton = () => {
+      answerButton.css({
+        opacity: 0,
+        pointerEvents: "none"
+      });
+    };
+
+    answerButton.click(function() {
+      state.isAnswered = true;
+      render();
+    });
+
+    return {
+      show: showQuestin
+    };
+  };
+
+  let footer = (() => {
+
+    let footer = $(".plate11, .line.bottom");
+
+    let init = () => {
+      hideElem(footer)
+    };
+
+    let show = () => {
+      showElem(footer)
+    };
+
+    init();
+
+    return {
+      show: show
+    }
+  })();
+
+  let questions = [
+    hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"),
+    hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"),
+    hookUpQueston($(".question-three"), 3, ".answer-three"),
+    hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
+    hookUpValQueston($(".question-five"), valPicker2, ".answer-five"),
+    hookUpValQueston($(".question-six"), valPicker, ".answer-six"),
+    hookUpQueston($(".question-seven"), 1, ".answer-seven"),
+    footer
+  ];
+
+
+
+  $.each($('.footer img'),
+    (i, elem) => {
+      elem.onclick = questions[i].show;
+    });
 });

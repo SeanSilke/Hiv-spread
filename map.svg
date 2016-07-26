@@ -1714,3 +1714,55 @@
   l0.6-0.9l0.6-1.2l0.3-1.2l-0.7-1l-1.3-0.9l-1-0.3L256,698v-1.9l0.1-1l-0.8-1.4l-0.3-0.6l-0.5-0.5l-0.3-0.4l0.2-1.1l0.1-2l0.2-1.6
   l0.7-1.6l1.3-2.3l1.6-2l1.2-1.9l1.4-1.1l1.1-0.6l0.5-1.9L261.2,675z"/>
 </svg>
+
+<div class="legend">
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> 100 </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> </div>
+    </div>
+
+    <div class="bloc">
+        <div class="color"> </div>
+        <div class="val"> 51200 </div>
+    </div>
+</div>

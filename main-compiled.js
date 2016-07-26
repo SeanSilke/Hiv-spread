@@ -1,5 +1,21 @@
 "use strict";
 
+var showElem = function showElem($elem) {
+  $elem.css({
+    display: "block"
+  }).animate({
+    opacity: 1
+  }, 1000);
+};
+
+var hideElem = function hideElem($elem) {
+  $elem.css({
+    display: "none",
+    opacity: 0,
+    transition: "opacity 1s"
+  });
+};
+
 var doElsCollide = function doElsCollide(el1, el2) {
 
   var rect1 = el1.getBoundingClientRect();
@@ -288,7 +304,6 @@ var mapMain = function mapMain() {
     var head = $(".drop_down .text");
 
     $select.click(function (e) {
-      console.log($select);
       e.stopPropagation();
       if (isOpen) {
         close();
@@ -830,10 +845,6 @@ $(function () {
     return arr.join("");
   };
 
-  // console.log(valToText(7089193));
-  // console.log(textFeald);
-  // textFeald.innerHTML = "Hello";
-
   var changeR = function changeR() {
     circle.style.width = r + "px";
     circle.style.height = r + "px";
@@ -851,56 +862,18 @@ $(function () {
     return 1000000 + 4000000 * (1 - h / 230);
   };
 
+  var onDrag = function onDrag(event, ui) {
+    var h = ui.position.top;
+    r = calculeteNewR(ui.position.top);
+    text = valToText(calculeteNewVal(h));
+    requestAnimationFrame(changeR);
+    requestAnimationFrame(changeText);
+  };
+
   $(".valuepicker-picker").draggable({
     containment: "parent",
     axis: "y",
-    drag: function drag(event, ui) {
-      var h = ui.position.top;
-      r = calculeteNewR(ui.position.top);
-      text = valToText(calculeteNewVal(h));
-      requestAnimationFrame(changeR);
-      requestAnimationFrame(changeText);
-    }
-  });
-});
-
-$(function () {
-
-  var meter = document.querySelector('.red-meter-8');
-  var greenMeter = document.querySelector('.thermometer .green-meter');
-  var ribbonSlider = document.querySelector('#ribbon-slider-8');
-  var percent = 0.4;
-  var max = 848;
-  var text = document.querySelector('.red-meter-8>div');
-
-  var render = function render(percent) {
-    ribbonSlider.style.left = percent * max + "px";
-    meter.style.left = 0 - (1 - percent) * 100 + "%";
-    text.innerHTML = Math.round(percent * 100) + "%";
-    if (percent < 0.075) {
-      meter.classList.add("small");
-    } else {
-      meter.classList.remove("small");
-    }
-    if (percent > 0.92) {
-      greenMeter.classList.add("big");
-    } else {
-      greenMeter.classList.remove("big");
-    }
-  };
-
-  render(percent);
-
-  $(ribbonSlider).draggable({
-    containment: "parent",
-    axis: "x",
-    drag: function drag(event, ui) {
-      ui.position.left = Math.min(848, ui.position.left);
-      var percent = ui.position.left / 848;
-      render(percent);
-      // console.log(100 - percent*100 + "%");
-      // meter.style.left = "-" + (100 *(1- percent)) + "%";
-    }
+    drag: onDrag
   });
 });
 
@@ -955,40 +928,318 @@ $(function () {
 
 $(function () {
 
-  var meter = document.querySelector('.red-meter-9');
-  var greenMeter = document.querySelector('.thermometer-9 .green-meter-9');
-  var ribbonSlider = document.querySelector('#ribbon-slider-9');
-  var percent = 0.4;
-  var max = 848;
-  var text = document.querySelector('.red-meter-9>div');
+  var valPicker = function valPicker(fn, state) {
 
-  var render = function render(percent) {
-    ribbonSlider.style.left = percent * max + "px";
-    meter.style.left = 0 - (1 - percent) * 100 + "%";
-    text.innerHTML = Math.round(percent * 194) + 1;
-    if (percent < 0.075) {
-      meter.classList.add("small");
-    } else {
-      meter.classList.remove("small");
-    }
-    if (percent > 0.92) {
-      greenMeter.classList.add("big");
-    } else {
-      greenMeter.classList.remove("big");
-    }
-  };
+    var meter = document.querySelector('.red-meter-9');
+    var greenMeter = document.querySelector('.thermometer-9 .green-meter-9');
+    var ribbonSlider = document.querySelector('#ribbon-slider-9');
+    var percent = void 0;
+    var max = 848;
+    var text = document.querySelector('.red-meter-9>div');
 
-  render(percent);
+    var render = function render(percent) {
+      ribbonSlider.style.left = percent * max + "px";
+      meter.style.left = 0 - (1 - percent) * 100 + "%";
+      text.innerHTML = Math.round(percent * 14) + 1;
+      if (percent < 0.075) {
+        meter.classList.add("small");
+      } else {
+        meter.classList.remove("small");
+      }
+      if (percent > 0.92) {
+        greenMeter.classList.add("big");
+      } else {
+        greenMeter.classList.remove("big");
+      }
+    };
 
-  $(ribbonSlider).draggable({
-    containment: "parent",
-    axis: "x",
-    drag: function drag(event, ui) {
+    render(0.4);
+
+    var onDrag = function onDrag(event, ui) {
       ui.position.left = Math.min(848, ui.position.left);
       var percent = ui.position.left / 848;
       render(percent);
-      // console.log(100 - percent*100 + "%");
-      // meter.style.left = "-" + (100 *(1- percent)) + "%";
-    }
+      state.selected = Math.round(percent * 14) + 1;
+      fn();
+    };
+
+    $(ribbonSlider).draggable({
+      containment: "parent",
+      axis: "x",
+      drag: onDrag
+    });
+  };
+
+  var valPicker2 = function valPicker2(fn, state) {
+    var meter = document.querySelector('.red-meter-8');
+    var greenMeter = document.querySelector('.thermometer .green-meter');
+    var ribbonSlider = document.querySelector('#ribbon-slider-8');
+    var percent = void 0;
+    var max = 848;
+    var text = document.querySelector('.red-meter-8>div');
+
+    var render = function render(percent) {
+      ribbonSlider.style.left = percent * max + "px";
+      meter.style.left = 0 - (1 - percent) * 100 + "%";
+      text.innerHTML = Math.round(percent * 100) + "%";
+      if (percent < 0.075) {
+        meter.classList.add("small");
+      } else {
+        meter.classList.remove("small");
+      }
+      if (percent > 0.92) {
+        greenMeter.classList.add("big");
+      } else {
+        greenMeter.classList.remove("big");
+      }
+    };
+
+    render(0.5);
+
+    var onDrag = function onDrag(event, ui) {
+      ui.position.left = Math.min(848, ui.position.left);
+      var percent = ui.position.left / 848;
+      render(percent);
+      state.selected = Math.round(percent * 14) + 1;
+      fn();
+    };
+
+    $(ribbonSlider).draggable({
+      containment: "parent",
+      axis: "x",
+      drag: onDrag
+    });
+  };
+
+  var valPicker3 = function valPicker3(fn, state) {
+    var circle = document.querySelector('.guess-growth-main-small');
+    var textFeald = document.querySelector('.guess-growth-main-text');
+    var r = 46;
+    var text = "1 000 000";
+
+    var valToText = function valToText(val) {
+      val = Math.round(val / 100) * 100;
+
+      var arr = (val + "").split("");
+      arr.splice(4, 0, " ");
+      arr.splice(1, 0, " ");
+      return arr.join("");
+    };
+
+    var changeR = function changeR() {
+      circle.style.width = r + "px";
+      circle.style.height = r + "px";
+    };
+
+    var changeText = function changeText() {
+      return textFeald.innerHTML = text;
+    };
+
+    var calculeteNewR = function calculeteNewR(h) {
+      return 46 + (230 - 46) * (1 - h / 230);
+    };
+
+    var calculeteNewVal = function calculeteNewVal(h) {
+      return 1000000 + 4000000 * (1 - h / 230);
+    };
+
+    var onDrag = function onDrag(event, ui) {
+      var h = ui.position.top;
+      r = calculeteNewR(ui.position.top);
+      text = valToText(calculeteNewVal(h));
+      requestAnimationFrame(changeR);
+      requestAnimationFrame(changeText);
+      //что записывать в состояние
+      state.selected = h / 230;
+      fn();
+    };
+
+    $(".valuepicker-picker").draggable({
+      containment: "parent",
+      axis: "y",
+      drag: onDrag
+    });
+  };
+
+  var hookUpValQueston = function hookUpValQueston(question, valPicker, AnswerSelectors) {
+
+    var answerButton = question.find(".answerButton");
+
+    var answer = $(AnswerSelectors);
+
+    var initAnswers = function initAnswers() {
+      hideElem(answer);
+    };
+
+    var showAnswers = function showAnswers() {
+      showElem(answer);
+    };
+
+    initAnswers();
+
+    var initQuestion = function initQuestion() {
+      hideElem(question);
+    };
+
+    var showQuestin = function showQuestin() {
+      showElem(question);
+    };
+
+    initQuestion();
+
+    var state = {
+      selected: null,
+      isAnswered: false,
+      right: 12
+    };
+
+    var render = function render() {
+      if (state.isAnswered) {
+        removeButton();
+        showAnswers();
+        question.css({
+          "pointer-events": "none"
+        });
+      }
+      if (state.selected !== null) {
+        answerButton.addClass("active");
+      };
+    };
+
+    var removeButton = function removeButton() {
+      answerButton.css({
+        opacity: 0,
+        pointerEvents: "none"
+      });
+    };
+
+    answerButton.click(function () {
+      state.isAnswered = true;
+      render();
+    });
+
+    valPicker(render, state);
+
+    return {
+      show: showQuestin
+    };
+  };
+
+  var hookUpQueston = function hookUpQueston(question, right, AnswerSelectors) {
+
+    var answerButton = question.find(".answerButton");
+    var answer = $(AnswerSelectors);
+
+    var initAnswers = function initAnswers() {
+      hideElem(answer);
+    };
+
+    var showAnswers = function showAnswers() {
+      showElem(answer);
+    };
+
+    initAnswers();
+
+    var initQuestion = function initQuestion() {
+      hideElem(question);
+    };
+
+    var showQuestin = function showQuestin() {
+      showElem(question);
+    };
+
+    initQuestion();
+
+    var options = question.find(".answers .item .elem");
+
+    var state = {
+      selected: null,
+      isAnswered: false,
+      right: right
+    };
+
+    var render = function render() {
+      if (state.isAnswered) {
+        removeButton();
+        showAnswers();
+        question.css({
+          "pointer-events": "none"
+        });
+      } else {
+        if (state.selected !== null) {
+          answerButton.addClass("active");
+        }
+      }
+      renderOptions();
+    };
+
+    var renderOptions = function renderOptions() {
+      if (!state.isAnswered) {
+        $.each(options, function (i, elem) {
+          if (i == state.selected) {
+            $(elem).addClass("selected");
+          } else {
+            $(elem).removeClass("selected");
+          }
+        });
+      } else {
+        if (state.selected !== state.right) {
+          options[state.selected].classList.add("wrong");
+          options[state.selected].classList.remove("selected");
+        }
+        options[state.right].classList.add("right");
+      };
+    };
+
+    var initOptions = function initOptions() {
+      var onSelect = function onSelect(event) {
+        state.selected = parseInt(event.currentTarget.dataset.id);
+        render();
+      };
+      options.on("click", onSelect);
+    };
+
+    initOptions();
+
+    var removeButton = function removeButton() {
+      answerButton.css({
+        opacity: 0,
+        pointerEvents: "none"
+      });
+    };
+
+    answerButton.click(function () {
+      state.isAnswered = true;
+      render();
+    });
+
+    return {
+      show: showQuestin
+    };
+  };
+
+  var footer = function () {
+
+    var footer = $(".plate11, .line.bottom");
+
+    var init = function init() {
+      hideElem(footer);
+    };
+
+    var show = function show() {
+      showElem(footer);
+    };
+
+    init();
+
+    return {
+      show: show
+    };
+  }();
+
+  var questions = [hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"), hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"), hookUpQueston($(".question-three"), 3, ".answer-three"), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five"), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven"), footer];
+
+  $.each($('.footer img'), function (i, elem) {
+    elem.onclick = questions[i].show;
   });
 });
