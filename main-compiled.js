@@ -6,6 +6,10 @@ var showElem = function showElem($elem) {
   }).animate({
     opacity: 1
   }, 1000);
+
+  $('html, body').animate({
+    scrollTop: $elem.offset().top
+  }, 1000);
 };
 
 var hideElem = function hideElem($elem) {
@@ -783,150 +787,126 @@ $(".map_body").load("map.svg", function () {
 //   2015: 93000,
 // };
 
-var data = [100, 203, 1513, 4315, 3971, 19758, 59609, 88739, 52170, 39232, 37002, 39407, 43007, 44713, 54563, 58410, 58298, 62387, 70832, 79764, 89667, 93000];
+$(function () {
 
-(function () {
+  var newInfectedChart = function () {
 
-  var bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
+    var data = [100, 203, 1513, 4315, 3971, 19758, 59609, 88739, 52170, 39232, 37002, 39407, 43007, 44713, 54563, 58410, 58298, 62387, 70832, 79764, 89667, 93000];
 
-  //rgb(24,179,172)
-  //rgb(203,132,125)
-  var startColor = [228, 152, 152];
-  //rgb(190,32,37)
-  var endColor = [190, 32, 37];
-  var max = 100 * 1000;
+    var bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
 
-  var i = 0;
+    //rgb(24,179,172)
+    //rgb(203,132,125)
+    var startColor = [228, 152, 152];
+    //rgb(190,32,37)
+    var endColor = [190, 32, 37];
+    var max = 100 * 1000;
 
-  var rendernewInfected = function rendernewInfected() {
-    if (i >= data.length) {
-      var labels = document.querySelectorAll('.newInfected_label_text');
-      [].forEach.call(labels, function (elem) {
-        return elem.style.opacity = 0.9;
+    var i = 0;
+
+    var rendernewInfected = function rendernewInfected() {
+      if (i >= data.length) {
+        var labels = document.querySelectorAll('.newInfected_label_text');
+        [].forEach.call(labels, function (elem) {
+          return elem.style.opacity = 0.9;
+        });
+        return;
+      }
+      var val = data[i];
+      if (val < 4000) {
+        bars[i].style.backgroundColor = 'rgb(24,179,172)';
+        bars[i].style.marginTop = 260 * 0.98 + "px";
+      } else {
+        var color = getColorMeta(startColor, endColor, val / max);
+        bars[i].style.backgroundColor = "rgb(" + color + ")";
+        bars[i].style.marginTop = (1 - val / max) * 260 + "px";
+      }
+
+      if (i == 3) {
+        bars[i].style.backgroundColor = 'rgb(24,179,172)';
+      }
+
+      i++;
+      setTimeout(rendernewInfected, 30);
+    };
+
+    var show = function show() {
+
+      setTimeout(function () {
+        rendernewInfected();
+      }, 200);
+    };
+
+    return {
+      show: show
+    };
+  }();
+
+  var keyReasonChart = function () {
+
+    //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
+
+    //как расположенны бары на диаграмме
+    var barsPosition = ["drags", "fromMather", "hetero", "homo"];
+
+    //как представленые данные в элементе матрици
+    var legend = {
+      drags: 0,
+      hetero: 1,
+      homo: 2,
+      fromMather: 3
+    };
+
+    var valMatrix = [[3.3, 43, 53, 0.7], [6, 41, 52.9, 0.1], [84, 7, 8.7, 0.3], [87, 10.9, 1.9, 0.2], [79.1, 17.8, 2.7, 0.4], [91.8, 7.4, 0.6, 0.1], [95.5, 4.2, 0.2, 0.1], [93.3, 6.4, 0.2, 0.2], [81.2, 17.7, 0.4, 0.7], [72.3, 25.4, 0.5, 1.7], [66.7, 29.9, 0.8, 2.5], [64.2, 31.8, 1.1, 3.0], [63.3, 33.0, 0.7, 2.9], [61.5, 35.2, 1.0, 2.3], [61.3, 35.6, 1.1, 2.0], [59.8, 37.1, 1.4, 1.8], [57.9, 39.7, 1.3, 1.1], [56.2, 41.4, 1.3, 1.1], [56.4, 41.7, 1.1, 0.8], [54.9, 43.1, 1, 1.0], [58.4, 39.7, 1.1, 0.8]];
+
+    var defYearVal = [25, 25, 25, 25];
+
+    var years = document.querySelectorAll('.key-reason-canvas .year');
+
+    var setValue = function setValue(year, valArr) {
+      var bars = year.querySelectorAll(".bar");
+      [].forEach.call(bars, function (elem, i) {
+        var name = barsPosition[i];
+        var percent = valArr[legend[name]];
+        elem.classList.add(name);
+        elem.style.height = percent + "%";
       });
-      return;
-    }
-    var val = data[i];
-    if (val < 4000) {
-      bars[i].style.backgroundColor = 'rgb(24,179,172)';
-      bars[i].style.marginTop = 260 * 0.98 + "px";
-    } else {
-      var color = getColorMeta(startColor, endColor, val / max);
-      bars[i].style.backgroundColor = "rgb(" + color + ")";
-      bars[i].style.marginTop = (1 - val / max) * 260 + "px";
-    }
+    };
 
-    if (i == 3) {
-      bars[i].style.backgroundColor = 'rgb(24,179,172)';
-    }
+    var setYears = function setYears(i, fn, years) {
+      if (i > years.length - 1) return;
+      fn(years[i], valMatrix[i]);
+      setTimeout(setYears, 200, ++i, fn, years);
+    };
 
-    i++;
-    setTimeout(rendernewInfected, 30);
-  };
+    var initYears = function initYears(i, fn) {
+      if (i > 20) return;
+      fn(years[i], defYearVal);
+      initYears(++i, fn);
+    };
 
-  setTimeout(function () {
-    rendernewInfected();
-  }, 200);
-})();
+    var startIndex = 0;
 
-$(function () {
+    var show = function show() {
+      console.log("show");
+      // setYears(startIndex, setValue, years)
+      setTimeout(setYears, 200, 0, setValue, years);
+    };
 
-  var circle = document.querySelector('.guess-growth-main-small');
-  var textFeald = document.querySelector('.guess-growth-main-text');
-  var r = 46;
-  var text = "1 000 000";
+    //move init to some global init
+    initYears(startIndex, setValue);
 
-  var valToText = function valToText(val) {
-    val = Math.round(val / 100) * 100;
+    return {
+      show: show
+    };
 
-    var arr = (val + "").split("");
-    arr.splice(4, 0, " ");
-    arr.splice(1, 0, " ");
-    return arr.join("");
-  };
-
-  var changeR = function changeR() {
-    circle.style.width = r + "px";
-    circle.style.height = r + "px";
-  };
-
-  var changeText = function changeText() {
-    return textFeald.innerHTML = text;
-  };
-
-  var calculeteNewR = function calculeteNewR(h) {
-    return 46 + (230 - 46) * (1 - h / 230);
-  };
-
-  var calculeteNewVal = function calculeteNewVal(h) {
-    return 1000000 + 4000000 * (1 - h / 230);
-  };
-
-  var onDrag = function onDrag(event, ui) {
-    var h = ui.position.top;
-    r = calculeteNewR(ui.position.top);
-    text = valToText(calculeteNewVal(h));
-    requestAnimationFrame(changeR);
-    requestAnimationFrame(changeText);
-  };
-
-  $(".valuepicker-picker").draggable({
-    containment: "parent",
-    axis: "y",
-    drag: onDrag
-  });
-});
-
-$(function () {
-
-  // let valArr = [10, 80, 5, 5];
-
-  //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
-
-  //как расположенны бары на диограмме
-  var barsPosition = ["drags", "fromMather", "hetero", "homo"];
-
-  //как представленые данные в элементе матрици
-  var legend = {
-    drags: 0,
-    hetero: 1,
-    homo: 2,
-    fromMather: 3
-  };
-
-  var valMatrix = [[3.3, 43, 53, 0.7], [6, 41, 52.9, 0.1], [84, 7, 8.7, 0.3], [87, 10.9, 1.9, 0.2], [79.1, 17.8, 2.7, 0.4], [91.8, 7.4, 0.6, 0.1], [95.5, 4.2, 0.2, 0.1], [93.3, 6.4, 0.2, 0.2], [81.2, 17.7, 0.4, 0.7], [72.3, 25.4, 0.5, 1.7], [66.7, 29.9, 0.8, 2.5], [64.2, 31.8, 1.1, 3.0], [63.3, 33.0, 0.7, 2.9], [61.5, 35.2, 1.0, 2.3], [61.3, 35.6, 1.1, 2.0], [59.8, 37.1, 1.4, 1.8], [57.9, 39.7, 1.3, 1.1], [56.2, 41.4, 1.3, 1.1], [56.4, 41.7, 1.1, 0.8], [54.9, 43.1, 1, 1.0], [58.4, 39.7, 1.1, 0.8]];
-
-  var years = document.querySelectorAll('.key-reason-canvas .year');
-
-  var setValue = function setValue(year, valArr) {
-    var bars = year.querySelectorAll(".bar");
-    [].forEach.call(bars, function (elem, i) {
-      var name = barsPosition[i];
-      var percent = valArr[legend[name]];
-      elem.classList.add(name);
-      elem.style.height = percent + "%";
-    });
-  };
-
-  var setYears = function setYears(i, fn, years) {
-    if (i > years.length - 1) return;
-    fn(years[i], valMatrix[i]);
-    setTimeout(setYears, 200, ++i, fn, years);
-  };
-
-  var initYears = function initYears(i, fn) {
-    if (i > 20) return;
-    fn(years[i], [25, 25, 25, 25]);
-    initYears(++i, fn);
-  };
-
-  //move init to some global init
-  initYears(0, setValue);
-
-  setTimeout(setYears, 700, 0, setValue, years);
-});
-
-$(function () {
+    // let canvas = $('.key-reason-canvas');
+    //
+    //
+    // document.addEventListener('scroll', function(e) {
+    //   console.log(canvas.is(":visible"),canvas.offset());
+    // });
+  }();
 
   var valPicker = function valPicker(fn, state) {
 
@@ -1061,7 +1041,7 @@ $(function () {
     });
   };
 
-  var hookUpValQueston = function hookUpValQueston(question, valPicker, AnswerSelectors) {
+  var hookUpValQueston = function hookUpValQueston(question, valPicker, AnswerSelectors, onAnswer) {
 
     var answerButton = question.find(".answerButton");
 
@@ -1073,9 +1053,8 @@ $(function () {
 
     var showAnswers = function showAnswers() {
       showElem(answer);
+      onAnswer && onAnswer();
     };
-
-    initAnswers();
 
     var initQuestion = function initQuestion() {
       hideElem(question);
@@ -1084,8 +1063,6 @@ $(function () {
     var showQuestin = function showQuestin() {
       showElem(question);
     };
-
-    initQuestion();
 
     var state = {
       selected: null,
@@ -1120,12 +1097,18 @@ $(function () {
 
     valPicker(render, state);
 
+    var init = function init() {
+      initQuestion();
+      initAnswers();
+    };
+
     return {
-      show: showQuestin
+      show: showQuestin,
+      init: init
     };
   };
 
-  var hookUpQueston = function hookUpQueston(question, right, AnswerSelectors) {
+  var hookUpQueston = function hookUpQueston(question, right, AnswerSelectors, onAnswer) {
 
     var answerButton = question.find(".answerButton");
     var answer = $(AnswerSelectors);
@@ -1136,9 +1119,8 @@ $(function () {
 
     var showAnswers = function showAnswers() {
       showElem(answer);
+      onAnswer && onAnswer();
     };
-
-    initAnswers();
 
     var initQuestion = function initQuestion() {
       hideElem(question);
@@ -1147,8 +1129,6 @@ $(function () {
     var showQuestin = function showQuestin() {
       showElem(question);
     };
-
-    initQuestion();
 
     var options = question.find(".answers .item .elem");
 
@@ -1199,8 +1179,6 @@ $(function () {
       options.on("click", onSelect);
     };
 
-    initOptions();
-
     var removeButton = function removeButton() {
       answerButton.css({
         opacity: 0,
@@ -1213,8 +1191,15 @@ $(function () {
       render();
     });
 
+    var init = function init() {
+      initOptions();
+      initQuestion();
+      initAnswers();
+    };
+
     return {
-      show: showQuestin
+      show: showQuestin,
+      init: init
     };
   };
 
@@ -1230,14 +1215,17 @@ $(function () {
       showElem(footer);
     };
 
-    init();
-
     return {
-      show: show
+      show: show,
+      init: init
     };
   }();
 
-  var questions = [hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"), hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"), hookUpQueston($(".question-three"), 3, ".answer-three"), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five"), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven"), footer];
+  var questions = [hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"), hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven"), footer];
+
+  questions.forEach(function (elem) {
+    return elem.init();
+  });
 
   $.each($('.footer img'), function (i, elem) {
     elem.onclick = questions[i].show;

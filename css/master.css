@@ -633,8 +633,8 @@ body {
 }
 .banner .head .region {
     color: #ffffff;
+    font-size: 16px;
     font-family: 'PTSans-Bold';
-    font-weight: 16px;
     display: inline-block;
     width: 85%;
 }

@@ -6,7 +6,11 @@ let showElem = ($elem) => {
     display: "block",
   }).animate({
     opacity: 1
-  }, 1000 );
+  }, 1000);
+
+  $('html, body').animate({
+    scrollTop: $elem.offset().top
+}, 1000);
 };
 
 let hideElem = ($elem) => {
@@ -843,200 +847,177 @@ $(".map_body").load("map.svg", function() {
 // };
 
 
-let data = [
-  100,
-  203,
-  1513,
-  4315,
-  3971,
-  19758,
-  59609,
-  88739,
-  52170,
-  39232,
-  37002,
-  39407,
-  43007,
-  44713,
-  54563,
-  58410,
-  58298,
-  62387,
-  70832,
-  79764,
-  89667,
-  93000,
-];
-
-
-
-(function() {
-
-  let bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
-
-  //rgb(24,179,172)
-  //rgb(203,132,125)
-  let startColor = [228, 152, 152];
-  //rgb(190,32,37)
-  let endColor = [190, 32, 37];
-  let max = 100 * 1000;
-
-  let i = 0;
-
-  let rendernewInfected = function() {
-    if (i >= data.length) {
-      let labels = document.querySelectorAll('.newInfected_label_text');
-      [].forEach.call(labels, elem => elem.style.opacity = 0.9);
-      return;
-    }
-    let val = data[i];
-    if (val < 4000) {
-      bars[i].style.backgroundColor = 'rgb(24,179,172)';
-      bars[i].style.marginTop = 260 * 0.98 + "px";
-    } else {
-      let color = getColorMeta(startColor, endColor, val / max);
-      bars[i].style.backgroundColor = `rgb(${color})`;
-      bars[i].style.marginTop = (1 - val / max) * 260 + "px";
-    }
-
-    if (i == 3) {
-      bars[i].style.backgroundColor = 'rgb(24,179,172)';
-    }
-
-    i++;
-    setTimeout(rendernewInfected, 30);
-  };
-
-
-  setTimeout(function() {
-    rendernewInfected();
-  }, 200);
-
-})();
-
-
 
 $(function() {
 
-  let circle = document.querySelector('.guess-growth-main-small');
-  let textFeald = document.querySelector('.guess-growth-main-text');
-  let r = 46;
-  let text = "1 000 000";
+  let newInfectedChart = (()=>{
 
-  let valToText = val => {
-    val = Math.round(val / 100) * 100;
-
-    var arr = (val + "").split("");
-    arr.splice(4, 0, " ");
-    arr.splice(1, 0, " ");
-    return arr.join("");
-  };
-
-
-  let changeR = function() {
-    circle.style.width = r + "px";
-    circle.style.height = r + "px";
-  };
-
-  let changeText = () => textFeald.innerHTML = text;
-
-  let calculeteNewR = h => 46 + (230 - 46) * (1 - h / 230);
-
-  let calculeteNewVal = h => 1000000 + (4000000) * (1 - h / 230);
-
-  let onDrag = (event, ui) => {
-    let h = ui.position.top;
-    r = calculeteNewR(ui.position.top);
-    text = valToText(calculeteNewVal(h));
-    requestAnimationFrame(changeR);
-    requestAnimationFrame(changeText);
-  };
-
-  $(".valuepicker-picker").draggable({
-    containment: "parent",
-    axis: "y",
-    drag: onDrag,
-  });
-});
+    let data = [
+      100,
+      203,
+      1513,
+      4315,
+      3971,
+      19758,
+      59609,
+      88739,
+      52170,
+      39232,
+      37002,
+      39407,
+      43007,
+      44713,
+      54563,
+      58410,
+      58298,
+      62387,
+      70832,
+      79764,
+      89667,
+      93000,
+    ];
 
 
+    let bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
 
-$(function() {
+    //rgb(24,179,172)
+    //rgb(203,132,125)
+    let startColor = [228, 152, 152];
+    //rgb(190,32,37)
+    let endColor = [190, 32, 37];
+    let max = 100 * 1000;
 
-  // let valArr = [10, 80, 5, 5];
+    let i = 0;
 
-  //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
+    let rendernewInfected = function() {
+      if (i >= data.length) {
+        let labels = document.querySelectorAll('.newInfected_label_text');
+        [].forEach.call(labels, elem => elem.style.opacity = 0.9);
+        return;
+      }
+      let val = data[i];
+      if (val < 4000) {
+        bars[i].style.backgroundColor = 'rgb(24,179,172)';
+        bars[i].style.marginTop = 260 * 0.98 + "px";
+      } else {
+        let color = getColorMeta(startColor, endColor, val / max);
+        bars[i].style.backgroundColor = `rgb(${color})`;
+        bars[i].style.marginTop = (1 - val / max) * 260 + "px";
+      }
 
-  //как расположенны бары на диограмме
-  let barsPosition = ["drags", "fromMather", "hetero", "homo"];
+      if (i == 3) {
+        bars[i].style.backgroundColor = 'rgb(24,179,172)';
+      }
 
+      i++;
+      setTimeout(rendernewInfected, 30);
+    };
 
-  //как представленые данные в элементе матрици
-  let legend = {
-    drags: 0,
-    hetero: 1,
-    homo: 2,
-    fromMather: 3
-  };
+    let show = () => {
 
-  let valMatrix = [
-    [3.3, 43, 53, 0.7],
-    [6, 41, 52.9, 0.1],
-    [84, 7, 8.7, 0.3],
-    [87, 10.9, 1.9, 0.2],
-    [79.1, 17.8, 2.7, 0.4],
-    [91.8, 7.4, 0.6, 0.1],
-    [95.5, 4.2, 0.2, 0.1],
-    [93.3, 6.4, 0.2, 0.2],
-    [81.2, 17.7, 0.4, 0.7],
-    [72.3, 25.4, 0.5, 1.7],
-    [66.7, 29.9, 0.8, 2.5],
-    [64.2, 31.8, 1.1, 3.0],
-    [63.3, 33.0, 0.7, 2.9],
-    [61.5, 35.2, 1.0, 2.3],
-    [61.3, 35.6, 1.1, 2.0],
-    [59.8, 37.1, 1.4, 1.8],
-    [57.9, 39.7, 1.3, 1.1],
-    [56.2, 41.4, 1.3, 1.1],
-    [56.4, 41.7, 1.1, 0.8],
-    [54.9, 43.1, 1, 1.0],
-    [58.4, 39.7, 1.1, 0.8]
-  ];
+    setTimeout(function() {
+      rendernewInfected();
+    }, 200);
 
-  let years = document.querySelectorAll('.key-reason-canvas .year');
+  }
 
-  let setValue = function(year, valArr) {
-    let bars = year.querySelectorAll(".bar");
-    [].forEach.call(bars, function(elem, i) {
-      let name = barsPosition[i];
-      let percent = valArr[legend[name]];
-      elem.classList.add(name);
-      elem.style.height = percent + "%";
-    });
-  };
+    return {
+      show
+    }
 
-  let setYears = (i, fn, years) => {
-    if (i > years.length - 1) return;
-    fn(years[i], valMatrix[i]);
-    setTimeout(setYears, 200, ++i, fn, years);
-  };
+  })();
 
 
-  let initYears = (i, fn) => {
-    if (i > 20) return;
-    fn(years[i], [25, 25, 25, 25]);
-    initYears(++i, fn);
-  };
+  let keyReasonChart = (() => {
 
-  //move init to some global init
-  initYears(0, setValue);
+    //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
 
-  setTimeout(setYears, 700, 0, setValue, years);
-
-});
+    //как расположенны бары на диаграмме
+    let barsPosition = ["drags", "fromMather", "hetero", "homo"];
 
 
-$(function() {
+    //как представленые данные в элементе матрици
+    let legend = {
+      drags: 0,
+      hetero: 1,
+      homo: 2,
+      fromMather: 3
+    };
+
+    let valMatrix = [
+      [3.3, 43, 53, 0.7],
+      [6, 41, 52.9, 0.1],
+      [84, 7, 8.7, 0.3],
+      [87, 10.9, 1.9, 0.2],
+      [79.1, 17.8, 2.7, 0.4],
+      [91.8, 7.4, 0.6, 0.1],
+      [95.5, 4.2, 0.2, 0.1],
+      [93.3, 6.4, 0.2, 0.2],
+      [81.2, 17.7, 0.4, 0.7],
+      [72.3, 25.4, 0.5, 1.7],
+      [66.7, 29.9, 0.8, 2.5],
+      [64.2, 31.8, 1.1, 3.0],
+      [63.3, 33.0, 0.7, 2.9],
+      [61.5, 35.2, 1.0, 2.3],
+      [61.3, 35.6, 1.1, 2.0],
+      [59.8, 37.1, 1.4, 1.8],
+      [57.9, 39.7, 1.3, 1.1],
+      [56.2, 41.4, 1.3, 1.1],
+      [56.4, 41.7, 1.1, 0.8],
+      [54.9, 43.1, 1, 1.0],
+      [58.4, 39.7, 1.1, 0.8]
+    ];
+
+    let defYearVal = [25, 25, 25, 25];
+
+    let years = document.querySelectorAll('.key-reason-canvas .year');
+
+    let setValue = function(year, valArr) {
+      let bars = year.querySelectorAll(".bar");
+      [].forEach.call(bars, function(elem, i) {
+        let name = barsPosition[i];
+        let percent = valArr[legend[name]];
+        elem.classList.add(name);
+        elem.style.height = percent + "%";
+      });
+    };
+
+    let setYears = (i, fn, years) => {
+      if (i > years.length - 1) return;
+      fn(years[i], valMatrix[i]);
+      setTimeout(setYears, 200, ++i, fn, years);
+    };
+
+
+    let initYears = (i, fn) => {
+      if (i > 20) return;
+      fn(years[i], defYearVal);
+      initYears(++i, fn);
+    };
+
+    let startIndex = 0;
+
+    let show = () => {
+      console.log("show");
+      // setYears(startIndex, setValue, years)
+        setTimeout(setYears, 200, 0, setValue, years);
+    }
+
+    //move init to some global init
+    initYears(startIndex, setValue);
+
+    return {
+      show: show,
+    }
+
+    // let canvas = $('.key-reason-canvas');
+    //
+    //
+    // document.addEventListener('scroll', function(e) {
+    //   console.log(canvas.is(":visible"),canvas.offset());
+    // });
+
+  })();
 
   let valPicker = function(fn, state) {
 
@@ -1171,7 +1152,7 @@ $(function() {
 
 
 
-  let hookUpValQueston = (question, valPicker, AnswerSelectors) => {
+  let hookUpValQueston = (question, valPicker, AnswerSelectors, onAnswer) => {
 
     let answerButton = question.find(".answerButton");
 
@@ -1184,9 +1165,8 @@ $(function() {
 
     let showAnswers = () => {
       showElem(answer);
+      onAnswer && onAnswer();
     };
-
-    initAnswers();
 
     let initQuestion = () => {
       hideElem(question);
@@ -1195,8 +1175,6 @@ $(function() {
     let showQuestin = () => {
       showElem(question)
     };
-
-    initQuestion();
 
     let state = {
       selected: null,
@@ -1231,13 +1209,19 @@ $(function() {
 
     valPicker(render, state);
 
+    let init = () => {
+      initQuestion();
+      initAnswers();
+    }
+
     return {
-      show: showQuestin
+      show: showQuestin,
+      init: init,
     };
 
   };
 
-  let hookUpQueston = function(question, right, AnswerSelectors) {
+  let hookUpQueston = function(question, right, AnswerSelectors, onAnswer) {
 
 
     let answerButton = question.find(".answerButton");
@@ -1250,9 +1234,8 @@ $(function() {
 
     let showAnswers = () => {
       showElem(answer);
+      onAnswer && onAnswer();
     };
-
-    initAnswers();
 
     let initQuestion = () => {
       hideElem(question);
@@ -1261,8 +1244,6 @@ $(function() {
     let showQuestin = () => {
       showElem(question)
     };
-
-    initQuestion();
 
     let options = question.find(".answers .item .elem");
 
@@ -1314,8 +1295,6 @@ $(function() {
       options.on("click", onSelect);
     };
 
-    initOptions();
-
     let removeButton = () => {
       answerButton.css({
         opacity: 0,
@@ -1328,8 +1307,15 @@ $(function() {
       render();
     });
 
+    let init = () => {
+      initOptions();
+      initQuestion();
+      initAnswers();
+    }
+
     return {
-      show: showQuestin
+      show: showQuestin,
+      init: init,
     };
   };
 
@@ -1345,24 +1331,24 @@ $(function() {
       showElem(footer)
     };
 
-    init();
-
     return {
-      show: show
+      show: show,
+      init: init,
     }
   })();
 
   let questions = [
     hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"),
     hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"),
-    hookUpQueston($(".question-three"), 3, ".answer-three"),
+    hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show),
     hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
-    hookUpValQueston($(".question-five"), valPicker2, ".answer-five"),
+    hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
     hookUpValQueston($(".question-six"), valPicker, ".answer-six"),
     hookUpQueston($(".question-seven"), 1, ".answer-seven"),
     footer
   ];
 
+  questions.forEach(elem => elem.init())
 
 
   $.each($('.footer img'),
