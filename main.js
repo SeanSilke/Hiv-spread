@@ -916,8 +916,9 @@ $(function() {
     let show = () => {
 
     setTimeout(function() {
+      console.log("show newInfectedChart");
       rendernewInfected();
-    }, 200);
+    }, 1000);
 
   }
 
@@ -1000,7 +1001,7 @@ $(function() {
     let show = () => {
       console.log("show");
       // setYears(startIndex, setValue, years)
-        setTimeout(setYears, 200, 0, setValue, years);
+        setTimeout(setYears, 1000, 0, setValue, years);
     }
 
     //move init to some global init
@@ -1344,11 +1345,11 @@ $(function() {
     hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
     hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
     hookUpValQueston($(".question-six"), valPicker, ".answer-six"),
-    hookUpQueston($(".question-seven"), 1, ".answer-seven"),
+    hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"),
     footer
   ];
 
-  questions.forEach(elem => elem.init())
+  questions.forEach(elem => elem.init());
 
 
   $.each($('.footer img'),

@@ -833,8 +833,9 @@ $(function () {
     var show = function show() {
 
       setTimeout(function () {
+        console.log("show newInfectedChart");
         rendernewInfected();
-      }, 200);
+      }, 1000);
     };
 
     return {
@@ -890,7 +891,7 @@ $(function () {
     var show = function show() {
       console.log("show");
       // setYears(startIndex, setValue, years)
-      setTimeout(setYears, 200, 0, setValue, years);
+      setTimeout(setYears, 1000, 0, setValue, years);
     };
 
     //move init to some global init
@@ -1221,7 +1222,7 @@ $(function () {
     };
   }();
 
-  var questions = [hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"), hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven"), footer];
+  var questions = [hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"), hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), footer];
 
   questions.forEach(function (elem) {
     return elem.init();

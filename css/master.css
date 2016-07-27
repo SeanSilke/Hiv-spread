@@ -309,7 +309,7 @@ body {
     min-width: 1024px;
     background-image: url("../ribon2.png");
     background-repeat: no-repeat;
-    background-position: 45% 25px;
+    background-position: 50% 25px;
     position: relative;
 }
 .plate3 .text {
@@ -1103,11 +1103,20 @@ body {
   cursor: pointer;
 }
 
-.thermometer .green-meter {
-  position: relative;
-  height: 30px;
+.thermometer {
+  box-sizing: border-box;
   width: 848px;
   margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.thermometer .green-meter {
+  box-sizing: border-box;
+  position: relative;
+  height: 30px;
+  width: 100%;
+  /*margin: 0 auto;*/
   background-color: #18B3AC;
   border-radius: 0 15px 15px 0;
   font-size: 16px;
@@ -1116,7 +1125,7 @@ body {
   text-align: right;
   box-sizing: border-box;
   padding: 6px 15px 6px 0;
-  overflow: hidden;
+  /*overflow: hidden;*/
   transition: color 0.5s ease-in-out;
 }
 
@@ -1311,11 +1320,17 @@ background-color: #18B3AC;
     margin: 65px auto 0 auto;
 }
 
+.thermometer-9 {
+  width: 848px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
 
 .thermometer-9 .green-meter-9 {
   position: relative;
   height: 30px;
-  width: 848px;
+  width: 100%;
   margin: 0 auto;
   background-color: #18B3AC;
   border-radius: 0 15px 15px 0;
@@ -1325,7 +1340,6 @@ background-color: #18B3AC;
   text-align: right;
   box-sizing: border-box;
   padding: 6px 15px 6px 0;
-  overflow: hidden;
   transition: color 0.5s ease-in-out;
 }
 
@@ -1434,12 +1448,25 @@ background-color: #18B3AC;
 }
 
 .plate10 {
+    position: relative;
     margin-top: 65px;
     width: 100%;
-    background-image: url("../ribon5.png");
-    background-repeat: no-repeat;
-    background-position: 50% 166px;
 }
+
+.plate10-after{
+  content: "";
+  background-image: url("../ribon5.png");
+  background-repeat: no-repeat;
+  background-position: 50% 166px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+
+}
+
 .plate10 .content {
     text-align: center;
     width: 1024px;
@@ -1477,6 +1504,11 @@ background-color: #18B3AC;
 }
 .plate10 .answers .item .elem {
     margin-bottom: 20px;
+}
+
+.plate10 .answerButton{
+  margin-bottom: 80px;
+  margin-top: 40px;
 }
 
 .plate10 .head {
@@ -1602,14 +1634,18 @@ background-color: #18B3AC;
   font-family: 'PTSerif-Regular';
 }
 
+.plate10 .footer {
+  margin-bottom: 65px;
+}
+
 
 
 .plate11 {
-    margin-top: 65px;
+    /*margin-top: 65px;*/
     width: 100%;
     background-image: url("../ribon6.png");
     background-repeat: no-repeat;
-    background-position: 50% 295px;
+    background-position: 50% 185px;
 }
 .plate11 .content {
     text-align: center;
@@ -1623,16 +1659,11 @@ background-color: #18B3AC;
   margin: 70px 0;
 }
 
-.plate11 .score {
-
-  font-family: 'PTSans-Bold';
-  font-size: 24px;
-}
 
 .plate11 .grade {
   margin-top: 30px;
   font-family: 'PTSans-Bold';
-  font-size: 24px;
+  font-size: 28px;
   color: #18B3AC;
 }
 
