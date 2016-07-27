@@ -1,5 +1,6 @@
 "use strict";
 
+(function(){
 
 let showElem = ($elem) => {
   $elem.css({
@@ -10,7 +11,7 @@ let showElem = ($elem) => {
 
   $('html, body').animate({
     scrollTop: $elem.offset().top
-}, 1000);
+  }, 1000);
 };
 
 let hideElem = ($elem) => {
@@ -107,6 +108,63 @@ let relnIfectedInYear = function(year, rowRregData) {
   let ofset = 2 + (2014 - year) * 3;
   return rowRregData[ofset];
 };
+
+let getColorMeta = function(startColor, endColor, percent) {
+  var noName = function(start, end, percent) {
+    return Math.abs(
+      Math.floor(start * (1 - percent) + end * percent)
+    );
+  };
+
+  return startColor.map(function(elem, i) {
+    return noName(elem, endColor[i], percent);
+  }).join(",");
+};
+
+
+
+/*
+██     ██ ██ ███    ██ ██████   ██████  ██     ██      ██████  ███    ██     ███████  ██████ ██████   ██████  ██      ██
+██     ██ ██ ████   ██ ██   ██ ██    ██ ██     ██     ██    ██ ████   ██     ██      ██      ██   ██ ██    ██ ██      ██
+██  █  ██ ██ ██ ██  ██ ██   ██ ██    ██ ██  █  ██     ██    ██ ██ ██  ██     ███████ ██      ██████  ██    ██ ██      ██
+██ ███ ██ ██ ██  ██ ██ ██   ██ ██    ██ ██ ███ ██     ██    ██ ██  ██ ██          ██ ██      ██   ██ ██    ██ ██      ██
+ ███ ███  ██ ██   ████ ██████   ██████   ███ ███       ██████  ██   ████     ███████  ██████ ██   ██  ██████  ███████ ███████
+*/
+
+
+let onscroll = (function() {
+  let bgColor = null;
+  let H = document.body.offsetHeight;
+
+  let onscroll = function() {
+    let scrolled = window.pageYOffset || document.documentElement.scrollTop;
+    let percent = (scrolled + window.innerHeight) / H;
+    let color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
+    if (color !== bgColor) {
+      window.requestAnimationFrame(function() {
+        window.document.body.style.backgroundColor = `rgb(${color})`;
+      });
+      bgColor = color;
+    }
+  };
+
+  onscroll();
+
+  return onscroll;
+
+})();
+
+window.onscroll = onscroll;
+
+
+
+/*
+███    ███  █████  ██████      ███    ███  █████  ██ ███    ██
+████  ████ ██   ██ ██   ██     ████  ████ ██   ██ ██ ████   ██
+██ ████ ██ ███████ ██████      ██ ████ ██ ███████ ██ ██ ██  ██
+██  ██  ██ ██   ██ ██          ██  ██  ██ ██   ██ ██ ██  ██ ██
+██      ██ ██   ██ ██          ██      ██ ██   ██ ██ ██   ████
+*/
 
 
 
@@ -759,98 +817,23 @@ let mapMain = function() {
 
 
 
-let getColorMeta = function(startColor, endColor, percent) {
-  var noName = function(start, end, percent) {
-    return Math.abs(
-      Math.floor(start * (1 - percent) + end * percent)
-    );
-  };
-
-  return startColor.map(function(elem, i) {
-    return noName(elem, endColor[i], percent);
-  }).join(",");
-};
-
-// console.log(
-// getColorMeta([26,14,14],[22,47,57], 0.5)
-// );
-
-let onscroll = (function() {
-  let bgColor = null;
-  let H = document.body.offsetHeight;
-
-  let onscroll = function() {
-    let scrolled = window.pageYOffset || document.documentElement.scrollTop;
-    let percent = (scrolled + window.innerHeight) / H;
-    let color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
-    if (color !== bgColor) {
-      window.requestAnimationFrame(function() {
-        window.document.body.style.backgroundColor = `rgb(${color})`;
-      });
-      bgColor = color;
-    }
-  };
-
-  onscroll();
-
-  return onscroll;
-
-})();
-
-$(".map_body").load("map.svg", function() {
-  mapMain();
-  // window.scrollTo(0,document.body.scrollHeight);
-  window.onscroll = onscroll;
-});
-
-// console.log($(".chart.top-spread .body"));
-
-// $(".top-spread-map").load("top-spread.svg", function() {
-//   // console.log("Done");
-//
-// });
-
-
-// Шапка  + волна #rgb(26,14,14)
-// 1 вопрос + ответ #rgb(22,47,57)
-// 2 вопрос + карта #rgb(26,14,14)
-// 3 вопрос + график + волна #rgb(19,50,61)
-// 4 вопрос + волна #rgb(19,50,61)
-// 5 вопрос + график #rgb(12,35,42)
-// 6 вопрос + график #rgb(12,35,42)
-// 7 вопрос + волна + карта #rgb(22,47,57)
-// подвал с результатами  #rgb(44,108,111)
-
-// let data = {
-//   1994: 100,
-//   1995: 203,
-//   1996: 1513,
-//   1997: 4315,
-//   1998: 3971,
-//   1999: 19758,
-//   2000: 59609,
-//   2001: 88739,
-//   2002: 52170,
-//   2003: 39232,
-//   2004: 37002,
-//   2005: 39407,
-//   2006: 43007,
-//   2007: 44713,
-//   2008: 54563,
-//   2009: 58410,
-//   2010: 58298,
-//   2011: 62387,
-//   2012: 70832,
-//   2013: 79764,
-//   2014: 89667,
-//   2015: 93000,
-// };
+/*
+██████  ███████  ██████  ██ ███    ██ ███████
+██   ██ ██      ██       ██ ████   ██ ██
+██████  █████   ██   ███ ██ ██ ██  ██ █████
+██   ██ ██      ██    ██ ██ ██  ██ ██ ██
+██████  ███████  ██████  ██ ██   ████ ███████
+*/
 
 
 
 $(function() {
 
-  let newInfectedChart = (()=>{
+  $(".map_body").load("map.svg", function() {
+    // mapMain();
+  });
+
+  let newInfectedChart = (() => {
 
     let data = [
       100,
@@ -915,12 +898,12 @@ $(function() {
 
     let show = () => {
 
-    setTimeout(function() {
-      console.log("show newInfectedChart");
-      rendernewInfected();
-    }, 1000);
+      setTimeout(function() {
+        console.log("show newInfectedChart");
+        rendernewInfected();
+      }, 1000);
 
-  }
+    }
 
     return {
       show
@@ -1001,7 +984,7 @@ $(function() {
     let show = () => {
       console.log("show");
       // setYears(startIndex, setValue, years)
-        setTimeout(setYears, 1000, 0, setValue, years);
+      setTimeout(setYears, 1000, 0, setValue, years);
     }
 
     //move init to some global init
@@ -1338,9 +1321,10 @@ $(function() {
     }
   })();
 
-  let questions = [
+
+  let elems = [
     hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"),
-    hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5"),
+    hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5", mapMain),
     hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show),
     hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
     hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
@@ -1349,11 +1333,58 @@ $(function() {
     footer
   ];
 
-  questions.forEach(elem => elem.init());
+  elems.forEach(elem => elem.init());
 
 
   $.each($('.footer img'),
     (i, elem) => {
-      elem.onclick = questions[i].show;
+      elem.onclick = elems[i].show;
     });
 });
+
+
+
+// console.log($(".chart.top-spread .body"));
+
+// $(".top-spread-map").load("top-spread.svg", function() {
+//   // console.log("Done");
+//
+// });
+
+
+// Шапка  + волна #rgb(26,14,14)
+// 1 вопрос + ответ #rgb(22,47,57)
+// 2 вопрос + карта #rgb(26,14,14)
+// 3 вопрос + график + волна #rgb(19,50,61)
+// 4 вопрос + волна #rgb(19,50,61)
+// 5 вопрос + график #rgb(12,35,42)
+// 6 вопрос + график #rgb(12,35,42)
+// 7 вопрос + волна + карта #rgb(22,47,57)
+// подвал с результатами  #rgb(44,108,111)
+
+// let data = {
+//   1994: 100,
+//   1995: 203,
+//   1996: 1513,
+//   1997: 4315,
+//   1998: 3971,
+//   1999: 19758,
+//   2000: 59609,
+//   2001: 88739,
+//   2002: 52170,
+//   2003: 39232,
+//   2004: 37002,
+//   2005: 39407,
+//   2006: 43007,
+//   2007: 44713,
+//   2008: 54563,
+//   2009: 58410,
+//   2010: 58298,
+//   2011: 62387,
+//   2012: 70832,
+//   2013: 79764,
+//   2014: 89667,
+//   2015: 93000,
+// };
+
+})();

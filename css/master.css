@@ -302,7 +302,7 @@ body {
     color: #ffffff;
     width: 553px;
     margin: 0 auto;
-    margin-top: 65px;
+    /*margin-top: 65px;*/
 }
 .plate3 {
     width: 100%;
@@ -375,7 +375,7 @@ body {
     color: #ffffff;
     width: 670px;
     margin: 0 auto;
-    margin-top: 65px;
+    /*margin-top: 65px;*/
     text-align: center;
 }
 
@@ -745,7 +745,7 @@ body {
     width: 100%;
     background-image: url("../ribon3.png");
     background-repeat: no-repeat;
-    background-position: 50% 850px;
+    background-position: 50% 775px;
 }
 .plate6 .content {
     width: 1024px;
@@ -791,7 +791,7 @@ body {
     color: #ffffff;
     width: 553px;
     margin: 0 auto;
-    margin-top: 65px;
+    /*margin-top: 65px;*/
 }
 
 .chart.newInfected {
@@ -918,7 +918,8 @@ body {
   content: "";
   background-image: url("../ribon4.png");
   background-repeat: no-repeat;
-  background-position: 50% 420px;
+  /*background-position: 50% 420px;*/
+  background-position: 50% 320px;
   top: 0;
   left: 0;
   bottom: 0;
@@ -1057,7 +1058,7 @@ body {
     height: 180px;
     margin: 0 auto;
     background-size: 258px;
-    margin-top: 80px;
+    /*margin-top: 80px;*/
 }
 
 .plate7 .head_text {
@@ -1172,7 +1173,7 @@ body {
     color: #ffffff;
     width: 553px;
     margin: 0 auto;
-    margin-top: 65px;
+    /*margin-top: 65px;*/
 }
 
 .plate8 .chart.key-reason {
@@ -1547,13 +1548,14 @@ background-color: #18B3AC;
 }
 
 .chart.top-spread {
-  margin-top: 180px;
+  margin-top: 175px;
 }
 
 .chart.top-spread .header.text{
     font-family: 'PTSans-Bold';
     font-size: 24px;
     text-align: center;
+    margin-bottom: 35px;
 }
 
 .chart.top-spread .body {
