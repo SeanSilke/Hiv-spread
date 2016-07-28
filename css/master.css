@@ -46,7 +46,54 @@ body {
     background-color: #1A1517;
     font-size: 0;
     overflow-y:scroll;
+    -webkit-font-smoothing: antialiased;
 }
+
+.side-panel {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  z-index: 100;
+  opacity: 0;
+}
+
+.side-box {
+  box-sizing: border-box;
+  width: 45px;
+  height: 45px;
+  margin-top: 3px;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: 'PTSans-Bold';
+  text-align: center;
+  padding-top: 14px;
+  transition: border 1s, background-color 1s, opacity 1s;
+  pointer-events: none;
+}
+
+.box-inactive {
+    background-color: #1F424F;
+}
+
+.box-selected {
+  border: 1px solid #97DDDA;
+}
+
+.box-false {
+  background-color: #B42025;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.box-true {
+  background-color: #18B3AC;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+
+
+
 
 .prop {
   position: relative;
@@ -149,7 +196,7 @@ body {
 .plate2 .content .question {
     font-size: 24px;
     color: #ffffff;
-    font-family: "TSans-Bold";
+    font-family: "PTSans-Bold";
     text-align: center;
 }
 .plate2 .answers {
@@ -348,7 +395,7 @@ body {
 .plate4 .content .question {
     font-size: 24px;
     color: #ffffff;
-    font-family: "TSans-Bold";
+    font-family: "PTSans-Bold";
     text-align: center;
 }
 .plate4 .answers {
@@ -764,7 +811,7 @@ body {
 .plate6 .content .question {
     font-size: 24px;
     color: #ffffff;
-    font-family: "TSans-Bold";
+    font-family: "PTSans-Bold";
     text-align: center;
 }
 .plate6 .answers {
@@ -945,7 +992,7 @@ body {
 .plate7 .content .question {
     font-size: 24px;
     color: #ffffff;
-    font-family: "TSans-Bold";
+    font-family: "PTSans-Bold";
     text-align: center;
 }
 
@@ -1095,7 +1142,7 @@ body {
 .plate8 .content .question {
     font-size: 24px;
     color: #ffffff;
-    font-family: "TSans-Bold";
+    font-family: "PTSans-Bold";
     text-align: center;
 }
 
@@ -1318,7 +1365,7 @@ background-color: #18B3AC;
 .plate9 .content .question {
     font-size: 24px;
     color: #ffffff;
-    font-family: "TSans-Bold";
+    font-family: "PTSans-Bold";
     text-align: center;
 }
 
@@ -1486,7 +1533,7 @@ background-color: #18B3AC;
 .plate10 .content .question {
     font-size: 24px;
     color: #ffffff;
-    font-family: "TSans-Bold";
+    font-family: "PTSans-Bold";
     text-align: center;
 }
 .plate10 .answers {
