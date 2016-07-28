@@ -2,15 +2,29 @@
 
 (function () {
 
-  var showElem = function showElem($elem) {
+  var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+  var showElem = function showElem($elem, isLast) {
     $elem.css({
       display: "block"
-    }).animate({
+    }).clearQueue().animate({
       opacity: 1
     }, 1000);
 
-    $('html, body').animate({
-      scrollTop: $elem.offset().top
+    var center = $elem.height() > h ? h / 2 : $elem.height() / 2;
+
+    var helperPosition = $elem.offset().top + $elem.height() / 2 + h / 2;
+
+    if (!isLast && helperPosition > $('.prop').offset().top) {
+      $('.prop').css({
+        top: helperPosition
+      });
+    }
+
+    var scrollTo = $elem.height() < h ? $elem.offset().top - h / 2 + $elem.height() / 2 : $elem.offset().top;
+
+    $('html, body').clearQueue().animate({
+      scrollTop: scrollTo
     }, 1000);
   };
 
@@ -152,7 +166,7 @@
     //----Data----
     var data = {};
 
-    // -------------Global State------------
+    // -------------Map State------------
     var state = {
       year: 1999,
       regionId: "",
@@ -857,7 +871,7 @@
       var setYears = function setYears(i, fn, years) {
         if (i > years.length - 1) return;
         fn(years[i], valMatrix[i]);
-        setTimeout(setYears, 200, ++i, fn, years);
+        setTimeout(setYears, 80, ++i, fn, years);
       };
 
       var initYears = function initYears(i, fn) {
@@ -897,6 +911,7 @@
       var percent = void 0;
       var max = 848;
       var text = document.querySelector('.red-meter-9>div');
+      var rightAnswer = 12;
 
       var render = function render(percent) {
         ribbonSlider.style.left = percent * max + "px";
@@ -918,8 +933,10 @@
 
       var onDrag = function onDrag(event, ui) {
         ui.position.left = Math.min(848, ui.position.left);
-        var percent = ui.position.left / 848;
+        percent = ui.position.left / 848;
         render(percent);
+        //обработку правильно ответа решил проводить в серекторе по этому можно
+        // не передовать состояние селектора в состояние вопроса
         state.selected = Math.round(percent * 14) + 1;
         fn();
       };
@@ -929,6 +946,14 @@
         axis: "x",
         drag: onDrag
       });
+
+      var isRight = function isRight() {
+        return Math.round(percent * 14) + 1 == rightAnswer;
+      };
+
+      return {
+        isRight: isRight
+      };
     };
 
     var valPicker2 = function valPicker2(fn, state) {
@@ -938,6 +963,7 @@
       var percent = void 0;
       var max = 848;
       var text = document.querySelector('.red-meter-8>div');
+      var rightAnswer = 40;
 
       var render = function render(percent) {
         ribbonSlider.style.left = percent * max + "px";
@@ -959,9 +985,12 @@
 
       var onDrag = function onDrag(event, ui) {
         ui.position.left = Math.min(848, ui.position.left);
-        var percent = ui.position.left / 848;
+        percent = ui.position.left / 848;
         render(percent);
-        state.selected = Math.round(percent * 14) + 1;
+
+        //обработку правильно ответа решил проводить в серекторе по этому можно
+        // не передовать состояние селектора в состояние вопроса
+        state.selected = Math.round(percent * 100);
         fn();
       };
 
@@ -970,6 +999,16 @@
         axis: "x",
         drag: onDrag
       });
+
+      var isRight = function isRight() {
+        console.log(Math.round(percent * 100) == rightAnswer);
+
+        return Math.round(percent * 100) == rightAnswer;
+      };
+
+      return {
+        isRight: isRight
+      };
     };
 
     var valPicker3 = function valPicker3(fn, state) {
@@ -977,6 +1016,7 @@
       var textFeald = document.querySelector('.guess-growth-main-text');
       var r = 46;
       var text = "1 000 000";
+      var selectedVal = 1000000;
 
       var valToText = function valToText(val) {
         val = Math.round(val / 100) * 100;
@@ -1007,7 +1047,8 @@
       var onDrag = function onDrag(event, ui) {
         var h = ui.position.top;
         r = calculeteNewR(ui.position.top);
-        text = valToText(calculeteNewVal(h));
+        selectedVal = calculeteNewVal(h);
+        text = valToText(selectedVal);
         requestAnimationFrame(changeR);
         requestAnimationFrame(changeText);
         //что записывать в состояние
@@ -1020,9 +1061,17 @@
         axis: "y",
         drag: onDrag
       });
+
+      var isRight = function isRight() {
+        return selectedVal < 3000000 && selectedVal > 2000000;
+      };
+
+      return {
+        isRight: isRight
+      };
     };
 
-    var hookUpValQueston = function hookUpValQueston(question, valPicker, AnswerSelectors, onAnswer) {
+    var hookUpValQueston = function hookUpValQueston(question, ValPicker, AnswerSelectors, onAnswer) {
 
       var answerButton = question.find(".answerButton");
 
@@ -1071,12 +1120,13 @@
         });
       };
 
+      var valPicker = ValPicker(render, state);
+
       answerButton.click(function () {
         state.isAnswered = true;
+        globalState.setReult(valPicker.isRight());
         render();
       });
-
-      valPicker(render, state);
 
       var init = function init() {
         initQuestion();
@@ -1169,6 +1219,7 @@
 
       answerButton.click(function () {
         state.isAnswered = true;
+        globalState.setReult(state.selected == state.right);
         render();
       });
 
@@ -1193,7 +1244,7 @@
       };
 
       var show = function show() {
-        showElem(footer);
+        showElem(footer, true);
       };
 
       return {
@@ -1202,14 +1253,85 @@
       };
     }();
 
-    var elems = [hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"), hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5", mapMain), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), footer];
+    var globalState = {
+      curQuestion: null,
+      questions: [{}, {}, {}, {}, {}, {}, {}],
+      setReult: function setReult(result) {
+        console.log("setReult");
+        var q = this.questions[this.curQuestion];
+        if (!q.result) {
+          q.result = result;
+          sideBars.render(this.questions);
+        }
+      }
+    };
+
+    var setReult = function setReult(result) {
+      if (!globalState.questions[globalState.curQuestion]) {
+        globalState.questions[globalState.curQuestion] = { result: result };
+      }
+    };
+
+    var elems = [hookUpQueston($(".question-one"), 2, ".plate3"), hookUpQueston($(".question-two"), 3, ".plate5", mapMain), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), footer];
 
     elems.forEach(function (elem) {
       return elem.init();
     });
 
+    var sideBars = function () {
+
+      var state = {
+        isVisible: null
+      };
+
+      var $mainElem = $(".side-panel");
+      var $sideBars = $(".side-box");
+
+      var select = function select(i) {
+        $sideBars.removeClass("box-selected");
+        $sideBars[i] && $sideBars[i].classList.add("box-selected");
+      };
+
+      $sideBars.click(function () {
+        elems[parseInt(this.dataset.id)].show();
+        select(parseInt(this.dataset.id));
+      });
+
+      var render = function render(qElems) {
+
+        qElems.forEach(function (e, i) {
+          if (e.result && e.result) {
+            $sideBars[i].classList.add("box-true");
+          } else if (e.result === false) {
+            $sideBars[i].classList.add("box-false");
+          }
+        });
+      };
+
+      var show = function show() {
+        $mainElem.clearQueue().animate({
+          opacity: 1
+        }, 1000);
+      };
+
+      return {
+        select: select,
+        render: render,
+        show: show
+      };
+    }();
+
     $.each($('.footer img'), function (i, elem) {
-      elem.onclick = elems[i].show;
+      elem.onclick = function () {
+        elems[i].show();
+        globalState.curQuestion = i;
+        sideBars.select(i);
+        console.log(globalState);
+
+        if (i == 0) {
+          sideBars.show();
+        }
+      };
     });
   });
 
