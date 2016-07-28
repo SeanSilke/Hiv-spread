@@ -2,16 +2,33 @@
 
 (function(){
 
-let showElem = ($elem) => {
+  let h = window.innerHeight
+|| document.documentElement.clientHeight
+|| document.body.clientHeight;
+
+let showElem = ($elem, isLast) => {
   $elem.css({
     display: "block",
   }).animate({
     opacity: 1
   }, 1000);
 
+  let center = $elem.height() > h ? h/2 : $elem.height()/2;
+
+  if (!isLast){
+  $('.prop').css({
+    top:($elem.offset().top + $elem.height()/2 + h/2  )
+  });
+}
+
+  let scrollTo = $elem.height() < h ? $elem.offset().top - h/2 + $elem.height()/2 : $elem.offset().top;
+
+
   $('html, body').animate({
-    scrollTop: $elem.offset().top
+    scrollTop: scrollTo
   }, 1000);
+
+
 };
 
 let hideElem = ($elem) => {
@@ -969,7 +986,7 @@ $(function() {
     let setYears = (i, fn, years) => {
       if (i > years.length - 1) return;
       fn(years[i], valMatrix[i]);
-      setTimeout(setYears, 200, ++i, fn, years);
+      setTimeout(setYears, 80, ++i, fn, years);
     };
 
 
@@ -1312,7 +1329,7 @@ $(function() {
     };
 
     let show = () => {
-      showElem(footer)
+      showElem(footer, true)
     };
 
     return {
@@ -1323,7 +1340,7 @@ $(function() {
 
 
   let elems = [
-    hookUpQueston($(".question-one"), 2, ".plate3, .plate2 .comment"),
+    hookUpQueston($(".question-one"), 2, ".plate3"),
     hookUpQueston($(".question-two"), 3, ".plate4 .comment, .plate5", mapMain),
     hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show),
     hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),

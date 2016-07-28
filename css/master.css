@@ -47,6 +47,14 @@ body {
     font-size: 0;
     overflow-y:scroll;
 }
+
+.prop {
+  position: relative;
+  width: 1px;
+  height: 1px;
+  /*top: 15000px;*/
+}
+
 .line {
     background-color: #A9242C;
     width: 100%;
@@ -125,7 +133,7 @@ body {
 }
 
 .plate3 .footer {
-  padding-top: 585px;
+  padding-top: 550px;
 }
 
 .plate2 {
@@ -296,7 +304,7 @@ body {
   transition: display 1s, ;
 }*/
 
-.plate2 .comment {
+.plate3 .comment {
     font-size: 16px;
     font-family: 'PTSerif-Regular';
     color: #ffffff;
@@ -369,7 +377,7 @@ body {
 .plate4 .answers .item .elem {
     margin-bottom: 20px;
 }
-.plate4 .comment {
+.plate5 .comment-1 {
     font-size: 16px;
     font-family: 'PTSerif-Regular';
     color: #ffffff;
@@ -1163,7 +1171,7 @@ body {
 
 
 .plate8 .answerButton{
-  margin-bottom: 80px;
+  /*margin-bottom: 80px;*/
   margin-top: 40px;
 }
 
@@ -1379,7 +1387,7 @@ background-color: #18B3AC;
 
 .plate9 .answerButton{
   margin-top: 60px;
-  margin-bottom: 80px;
+  /*margin-bottom: 80px;*/
 }
 
 
@@ -1508,8 +1516,12 @@ background-color: #18B3AC;
 }
 
 .plate10 .answerButton{
-  margin-bottom: 80px;
+  /*margin-bottom: 80px;*/
   margin-top: 40px;
+}
+
+.answer-seven {
+    padding-top: 100px;
 }
 
 .plate10 .head {
@@ -1519,7 +1531,7 @@ background-color: #18B3AC;
     width: 260px;
     height: 214px;
     background-size: 258px;
-    margin-top: 90px;
+    /*margin-top: 90px;*/
 }
 
 .plate10 .head-name {
