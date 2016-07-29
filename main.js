@@ -18,7 +18,7 @@
 
     let helperPosition = ($elem.offset().top + $elem.height() / 2 + h / 2)
 
-    if (!isLast && helperPosition > $('.prop').offset().top ) {
+    if (!isLast && helperPosition > $('.prop').offset().top) {
       $('.prop').css({
         top: helperPosition
       });
@@ -160,6 +160,7 @@
       let scrolled = window.pageYOffset || document.documentElement.scrollTop;
       let percent = (scrolled + window.innerHeight) / H;
       let color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
+
       if (color !== bgColor) {
         window.requestAnimationFrame(function() {
           window.document.body.style.backgroundColor = `rgb(${color})`;
@@ -168,7 +169,7 @@
       }
     };
 
-    onscroll();
+    // onscroll();
 
     return onscroll;
 
@@ -919,7 +920,6 @@
       let show = () => {
 
         setTimeout(function() {
-          console.log("show newInfectedChart");
           rendernewInfected();
         }, 1000);
 
@@ -1002,7 +1002,6 @@
       let startIndex = 0;
 
       let show = () => {
-        console.log("show");
         // setYears(startIndex, setValue, years)
         setTimeout(setYears, 1000, 0, setValue, years);
       }
@@ -1068,7 +1067,7 @@
         drag: onDrag,
       });
 
-      let isRight = () => (Math.round(percent * 14) + 1 ==  rightAnswer)
+      let isRight = () => (Math.round(percent * 14) + 1 == rightAnswer)
 
       return {
         isRight
@@ -1110,7 +1109,7 @@
 
         //обработку правильно ответа решил проводить в серекторе по этому можно
         // не передовать состояние селектора в состояние вопроса
-        state.selected =  Math.round(percent * 100);
+        state.selected = Math.round(percent * 100);
         fn();
       };
 
@@ -1121,9 +1120,7 @@
       });
 
       let isRight = () => {
-        console.log(Math.round(percent * 100) ==  rightAnswer);
-
-        return Math.round(percent * 100) ==  rightAnswer
+        return Math.round(percent * 100) == rightAnswer
       }
 
       return {
@@ -1178,7 +1175,7 @@
         drag: onDrag,
       });
 
-      let isRight = () => (selectedVal < 3000000  &&  selectedVal > 2000000)
+      let isRight = () => (selectedVal < 3000000 && selectedVal > 2000000)
 
       return {
         isRight
@@ -1237,7 +1234,7 @@
         });
       };
 
-      let  valPicker =  ValPicker(render, state);
+      let valPicker = ValPicker(render, state);
 
       answerButton.click(function() {
         state.isAnswered = true;
@@ -1377,20 +1374,13 @@
 
     let globalState = {
       curQuestion: null,
-      questions: [{},{},{},{},{},{},{}],
+      questions: [{}, {}, {}, {}, {}, {}, {}],
       setReult: function(result) {
-        console.log("setReult");
         let q = this.questions[this.curQuestion]
-        if(!q.result){
-        q.result = result;
-        sideBars.render(this.questions);
+        if (!q.result) {
+          q.result = result;
+          sideBars.render(this.questions);
         }
-      }
-    }
-
-    let setReult = function(result){
-      if (!globalState.questions[globalState.curQuestion]){
-        globalState.questions[globalState.curQuestion] = {result}
       }
     }
 
@@ -1407,13 +1397,22 @@
     ];
 
     elems.forEach(elem => elem.init());
+    // elems.forEach(elem => elem.show());
 
+
+    /*
+    ███████ ██ ██████  ███████ ██████   █████  ██████  ███████
+    ██      ██ ██   ██ ██      ██   ██ ██   ██ ██   ██ ██
+    ███████ ██ ██   ██ █████   ██████  ███████ ██████  ███████
+         ██ ██ ██   ██ ██      ██   ██ ██   ██ ██   ██      ██
+    ███████ ██ ██████  ███████ ██████  ██   ██ ██   ██ ███████
+    */
 
 
     let sideBars = (function() {
 
       let state = {
-        isVisible : null,
+        isVisible: null,
       }
 
       let $mainElem = $(".side-panel");
@@ -1424,17 +1423,17 @@
         $sideBars[i] && $sideBars[i].classList.add("box-selected");
       }
 
-      $sideBars.click(function(){
+      $sideBars.click(function() {
         elems[parseInt(this.dataset.id)].show();
         select(parseInt(this.dataset.id))
       })
 
-      let render = (qElems) =>{
+      let render = (qElems) => {
 
-        qElems.forEach((e, i)=>{
-          if(e.result && e.result) {
+        qElems.forEach((e, i) => {
+          if (e.result && e.result) {
             $sideBars[i].classList.add("box-true")
-          } else if (e.result === false){
+          } else if (e.result === false) {
             $sideBars[i].classList.add("box-false")
           }
         })
@@ -1442,9 +1441,9 @@
 
       let show = () => {
         $mainElem.clearQueue()
-        .animate({
-          opacity: 1
-        }, 1000);
+          .animate({
+            opacity: 1
+          }, 1000);
       }
 
       return {
@@ -1457,6 +1456,32 @@
 
 
 
+    let results = [
+      {
+        title: "Плохой",
+        text: "СПИД, как известно, не спит. А вы почти ничего о нём не знаете",
+      },
+      {
+        title: "Средний",
+        text: "Кажется, вы, по крайней мере, знаете, чем отличается ВИЧ от СПИД",
+      },
+      {
+        title: "Хороший",
+        text: "Вы отлично разбираетесь в этой невесёлой теме!",
+      },
+    ]
+
+
+    let  renderResult = function() {
+
+      let resultVal = globalState.questions.reduce((val,e) =>  (val = (e.result) ? val + 1 : val),0)
+      let resultTextId =  resultVal> 5 ? 2 : resultVal > 3 ? 1: 0;
+      // let resultTextId z= 2;
+      let obj =  results[resultTextId]
+
+      $(".plate11 .grade").text(obj.title)
+      $(".plate11 .result .comment").text(obj.text)
+    }
 
 
     $.each($('.footer img'),
@@ -1465,10 +1490,11 @@
           elems[i].show();
           globalState.curQuestion = i;
           sideBars.select(i);
-          console.log(globalState);
-
           if (i == 0) {
             sideBars.show()
+          }
+          if (i == 7){
+            renderResult();
           }
         }
       });

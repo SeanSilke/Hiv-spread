@@ -133,13 +133,16 @@
   var onscroll = function () {
     var bgColor = null;
     var H = document.body.offsetHeight;
+    var i = 0;
 
     var onscroll = function onscroll() {
       var scrolled = window.pageYOffset || document.documentElement.scrollTop;
       var percent = (scrolled + window.innerHeight) / H;
       var color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
+
       if (color !== bgColor) {
         window.requestAnimationFrame(function () {
+          console.log(i++);
           window.document.body.style.backgroundColor = "rgb(" + color + ")";
         });
         bgColor = color;

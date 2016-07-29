@@ -67,8 +67,13 @@ body {
   font-family: 'PTSans-Bold';
   text-align: center;
   padding-top: 14px;
-  transition: border 1s, background-color 1s, opacity 1s;
+  /*transition: border 5s, background-color 1s, opacity 1s;*/
   pointer-events: none;
+  /*-moz-transition: all .51s;*/
+  /*-o-transition: all .51s;*/
+  /*-webkit-transition: all .51s;*/
+  border: 1px solid transparent;
+  transition: all 1s;
 }
 
 .box-inactive {
@@ -1165,6 +1170,11 @@ body {
   margin: 0 auto;
   overflow: hidden;
   position: relative;
+}
+
+.ribbon-slider-8-answer {
+  width: 45px;
+  height: 45px;
 }
 
 .thermometer .green-meter {
