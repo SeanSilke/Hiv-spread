@@ -1184,7 +1184,7 @@
 
 
 
-    let hookUpValQueston = (question, ValPicker, AnswerSelectors, onAnswer) => {
+    function hookUpValQueston (question, ValPicker, AnswerSelectors, onAnswer) {
 
       let answerButton = question.find(".answerButton");
 
@@ -1243,15 +1243,14 @@
         render();
       });
 
-      let init = () => {
+      this.init = () => {
         initQuestion();
         initAnswers();
       }
 
-      return {
-        show: showQuestin,
-        init: init,
-      };
+      this.show = function() {
+        showQuestin();
+      }
 
     };
 
@@ -1355,23 +1354,19 @@
       };
     };
 
-    let footer = (() => {
+    function Footer() {
 
       let footer = $(".plate11, .line.bottom");
 
-      let init = () => {
+      this.init =  function() {
         hideElem(footer)
       };
 
-      let show = () => {
+      this.show = function() {
         showElem(footer, true)
       };
 
-      return {
-        show: show,
-        init: init,
-      }
-    })();
+    }
 
 
     let globalState = {
@@ -1391,11 +1386,11 @@
       hookUpQueston($(".question-one"), 2, ".plate3"),
       hookUpQueston($(".question-two"), 3, ".plate5", mapMain),
       hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show),
-      hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
-      hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
-      hookUpValQueston($(".question-six"), valPicker, ".answer-six"),
+      new hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
+      new hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
+      new hookUpValQueston($(".question-six"), valPicker, ".answer-six"),
       hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"),
-      footer
+      new Footer(),
     ];
 
     elems.forEach(elem => elem.init());

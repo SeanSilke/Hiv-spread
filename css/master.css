@@ -49,6 +49,10 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+.content {
+  min-width: 1024px;
+}
+
 .answered {
   pointer-events: none;
 }
@@ -188,10 +192,6 @@ body {
   margin-top: 230px;
 }
 
-.plate3 .footer {
-  padding-top: 550px;
-}
-
 .plate2 {
     margin-top: 65px;
     width: 100%;
@@ -202,6 +202,17 @@ body {
     margin: 0 auto;
     /*background-color: rgba(0, 128, 0, 0.25);*/
 }
+
+.redDotLine {
+  margin-top:10px;
+  width: 100%;
+  height: 5px;
+  background-image: url("../redDotLine.png");
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+
 .plate2 .content .question {
     font-size: 24px;
     color: #ffffff;
@@ -373,23 +384,30 @@ body {
     min-width: 1024px;
     background-image: url("../ribon2.png");
     background-repeat: no-repeat;
-    background-position: 50% 25px;
+    background-position: 50% 120px;
     position: relative;
 }
-.plate3 .text {
-    display: inline-block;
+.plate3-text-item {
+    display: block;
+    /*margin: 0 auto;*/
+    text-align: center;
     font-family: "PTSerif-Regular";
     font-size: 24px;
     color: #ffffff;
-    position: absolute;
-    text-align: center;
-    left: 50%;
-    top: 40%;
-    transform: translate(-50%, -50%);
+    position: relative;
 }
-.plate3 .text .item:nth-child(2) {
+.plate3-text-item-big {
     font-size: 63px;
 }
+
+.plate3-text-item-top{
+  padding-top: 210px;
+}
+
+.plate3 .footer {
+  padding-top: 220px;
+}
+
 .plate4 {
     width: 100%;
     min-width: 1024px;
@@ -433,19 +451,21 @@ body {
 .plate4 .answers .item .elem {
     margin-bottom: 20px;
 }
-.plate5 .comment-1 {
-    font-size: 16px;
-    font-family: 'PTSerif-Regular';
-    color: #ffffff;
-    width: 670px;
-    margin: 0 auto;
-    /*margin-top: 65px;*/
-    text-align: center;
-}
 
 .plate5  {
   margin-top: 45px;
 }
+
+.plate5 .comment-top {
+    font-size: 24px;
+    font-family: 'PTSans-Bold';
+    color: #ffffff;
+    width: 980px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 65px;
+}
+
 
 .plate5 .comment {
   font-size: 0px;
@@ -983,7 +1003,7 @@ body {
   background-image: url("../ribon4.png");
   background-repeat: no-repeat;
   /*background-position: 50% 420px;*/
-  background-position: 50% 320px;
+  background-position: 50% 335px;
   top: 0;
   left: 0;
   bottom: 0;
@@ -1595,7 +1615,7 @@ background-color: #18B3AC;
   margin-bottom: 5px;
   /*opacity: 0.3;*/
   border-radius: 20px;
-  color: #93A1A8;
+  color: #ffffff;
   font-family:'PTSans-Regular';
 }
 
@@ -1773,7 +1793,7 @@ background-color: #18B3AC;
   height: 100%;
   background-color: rgba(24,179,172,0.3);
   border-radius: 20px 0px 0px 20px;
-  color: #93A1A8;
+  color: #ffffff;
   font-family:'PTSans-Regular';
   font-size: 0;
 }

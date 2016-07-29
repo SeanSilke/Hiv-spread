@@ -1068,7 +1068,7 @@
       };
     };
 
-    var hookUpValQueston = function hookUpValQueston(question, ValPicker, AnswerSelectors, onAnswer) {
+    function hookUpValQueston(question, ValPicker, AnswerSelectors, onAnswer) {
 
       var answerButton = question.find(".answerButton");
 
@@ -1126,14 +1126,13 @@
         render();
       });
 
-      var init = function init() {
+      this.init = function () {
         initQuestion();
         initAnswers();
       };
 
-      return {
-        show: showQuestin,
-        init: init
+      this.show = function () {
+        showQuestin();
       };
     };
 
@@ -1234,23 +1233,18 @@
       };
     };
 
-    var footer = function () {
+    function Footer() {
 
       var footer = $(".plate11, .line.bottom");
 
-      var init = function init() {
+      this.init = function () {
         hideElem(footer);
       };
 
-      var show = function show() {
+      this.show = function () {
         showElem(footer, true);
       };
-
-      return {
-        show: show,
-        init: init
-      };
-    }();
+    }
 
     var globalState = {
       curQuestion: null,
@@ -1264,7 +1258,7 @@
       }
     };
 
-    var elems = [hookUpQueston($(".question-one"), 2, ".plate3"), hookUpQueston($(".question-two"), 3, ".plate5", mapMain), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), footer];
+    var elems = [hookUpQueston($(".question-one"), 2, ".plate3"), hookUpQueston($(".question-two"), 3, ".plate5", mapMain), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), new hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer()];
 
     elems.forEach(function (elem) {
       return elem.init();
