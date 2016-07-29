@@ -133,7 +133,6 @@
   var onscroll = function () {
     var bgColor = null;
     var H = document.body.offsetHeight;
-    var i = 0;
 
     var onscroll = function onscroll() {
       var scrolled = window.pageYOffset || document.documentElement.scrollTop;
@@ -142,14 +141,13 @@
 
       if (color !== bgColor) {
         window.requestAnimationFrame(function () {
-          console.log(i++);
           window.document.body.style.backgroundColor = "rgb(" + color + ")";
         });
         bgColor = color;
       }
     };
 
-    onscroll();
+    // onscroll();
 
     return onscroll;
   }();
@@ -830,7 +828,6 @@
       var show = function show() {
 
         setTimeout(function () {
-          console.log("show newInfectedChart");
           rendernewInfected();
         }, 1000);
       };
@@ -886,7 +883,6 @@
       var startIndex = 0;
 
       var show = function show() {
-        console.log("show");
         // setYears(startIndex, setValue, years)
         setTimeout(setYears, 1000, 0, setValue, years);
       };
@@ -1004,8 +1000,6 @@
       });
 
       var isRight = function isRight() {
-        console.log(Math.round(percent * 100) == rightAnswer);
-
         return Math.round(percent * 100) == rightAnswer;
       };
 
@@ -1107,9 +1101,10 @@
         if (state.isAnswered) {
           removeButton();
           showAnswers();
-          question.css({
-            "pointer-events": "none"
-          });
+          question.addClass("answered");
+          // question.css({
+          //   "pointer-events": "none"
+          // });
         }
         if (state.selected !== null) {
           answerButton.addClass("active");
@@ -1176,9 +1171,10 @@
         if (state.isAnswered) {
           removeButton();
           showAnswers();
-          question.css({
-            "pointer-events": "none"
-          });
+          question.addClass("answered");
+          // question.css({
+          //   "pointer-events": "none"
+          // });
         } else {
           if (state.selected !== null) {
             answerButton.addClass("active");
@@ -1260,7 +1256,6 @@
       curQuestion: null,
       questions: [{}, {}, {}, {}, {}, {}, {}],
       setReult: function setReult(result) {
-        console.log("setReult");
         var q = this.questions[this.curQuestion];
         if (!q.result) {
           q.result = result;
@@ -1269,17 +1264,19 @@
       }
     };
 
-    var setReult = function setReult(result) {
-      if (!globalState.questions[globalState.curQuestion]) {
-        globalState.questions[globalState.curQuestion] = { result: result };
-      }
-    };
-
     var elems = [hookUpQueston($(".question-one"), 2, ".plate3"), hookUpQueston($(".question-two"), 3, ".plate5", mapMain), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), footer];
 
     elems.forEach(function (elem) {
       return elem.init();
     });
+
+    /*
+    ███████ ██ ██████  ███████ ██████   █████  ██████  ███████
+    ██      ██ ██   ██ ██      ██   ██ ██   ██ ██   ██ ██
+    ███████ ██ ██   ██ █████   ██████  ███████ ██████  ███████
+         ██ ██ ██   ██ ██      ██   ██ ██   ██ ██   ██      ██
+    ███████ ██ ██████  ███████ ██████  ██   ██ ██   ██ ███████
+    */
 
     var sideBars = function () {
 
@@ -1324,15 +1321,40 @@
       };
     }();
 
+    var results = [{
+      title: "Плохой",
+      text: "СПИД, как известно, не спит. А вы почти ничего о нём не знаете"
+    }, {
+      title: "Средний",
+      text: "Кажется, вы, по крайней мере, знаете, чем отличается ВИЧ от СПИД"
+    }, {
+      title: "Хороший",
+      text: "Вы отлично разбираетесь в этой невесёлой теме!"
+    }];
+
+    var renderResult = function renderResult() {
+
+      var resultVal = globalState.questions.reduce(function (val, e) {
+        return val = e.result ? val + 1 : val;
+      }, 0);
+      var resultTextId = resultVal > 5 ? 2 : resultVal > 3 ? 1 : 0;
+      // let resultTextId z= 2;
+      var obj = results[resultTextId];
+
+      $(".plate11 .grade").text(obj.title);
+      $(".plate11 .result .comment").text(obj.text);
+    };
+
     $.each($('.footer img'), function (i, elem) {
       elem.onclick = function () {
         elems[i].show();
         globalState.curQuestion = i;
         sideBars.select(i);
-        console.log(globalState);
-
         if (i == 0) {
           sideBars.show();
+        }
+        if (i == 7) {
+          renderResult();
         }
       };
     });

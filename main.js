@@ -1218,9 +1218,10 @@
         if (state.isAnswered) {
           removeButton();
           showAnswers();
-          question.css({
-            "pointer-events": "none"
-          });
+          question.addClass("answered");
+          // question.css({
+          //   "pointer-events": "none"
+          // });
         }
         if (state.selected !== null) {
           answerButton.addClass("active");
@@ -1290,9 +1291,10 @@
         if (state.isAnswered) {
           removeButton();
           showAnswers();
-          question.css({
-            "pointer-events": "none"
-          });
+          question.addClass("answered");
+          // question.css({
+          //   "pointer-events": "none"
+          // });
 
         } else {
           if (state.selected !== null) {
@@ -1397,7 +1399,6 @@
     ];
 
     elems.forEach(elem => elem.init());
-    // elems.forEach(elem => elem.show());
 
 
     /*
