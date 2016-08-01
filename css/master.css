@@ -599,6 +599,7 @@ body {
     height: 100%;
     padding-right: 50%;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 .scroller {
     z-index: 100;

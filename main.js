@@ -16,7 +16,7 @@
 
     let center = $elem.height() > h ? h / 2 : $elem.height() / 2;
 
-    let helperPosition = ($elem.offset().top + $elem.height() / 2 + h / 2)
+    let helperPosition = ($elem.offset().top + $elem.height() / 2 + h / 2);
 
     if (!isLast && helperPosition > $('.prop').offset().top) {
       $('.prop').css({
@@ -130,6 +130,8 @@
   };
 
   let getColorMeta = function(startColor, endColor, percent) {
+    // console.log(percent);
+    if(percent>=1 || isNaN(percent) )return startColor.join(",")
     var noName = function(start, end, percent) {
       return Math.abs(
         Math.floor(start * (1 - percent) + end * percent)
@@ -157,33 +159,54 @@
     let H = document.body.offsetHeight;
 
 
+    let colors = [
+      [26,14,14],
+      [22,47,57],
+      [26,14,14],
+      [19,50,61],
+      [19,50,61],
+      [12,35,42],
+      [12,35,42],
+      [22,47,57],
+      [44,108,111],
+    ]
 
-    // Шапка  + волна #rgb(26,14,14)
-    document.querySelector('.plate1');
-    // 1 вопрос + ответ #rgb(22,47,57)
-    // .plate2 + .plate3
-    // 2 вопрос + карта #rgb(26,14,14)
-    // .plate5 +.plate4
-    // 3 вопрос + график + волна #rgb(19,50,61)
-    // .plate6
-    // 4 вопрос + волна #rgb(19,50,61)
-// .plate7
-    // 5 вопрос + график #rgb(12,35,42)
-    //.plate8
-    // 6 вопрос + график #rgb(12,35,42)
-    // .plate9
-    // 7 вопрос + волна + карта #rgb(22,47,57)
-    //.plate10
-    // подвал с результатами  #rgb(44,108,111)
-    //plate11
+    let refElemSelectors = [
+      '.plate1',
+      ".plate2-3",
+      ".plate4-5",
+      ".plate6",
+       ".plate7",
+       ".plate8",
+       ".plate9",
+       ".plate10",
+       ".plate11"
+    ];
+
+    let calcRefPoint = (elem) => ($(elem).outerHeight()/2 + $(elem).offset().top);
+
+    let refPoint = refElemSelectors.map(calcRefPoint);
+
+
+    let getBotomRefIndex = (px) =>{
+      let i ;
+      for( i = 0; i < refPoint.length; i++){
+        if (refPoint[i] > px ) break;
+      };
+      return i;
+    };
+
+    let getPersents = (px, refTop, refBotom) => ((px - refTop)/ (refBotom - refTop));
 
     let onscroll = function() {
       let scrolled = window.pageYOffset || document.documentElement.scrollTop;
-      let jQueryScrolled = $(".plate1").offset().top
-      // console.log("jQueryScrolled", jQueryScrolled);
-      let percent = (scrolled + window.innerHeight) / H;
-      let color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
-      // console.log("scrolled", scrolled , "window.innerHeight", window.innerHeight, "H", H);
+      let windowCenter = scrolled + window.innerHeight/2;
+      // console.log("windowCenter",windowCenter);
+
+      let botomIndex =   getBotomRefIndex(windowCenter);
+      let percent = getPersents(windowCenter,refPoint[botomIndex-1],refPoint[botomIndex]);
+      let color = getColorMeta(colors[botomIndex-1],colors[botomIndex], percent);
+      // console.log(colors[botomIndex-1],colors[botomIndex], percent);
 
       if (color !== bgColor) {
         window.requestAnimationFrame(function() {
@@ -947,7 +970,7 @@
           rendernewInfected();
         }, 1000);
 
-      }
+      };
 
       return {
         show
@@ -1408,6 +1431,7 @@
     }
 
 
+
     let elems = [
       hookUpQueston($(".question-one"), 2, ".plate3"),
       hookUpQueston($(".question-two"), 3, ".plate5", mapMain),
@@ -1516,6 +1540,32 @@
           }
         }
       });
+
+      if (document.addEventListener) {
+        if ('onwheel' in document) {
+          // IE9+, FF17+, Ch31+
+          document.addEventListener("wheel", onWheel);
+        } else if ('onmousewheel' in document) {
+          // устаревший вариант события
+          document.addEventListener("mousewheel", onWheel);
+        } else {
+          // Firefox < 17
+          document.addEventListener("MozMousePixelScroll", onWheel);
+        }
+      } else { // IE8-
+        document.attachEvent("onmousewheel", onWheel);
+      }
+
+
+      function onWheel(e) {
+        e = e || window.event;
+
+        // wheelDelta не дает возможность узнать количество пикселей
+        var delta = e.deltaY || e.detail || e.wheelDelta;
+
+        console.log(delta, globalState);
+        // e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+      }
   });
 
 
