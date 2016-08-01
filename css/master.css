@@ -383,10 +383,24 @@ body {
     width: 100%;
     min-width: 1024px;
     background-image: url("../ribon2.png");
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     background-position: 50% 120px;
     position: relative;
+    animation: mymove 50s infinite;
+    animation-timing-function: linear;
 }
+
+
+/* Standard syntax */
+@keyframes mymove {
+  0%   {background-position-x: 0px;}
+  /*25%  {top: 200px;}
+  75%  {top: 50px}*/
+  100% {background-position-x: 1851px;}
+}
+
+
+
 .plate3-text-item {
     display: block;
     /*margin: 0 auto;*/
@@ -1868,13 +1882,6 @@ background-color: #18B3AC;
 }
 
 
-.plate11 .grade {
-  margin-top: 30px;
-  font-family: 'PTSans-Bold';
-  font-size: 28px;
-  color: #18B3AC;
-}
-
 .plate11 .result .comment {
 
   font-family: 'PTSerif-Regular';
@@ -1882,6 +1889,7 @@ background-color: #18B3AC;
   width: 300px;
   margin: auto;
   margin-top: 30px;
+  color: #ffffff;
 
 }
 

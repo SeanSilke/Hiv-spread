@@ -134,10 +134,32 @@
     var bgColor = null;
     var H = document.body.offsetHeight;
 
+    // Шапка  + волна #rgb(26,14,14)
+    document.querySelector('.plate1');
+    // 1 вопрос + ответ #rgb(22,47,57)
+    // .plate2 + .plate3
+    // 2 вопрос + карта #rgb(26,14,14)
+    // .plate5 +.plate4
+    // 3 вопрос + график + волна #rgb(19,50,61)
+    // .plate6
+    // 4 вопрос + волна #rgb(19,50,61)
+    // .plate7
+    // 5 вопрос + график #rgb(12,35,42)
+    //.plate8
+    // 6 вопрос + график #rgb(12,35,42)
+    // .plate9
+    // 7 вопрос + волна + карта #rgb(22,47,57)
+    //.plate10
+    // подвал с результатами  #rgb(44,108,111)
+    //plate11
+
     var onscroll = function onscroll() {
       var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+      var jQueryScrolled = $(".plate1").offset().top;
+      // console.log("jQueryScrolled", jQueryScrolled);
       var percent = (scrolled + window.innerHeight) / H;
       var color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
+      // console.log("scrolled", scrolled , "window.innerHeight", window.innerHeight, "H", H);
 
       if (color !== bgColor) {
         window.requestAnimationFrame(function () {
@@ -1100,7 +1122,8 @@
       var render = function render() {
         if (state.isAnswered) {
           removeButton();
-          showAnswers();
+          setTimeout(showAnswers, 1000);
+          // showAnswers();
           question.addClass("answered");
           // question.css({
           //   "pointer-events": "none"
@@ -1169,7 +1192,8 @@
       var render = function render() {
         if (state.isAnswered) {
           removeButton();
-          showAnswers();
+          setTimeout(showAnswers, 1000);
+          //  showAnswers();
           question.addClass("answered");
           // question.css({
           //   "pointer-events": "none"
@@ -1335,7 +1359,7 @@
       // let resultTextId z= 2;
       var obj = results[resultTextId];
 
-      $(".plate11 .grade").text(obj.title);
+      // $(".plate11 .grade").text(obj.title)
       $(".plate11 .result .comment").text(obj.text);
     };
 
@@ -1360,16 +1384,6 @@
   //   // console.log("Done");
   //
   // });
-
-  // Шапка  + волна #rgb(26,14,14)
-  // 1 вопрос + ответ #rgb(22,47,57)
-  // 2 вопрос + карта #rgb(26,14,14)
-  // 3 вопрос + график + волна #rgb(19,50,61)
-  // 4 вопрос + волна #rgb(19,50,61)
-  // 5 вопрос + график #rgb(12,35,42)
-  // 6 вопрос + график #rgb(12,35,42)
-  // 7 вопрос + волна + карта #rgb(22,47,57)
-  // подвал с результатами  #rgb(44,108,111)
 
   // let data = {
   //   1994: 100,
@@ -1396,3 +1410,20 @@
   //   2015: 93000,
   // };
 })();
+
+//
+// if (network == "vk") {
+//   var url = "http://vk.com/share.php?url=" + link + "&description=" +
+//     description + "&image=" + image + "&title=" + title;
+//   window.open(url, "_blank", "width=400,height=500");
+// } else if (network == "fb") {
+//   var appId: number = 252262851796390;
+//   var url = "https://www.facebook.com/dialog/feed?app_id=" + appId +
+//     "&description=" + description + "&display=popup&link=" + link + "&name=" + title + "&next=" +
+//     closeLink + "&picture=" + image;
+//   window.open(url, "_blank", "width=400,height=500");
+// } else if (network == "tw") {
+//   var url = "https://twitter.com/intent/tweet?original_referer=" + link +
+//             "&text=" + twitterText + "&tw_p=tweetbutton&url=" + link;
+//   window.open(url, "_blank", "width=400,height=500");
+// }

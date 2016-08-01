@@ -156,10 +156,34 @@
     let bgColor = null;
     let H = document.body.offsetHeight;
 
+
+
+    // Шапка  + волна #rgb(26,14,14)
+    document.querySelector('.plate1');
+    // 1 вопрос + ответ #rgb(22,47,57)
+    // .plate2 + .plate3
+    // 2 вопрос + карта #rgb(26,14,14)
+    // .plate5 +.plate4
+    // 3 вопрос + график + волна #rgb(19,50,61)
+    // .plate6
+    // 4 вопрос + волна #rgb(19,50,61)
+// .plate7
+    // 5 вопрос + график #rgb(12,35,42)
+    //.plate8
+    // 6 вопрос + график #rgb(12,35,42)
+    // .plate9
+    // 7 вопрос + волна + карта #rgb(22,47,57)
+    //.plate10
+    // подвал с результатами  #rgb(44,108,111)
+    //plate11
+
     let onscroll = function() {
       let scrolled = window.pageYOffset || document.documentElement.scrollTop;
+      let jQueryScrolled = $(".plate1").offset().top
+      // console.log("jQueryScrolled", jQueryScrolled);
       let percent = (scrolled + window.innerHeight) / H;
       let color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
+      // console.log("scrolled", scrolled , "window.innerHeight", window.innerHeight, "H", H);
 
       if (color !== bgColor) {
         window.requestAnimationFrame(function() {
@@ -1184,7 +1208,7 @@
 
 
 
-    function hookUpValQueston (question, ValPicker, AnswerSelectors, onAnswer) {
+    function hookUpValQueston(question, ValPicker, AnswerSelectors, onAnswer) {
 
       let answerButton = question.find(".answerButton");
 
@@ -1217,7 +1241,8 @@
       let render = function() {
         if (state.isAnswered) {
           removeButton();
-          showAnswers();
+          setTimeout(showAnswers, 1000);
+          // showAnswers();
           question.addClass("answered");
           // question.css({
           //   "pointer-events": "none"
@@ -1289,7 +1314,8 @@
       let render = function() {
         if (state.isAnswered) {
           removeButton();
-          showAnswers();
+          setTimeout(showAnswers, 1000);
+          //  showAnswers();
           question.addClass("answered");
           // question.css({
           //   "pointer-events": "none"
@@ -1358,7 +1384,7 @@
 
       let footer = $(".plate11, .line.bottom");
 
-      this.init =  function() {
+      this.init = function() {
         hideElem(footer)
       };
 
@@ -1452,30 +1478,26 @@
 
 
 
-    let results = [
-      {
-        title: "Плохой",
-        text: "СПИД, как известно, не спит. А вы почти ничего о нём не знаете",
-      },
-      {
-        title: "Средний",
-        text: "Кажется, вы, по крайней мере, знаете, чем отличается ВИЧ от СПИД",
-      },
-      {
-        title: "Хороший",
-        text: "Вы отлично разбираетесь в этой невесёлой теме!",
-      },
-    ]
+    let results = [{
+      title: "Плохой",
+      text: "СПИД, как известно, не спит. А вы почти ничего о нём не знаете",
+    }, {
+      title: "Средний",
+      text: "Кажется, вы, по крайней мере, знаете, чем отличается ВИЧ от СПИД",
+    }, {
+      title: "Хороший",
+      text: "Вы отлично разбираетесь в этой невесёлой теме!",
+    }, ]
 
 
-    let  renderResult = function() {
+    let renderResult = function() {
 
-      let resultVal = globalState.questions.reduce((val,e) =>  (val = (e.result) ? val + 1 : val),0)
-      let resultTextId =  resultVal> 5 ? 2 : resultVal > 3 ? 1: 0;
+      let resultVal = globalState.questions.reduce((val, e) => (val = (e.result) ? val + 1 : val), 0)
+      let resultTextId = resultVal > 5 ? 2 : resultVal > 3 ? 1 : 0;
       // let resultTextId z= 2;
-      let obj =  results[resultTextId]
+      let obj = results[resultTextId]
 
-      $(".plate11 .grade").text(obj.title)
+      // $(".plate11 .grade").text(obj.title)
       $(".plate11 .result .comment").text(obj.text)
     }
 
@@ -1489,7 +1511,7 @@
           if (i == 0) {
             sideBars.show()
           }
-          if (i == 7){
+          if (i == 7) {
             renderResult();
           }
         }
@@ -1506,15 +1528,7 @@
   // });
 
 
-  // Шапка  + волна #rgb(26,14,14)
-  // 1 вопрос + ответ #rgb(22,47,57)
-  // 2 вопрос + карта #rgb(26,14,14)
-  // 3 вопрос + график + волна #rgb(19,50,61)
-  // 4 вопрос + волна #rgb(19,50,61)
-  // 5 вопрос + график #rgb(12,35,42)
-  // 6 вопрос + график #rgb(12,35,42)
-  // 7 вопрос + волна + карта #rgb(22,47,57)
-  // подвал с результатами  #rgb(44,108,111)
+
 
   // let data = {
   //   1994: 100,
@@ -1542,3 +1556,21 @@
   // };
 
 })();
+
+
+//
+// if (network == "vk") {
+//   var url = "http://vk.com/share.php?url=" + link + "&description=" +
+//     description + "&image=" + image + "&title=" + title;
+//   window.open(url, "_blank", "width=400,height=500");
+// } else if (network == "fb") {
+//   var appId: number = 252262851796390;
+//   var url = "https://www.facebook.com/dialog/feed?app_id=" + appId +
+//     "&description=" + description + "&display=popup&link=" + link + "&name=" + title + "&next=" +
+//     closeLink + "&picture=" + image;
+//   window.open(url, "_blank", "width=400,height=500");
+// } else if (network == "tw") {
+//   var url = "https://twitter.com/intent/tweet?original_referer=" + link +
+//             "&text=" + twitterText + "&tw_p=tweetbutton&url=" + link;
+//   window.open(url, "_blank", "width=400,height=500");
+// }
