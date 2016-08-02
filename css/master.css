@@ -170,6 +170,11 @@ body {
     padding-left: 338px;
     padding-top: 15px;
 }
+
+.share-btn {
+  cursor: pointer;
+}
+
 .plate1 .content .item .head .important {
     color: #B42025;
 }
@@ -386,7 +391,7 @@ body {
     background-repeat: repeat-x;
     background-position: 50% 120px;
     position: relative;
-    animation: mymove 50s infinite;
+    animation: mymove 100s infinite;
     animation-timing-function: linear;
 }
 

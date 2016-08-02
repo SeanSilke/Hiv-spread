@@ -4,7 +4,10 @@
 
   var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
+  var showInProgress = false;
+
   var showElem = function showElem($elem, isLast) {
+    showInProgress = true;
     $elem.css({
       display: "block"
     }).clearQueue().animate({
@@ -25,7 +28,12 @@
 
     $('html, body').clearQueue().animate({
       scrollTop: scrollTo
-    }, 1000);
+    }, {
+      duration: 1000,
+      done: function done() {
+        return showInProgress = false;
+      }
+    });
   };
 
   var hideElem = function hideElem($elem) {
@@ -113,6 +121,8 @@
   };
 
   var getColorMeta = function getColorMeta(startColor, endColor, percent) {
+    // console.log(percent);
+    if (percent >= 1 || isNaN(percent)) return startColor.join(",");
     var noName = function noName(start, end, percent) {
       return Math.abs(Math.floor(start * (1 - percent) + end * percent));
     };
@@ -134,32 +144,37 @@
     var bgColor = null;
     var H = document.body.offsetHeight;
 
-    // Шапка  + волна #rgb(26,14,14)
-    document.querySelector('.plate1');
-    // 1 вопрос + ответ #rgb(22,47,57)
-    // .plate2 + .plate3
-    // 2 вопрос + карта #rgb(26,14,14)
-    // .plate5 +.plate4
-    // 3 вопрос + график + волна #rgb(19,50,61)
-    // .plate6
-    // 4 вопрос + волна #rgb(19,50,61)
-    // .plate7
-    // 5 вопрос + график #rgb(12,35,42)
-    //.plate8
-    // 6 вопрос + график #rgb(12,35,42)
-    // .plate9
-    // 7 вопрос + волна + карта #rgb(22,47,57)
-    //.plate10
-    // подвал с результатами  #rgb(44,108,111)
-    //plate11
+    var colors = [[26, 14, 14], [22, 47, 57], [26, 14, 14], [19, 50, 61], [19, 50, 61], [12, 35, 42], [12, 35, 42], [22, 47, 57], [44, 108, 111]];
+
+    var refElemSelectors = ['.plate1', ".plate2-3", ".plate4-5", ".plate6", ".plate7", ".plate8", ".plate9", ".plate10", ".plate11"];
+
+    var calcRefPoint = function calcRefPoint(elem) {
+      return $(elem).outerHeight() / 2 + $(elem).offset().top;
+    };
+
+    var refPoint = refElemSelectors.map(calcRefPoint);
+
+    var getBotomRefIndex = function getBotomRefIndex(px) {
+      var i = void 0;
+      for (i = 0; i < refPoint.length; i++) {
+        if (refPoint[i] > px) break;
+      };
+      return i;
+    };
+
+    var getPersents = function getPersents(px, refTop, refBotom) {
+      return (px - refTop) / (refBotom - refTop);
+    };
 
     var onscroll = function onscroll() {
       var scrolled = window.pageYOffset || document.documentElement.scrollTop;
-      var jQueryScrolled = $(".plate1").offset().top;
-      // console.log("jQueryScrolled", jQueryScrolled);
-      var percent = (scrolled + window.innerHeight) / H;
-      var color = getColorMeta([26, 14, 14], [44, 108, 111], percent);
-      // console.log("scrolled", scrolled , "window.innerHeight", window.innerHeight, "H", H);
+      var windowCenter = scrolled + window.innerHeight / 2;
+      // console.log("windowCenter",windowCenter);
+
+      var botomIndex = getBotomRefIndex(windowCenter);
+      var percent = getPersents(windowCenter, refPoint[botomIndex - 1], refPoint[botomIndex]);
+      var color = getColorMeta(colors[botomIndex - 1], colors[botomIndex], percent);
+      // console.log(colors[botomIndex-1],colors[botomIndex], percent);
 
       if (color !== bgColor) {
         window.requestAnimationFrame(function () {
@@ -915,13 +930,6 @@
       return {
         show: show
       };
-
-      // let canvas = $('.key-reason-canvas');
-      //
-      //
-      // document.addEventListener('scroll', function(e) {
-      //   console.log(canvas.is(":visible"),canvas.offset());
-      // });
     }();
 
     var valPicker = function valPicker(fn, state) {
@@ -1123,11 +1131,8 @@
         if (state.isAnswered) {
           removeButton();
           setTimeout(showAnswers, 1000);
-          // showAnswers();
           question.addClass("answered");
-          // question.css({
-          //   "pointer-events": "none"
-          // });
+          sideBars.render();
         }
         if (state.selected !== null) {
           answerButton.addClass("active");
@@ -1143,9 +1148,12 @@
 
       var valPicker = ValPicker(render, state);
 
+      var that = this;
+      this.result = null;
+
       answerButton.click(function () {
         state.isAnswered = true;
-        globalState.setReult(valPicker.isRight());
+        that.result = valPicker.isRight();
         render();
       });
 
@@ -1154,12 +1162,14 @@
         initAnswers();
       };
 
+      this.isShown = false;
       this.show = function () {
         showQuestin();
+        this.isShown = true;
       };
     };
 
-    var hookUpQueston = function hookUpQueston(question, right, AnswerSelectors, onAnswer) {
+    function hookUpQueston(question, right, AnswerSelectors, onAnswer) {
 
       var answerButton = question.find(".answerButton");
       var answer = $(AnswerSelectors);
@@ -1181,8 +1191,6 @@
         showElem(question);
       };
 
-      var options = question.find(".answers .item .elem");
-
       var state = {
         selected: null,
         isAnswered: false,
@@ -1193,11 +1201,8 @@
         if (state.isAnswered) {
           removeButton();
           setTimeout(showAnswers, 1000);
-          //  showAnswers();
           question.addClass("answered");
-          // question.css({
-          //   "pointer-events": "none"
-          // });
+          sideBars.render();
         } else {
           if (state.selected !== null) {
             answerButton.addClass("active");
@@ -1205,6 +1210,8 @@
         }
         renderOptions();
       };
+
+      var options = question.find(".answers .item .elem");
 
       var renderOptions = function renderOptions() {
         if (!state.isAnswered) {
@@ -1239,9 +1246,12 @@
         });
       };
 
+      var that = this;
+      this.result = null;
+
       answerButton.click(function () {
         state.isAnswered = true;
-        globalState.setReult(state.selected == state.right);
+        that.result = state.selected == state.right;
         render();
       });
 
@@ -1251,10 +1261,13 @@
         initAnswers();
       };
 
-      return {
-        show: showQuestin,
-        init: init
+      this.isShown = false;
+
+      this.show = function () {
+        showQuestin();
+        this.isShown = true;
       };
+      this.init = init;
     };
 
     function Footer() {
@@ -1266,27 +1279,12 @@
       };
 
       this.show = function () {
+        console.log("show end");
+        this.isShown = true;
         showElem(footer, true);
+        renderResult();
       };
     }
-
-    var globalState = {
-      curQuestion: null,
-      questions: [{}, {}, {}, {}, {}, {}, {}],
-      setReult: function setReult(result) {
-        var q = this.questions[this.curQuestion];
-        if (!q.result) {
-          q.result = result;
-          sideBars.render(this.questions);
-        }
-      }
-    };
-
-    var elems = [hookUpQueston($(".question-one"), 2, ".plate3"), hookUpQueston($(".question-two"), 3, ".plate5", mapMain), hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), new hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston($(".question-six"), valPicker, ".answer-six"), hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer()];
-
-    elems.forEach(function (elem) {
-      return elem.init();
-    });
 
     /*
     ███████ ██ ██████  ███████ ██████   █████  ██████  ███████
@@ -1296,8 +1294,7 @@
     ███████ ██ ██████  ███████ ██████  ██   ██ ██   ██ ███████
     */
 
-    var sideBars = function () {
-
+    function SideBars() {
       var state = {
         isVisible: null
       };
@@ -1311,13 +1308,13 @@
       };
 
       $sideBars.click(function () {
-        elems[parseInt(this.dataset.id)].show();
+        mainElems[parseInt(this.dataset.id)].show();
         select(parseInt(this.dataset.id));
       });
 
-      var render = function render(qElems) {
+      var render = function render() {
 
-        qElems.forEach(function (e, i) {
+        mainElems.forEach(function (e, i) {
           if (e.result && e.result) {
             $sideBars[i].classList.add("box-true");
           } else if (e.result === false) {
@@ -1327,17 +1324,28 @@
       };
 
       var show = function show() {
+
         $mainElem.clearQueue().animate({
           opacity: 1
         }, 1000);
       };
 
-      return {
-        select: select,
-        render: render,
-        show: show
+      this.isShown = false;
+      this.select = select;
+      this.render = render;
+      this.show = function () {
+        this.isShown = true;
+        show();
       };
-    }();
+    }
+
+    var mainElems = [new hookUpQueston($(".question-one"), 2, ".plate3"), new hookUpQueston($(".question-two"), 3, ".plate5", mapMain), new hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), new hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston($(".question-six"), valPicker, ".answer-six"), new hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer()];
+
+    var sideBars = new SideBars();
+
+    mainElems.forEach(function (elem) {
+      return elem.init();
+    });
 
     var results = [{
       title: "Плохой",
@@ -1352,8 +1360,11 @@
 
     var renderResult = function renderResult() {
 
-      var resultVal = globalState.questions.reduce(function (val, e) {
-        return val = e.result ? val + 1 : val;
+      var resultVal = mainElems.reduce(function (val, e) {
+        if (e instanceof hookUpValQueston || e instanceof hookUpQueston) {
+          val = e.result ? val + 1 : val;
+        }
+        return val;
       }, 0);
       var resultTextId = resultVal > 5 ? 2 : resultVal > 3 ? 1 : 0;
       // let resultTextId z= 2;
@@ -1363,20 +1374,111 @@
       $(".plate11 .result .comment").text(obj.text);
     };
 
+    var showNext = function showNext() {
+      // console.log("showNext");
+      // console.log(mainElems.length);
+      for (var i = mainElems.length - 1; i >= 0; i--) {
+        // console.log(i);
+        var e = mainElems[i];
+        if (i == 0 && !e.isShown) {
+          mainElems[i].show();
+          sideBars.show();
+          return;
+        }
+        // console.log(mainElems,e.isShown ,e.result !== null , i < mainElems.length - 1);
+        if (e.isShown && e.result !== null && i < mainElems.length - 1) {
+          if (!mainElems[i + 1].isShown) mainElems[i + 1].show();
+          return;
+        }
+      }
+    };
+
     $.each($('.footer img'), function (i, elem) {
       elem.onclick = function () {
-        elems[i].show();
-        globalState.curQuestion = i;
+        mainElems[i].show();
         sideBars.select(i);
         if (i == 0) {
           sideBars.show();
         }
-        if (i == 7) {
-          renderResult();
-        }
       };
     });
+
+    var oldScrollPositoin = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (document.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+, Ch31+
+        document.addEventListener("wheel", onWheel);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        document.addEventListener("mousewheel", onWheel);
+      } else {
+        // Firefox < 17
+        document.addEventListener("MozMousePixelScroll", onWheel);
+      }
+    } else {
+      // IE8-
+      document.attachEvent("onmousewheel", onWheel);
+    }
+
+    function onWheel(e) {
+      e = e || window.event;
+
+      if (showInProgress) {
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+        return;
+      }
+
+      var newScrollPositoin = window.pageYOffset || document.documentElement.scrollTop;
+
+      // wheelDelta не дает возможность узнать количество пикселей
+      var delta = e.deltaY || e.detail || e.wheelDelta;
+
+      if (newScrollPositoin == oldScrollPositoin && delta > 10) {
+        console.log("showInProgress", showInProgress);
+        showNext();
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+      }
+      if (delta > 10) {
+        oldScrollPositoin = newScrollPositoin;
+      }
+    }
   });
+
+  /*
+  ███████ ██   ██  █████  ██████  ███████     ██████  ████████ ███    ██
+  ██      ██   ██ ██   ██ ██   ██ ██          ██   ██    ██    ████   ██
+  ███████ ███████ ███████ ██████  █████       ██████     ██    ██ ██  ██
+       ██ ██   ██ ██   ██ ██   ██ ██          ██   ██    ██    ██  ██ ██
+  ███████ ██   ██ ██   ██ ██   ██ ███████     ██████     ██    ██   ████
+  */
+
+  $(".share-btn").click(function () {
+    console.log(this.dataset.network);
+    share(this.dataset.network);
+  });
+
+  var share = function share(network) {
+
+    var title = "Россия на пороге эпидемии ВИЧ";
+    var description = "Тревожные факты о масштабах бедствия — в спецпроекте «Газеты.Ru»";
+    var link = "http://dyn.ig.rambler.ru/HIV-spread/";
+    var closeLink = "http://dyn.ig.rambler.ru/HIV-spread/close.html";
+    var twitterText = title + "." + " " + description;
+    var image = "http://dyn.ig.rambler.ru/HIV-spread/share-img.png";
+
+    if (network == "vk") {
+      var url = "http://vk.com/share.php?url=" + link + "&description=" + description + "&image=" + image + "&title=" + title;
+      window.open(url, "_blank", "width=400,height=500");
+    } else if (network == "fb") {
+      var appId = 610415715785775;
+      var _url = "https://www.facebook.com/dialog/feed?app_id=" + appId + "&description=" + description + "&display=popup&link=" + link + "&name=" + title + "&next=" + closeLink + "&picture=" + image;
+      window.open(_url, "_blank", "width=400,height=500");
+    } else if (network == "tw") {
+      var _url2 = "https://twitter.com/intent/tweet?original_referer=" + link + "&text=" + twitterText + "&tw_p=tweetbutton&url=" + link;
+      window.open(_url2, "_blank", "width=400,height=500");
+    }
+  };
 
   // console.log($(".chart.top-spread .body"));
 
@@ -1409,21 +1511,6 @@
   //   2014: 89667,
   //   2015: 93000,
   // };
-})();
 
-//
-// if (network == "vk") {
-//   var url = "http://vk.com/share.php?url=" + link + "&description=" +
-//     description + "&image=" + image + "&title=" + title;
-//   window.open(url, "_blank", "width=400,height=500");
-// } else if (network == "fb") {
-//   var appId: number = 252262851796390;
-//   var url = "https://www.facebook.com/dialog/feed?app_id=" + appId +
-//     "&description=" + description + "&display=popup&link=" + link + "&name=" + title + "&next=" +
-//     closeLink + "&picture=" + image;
-//   window.open(url, "_blank", "width=400,height=500");
-// } else if (network == "tw") {
-//   var url = "https://twitter.com/intent/tweet?original_referer=" + link +
-//             "&text=" + twitterText + "&tw_p=tweetbutton&url=" + link;
-//   window.open(url, "_blank", "width=400,height=500");
-// }
+  //all code is wrapped  in iiaf to prevent main scope pollution
+})();

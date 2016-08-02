@@ -6,7 +6,10 @@
     document.documentElement.clientHeight ||
     document.body.clientHeight;
 
+  let showInProgress = false;
+
   let showElem = ($elem, isLast) => {
+    showInProgress = true;
     $elem.css({
         display: "block",
       }).clearQueue()
@@ -30,7 +33,10 @@
     $('html, body').clearQueue()
       .animate({
         scrollTop: scrollTo
-      }, 1000);
+      }, {
+        duration: 1000,
+        done: () => showInProgress = false
+      });
 
   };
 
@@ -131,8 +137,8 @@
 
   let getColorMeta = function(startColor, endColor, percent) {
     // console.log(percent);
-    if(percent>=1 || isNaN(percent) )return startColor.join(",")
-    var noName = function(start, end, percent) {
+    if (percent >= 1 || isNaN(percent)) return startColor.join(",")
+    let noName = function(start, end, percent) {
       return Math.abs(
         Math.floor(start * (1 - percent) + end * percent)
       );
@@ -160,15 +166,15 @@
 
 
     let colors = [
-      [26,14,14],
-      [22,47,57],
-      [26,14,14],
-      [19,50,61],
-      [19,50,61],
-      [12,35,42],
-      [12,35,42],
-      [22,47,57],
-      [44,108,111],
+      [26, 14, 14],
+      [22, 47, 57],
+      [26, 14, 14],
+      [19, 50, 61],
+      [19, 50, 61],
+      [12, 35, 42],
+      [12, 35, 42],
+      [22, 47, 57],
+      [44, 108, 111],
     ]
 
     let refElemSelectors = [
@@ -176,36 +182,36 @@
       ".plate2-3",
       ".plate4-5",
       ".plate6",
-       ".plate7",
-       ".plate8",
-       ".plate9",
-       ".plate10",
-       ".plate11"
+      ".plate7",
+      ".plate8",
+      ".plate9",
+      ".plate10",
+      ".plate11"
     ];
 
-    let calcRefPoint = (elem) => ($(elem).outerHeight()/2 + $(elem).offset().top);
+    let calcRefPoint = (elem) => ($(elem).outerHeight() / 2 + $(elem).offset().top);
 
     let refPoint = refElemSelectors.map(calcRefPoint);
 
 
-    let getBotomRefIndex = (px) =>{
-      let i ;
-      for( i = 0; i < refPoint.length; i++){
-        if (refPoint[i] > px ) break;
+    let getBotomRefIndex = (px) => {
+      let i;
+      for (i = 0; i < refPoint.length; i++) {
+        if (refPoint[i] > px) break;
       };
       return i;
     };
 
-    let getPersents = (px, refTop, refBotom) => ((px - refTop)/ (refBotom - refTop));
+    let getPersents = (px, refTop, refBotom) => ((px - refTop) / (refBotom - refTop));
 
     let onscroll = function() {
       let scrolled = window.pageYOffset || document.documentElement.scrollTop;
-      let windowCenter = scrolled + window.innerHeight/2;
+      let windowCenter = scrolled + window.innerHeight / 2;
       // console.log("windowCenter",windowCenter);
 
-      let botomIndex =   getBotomRefIndex(windowCenter);
-      let percent = getPersents(windowCenter,refPoint[botomIndex-1],refPoint[botomIndex]);
-      let color = getColorMeta(colors[botomIndex-1],colors[botomIndex], percent);
+      let botomIndex = getBotomRefIndex(windowCenter);
+      let percent = getPersents(windowCenter, refPoint[botomIndex - 1], refPoint[botomIndex]);
+      let color = getColorMeta(colors[botomIndex - 1], colors[botomIndex], percent);
       // console.log(colors[botomIndex-1],colors[botomIndex], percent);
 
       if (color !== bgColor) {
@@ -1060,12 +1066,6 @@
         show: show,
       }
 
-      // let canvas = $('.key-reason-canvas');
-      //
-      //
-      // document.addEventListener('scroll', function(e) {
-      //   console.log(canvas.is(":visible"),canvas.offset());
-      // });
 
     })();
 
@@ -1186,7 +1186,7 @@
       let valToText = val => {
         val = Math.round(val / 100) * 100;
 
-        var arr = (val + "").split("");
+        let arr = (val + "").split("");
         arr.splice(4, 0, " ");
         arr.splice(1, 0, " ");
         return arr.join("");
@@ -1265,11 +1265,8 @@
         if (state.isAnswered) {
           removeButton();
           setTimeout(showAnswers, 1000);
-          // showAnswers();
           question.addClass("answered");
-          // question.css({
-          //   "pointer-events": "none"
-          // });
+          sideBars.render();
         }
         if (state.selected !== null) {
           answerButton.addClass("active");
@@ -1285,9 +1282,12 @@
 
       let valPicker = ValPicker(render, state);
 
+      let that = this;
+      this.result = null;
+
       answerButton.click(function() {
         state.isAnswered = true;
-        globalState.setReult(valPicker.isRight());
+        that.result = valPicker.isRight()
         render();
       });
 
@@ -1296,13 +1296,15 @@
         initAnswers();
       }
 
+      this.isShown = false;
       this.show = function() {
         showQuestin();
+        this.isShown = true;
       }
 
     };
 
-    let hookUpQueston = function(question, right, AnswerSelectors, onAnswer) {
+    function hookUpQueston(question, right, AnswerSelectors, onAnswer) {
 
 
       let answerButton = question.find(".answerButton");
@@ -1322,11 +1324,10 @@
         hideElem(question);
       };
 
+
       let showQuestin = () => {
         showElem(question)
       };
-
-      let options = question.find(".answers .item .elem");
 
       let state = {
         selected: null,
@@ -1338,12 +1339,8 @@
         if (state.isAnswered) {
           removeButton();
           setTimeout(showAnswers, 1000);
-          //  showAnswers();
           question.addClass("answered");
-          // question.css({
-          //   "pointer-events": "none"
-          // });
-
+          sideBars.render();
         } else {
           if (state.selected !== null) {
             answerButton.addClass("active");
@@ -1351,6 +1348,8 @@
         }
         renderOptions();
       };
+
+      let options = question.find(".answers .item .elem");
 
       let renderOptions = () => {
         if (!state.isAnswered) {
@@ -1385,9 +1384,12 @@
         });
       };
 
+      let that = this;
+      this.result = null;
+
       answerButton.click(function() {
         state.isAnswered = true;
-        globalState.setReult(state.selected == state.right);
+        that.result = state.selected == state.right
         render();
       });
 
@@ -1397,10 +1399,14 @@
         initAnswers();
       }
 
-      return {
-        show: showQuestin,
-        init: init,
-      };
+      this.isShown = false;
+
+      this.show = function() {
+        showQuestin();
+        this.isShown = true;
+      }
+      this.init = init;
+
     };
 
     function Footer() {
@@ -1412,39 +1418,13 @@
       };
 
       this.show = function() {
+        console.log("show end");
+        this.isShown = true;
         showElem(footer, true)
+        renderResult();
       };
 
     }
-
-
-    let globalState = {
-      curQuestion: null,
-      questions: [{}, {}, {}, {}, {}, {}, {}],
-      setReult: function(result) {
-        let q = this.questions[this.curQuestion]
-        if (!q.result) {
-          q.result = result;
-          sideBars.render(this.questions);
-        }
-      }
-    }
-
-
-
-    let elems = [
-      hookUpQueston($(".question-one"), 2, ".plate3"),
-      hookUpQueston($(".question-two"), 3, ".plate5", mapMain),
-      hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show),
-      new hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
-      new hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
-      new hookUpValQueston($(".question-six"), valPicker, ".answer-six"),
-      hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"),
-      new Footer(),
-    ];
-
-    elems.forEach(elem => elem.init());
-
 
     /*
     ███████ ██ ██████  ███████ ██████   █████  ██████  ███████
@@ -1454,9 +1434,7 @@
     ███████ ██ ██████  ███████ ██████  ██   ██ ██   ██ ███████
     */
 
-
-    let sideBars = (function() {
-
+    function SideBars() {
       let state = {
         isVisible: null,
       }
@@ -1470,13 +1448,13 @@
       }
 
       $sideBars.click(function() {
-        elems[parseInt(this.dataset.id)].show();
+        mainElems[parseInt(this.dataset.id)].show();
         select(parseInt(this.dataset.id))
       })
 
-      let render = (qElems) => {
+      let render = () => {
 
-        qElems.forEach((e, i) => {
+        mainElems.forEach((e, i) => {
           if (e.result && e.result) {
             $sideBars[i].classList.add("box-true")
           } else if (e.result === false) {
@@ -1486,19 +1464,39 @@
       }
 
       let show = () => {
+
         $mainElem.clearQueue()
           .animate({
             opacity: 1
           }, 1000);
       }
 
-      return {
-        select,
-        render,
-        show
-      }
+      this.isShown = false
+      this.select = select;
+      this.render = render;
+      this.show = function() {
+        this.isShown = true;
+        show();
+      };
+    }
 
-    })();
+
+    let mainElems = [
+      new hookUpQueston($(".question-one"), 2, ".plate3"),
+      new hookUpQueston($(".question-two"), 3, ".plate5", mapMain),
+      new hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show),
+      new hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"),
+      new hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
+      new hookUpValQueston($(".question-six"), valPicker, ".answer-six"),
+      new hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"),
+      new Footer(),
+    ];
+
+
+
+    let sideBars = new SideBars();
+
+    mainElems.forEach(elem => elem.init());
 
 
 
@@ -1516,7 +1514,12 @@
 
     let renderResult = function() {
 
-      let resultVal = globalState.questions.reduce((val, e) => (val = (e.result) ? val + 1 : val), 0)
+      let resultVal = mainElems.reduce((val, e) => {
+        if (e instanceof hookUpValQueston || e instanceof hookUpQueston) {
+          val = (e.result) ? val + 1 : val
+        }
+        return val;
+      }, 0)
       let resultTextId = resultVal > 5 ? 2 : resultVal > 3 ? 1 : 0;
       // let resultTextId z= 2;
       let obj = results[resultTextId]
@@ -1526,49 +1529,121 @@
     }
 
 
+    let showNext = () => {
+      // console.log("showNext");
+      // console.log(mainElems.length);
+      for (let i = mainElems.length - 1; i >= 0; i--) {
+        // console.log(i);
+        let e = mainElems[i];
+        if (i == 0 && !e.isShown) {
+          mainElems[i].show();
+          sideBars.show()
+          return;
+        }
+        // console.log(mainElems,e.isShown ,e.result !== null , i < mainElems.length - 1);
+        if (e.isShown && e.result !== null && i < mainElems.length - 1) {
+          if (!mainElems[i + 1].isShown) mainElems[i + 1].show();
+          return;
+        }
+      }
+
+    }
+
+
     $.each($('.footer img'),
       (i, elem) => {
         elem.onclick = function() {
-          elems[i].show();
-          globalState.curQuestion = i;
+          mainElems[i].show();
           sideBars.select(i);
           if (i == 0) {
             sideBars.show()
           }
-          if (i == 7) {
-            renderResult();
-          }
         }
       });
 
-      if (document.addEventListener) {
-        if ('onwheel' in document) {
-          // IE9+, FF17+, Ch31+
-          document.addEventListener("wheel", onWheel);
-        } else if ('onmousewheel' in document) {
-          // устаревший вариант события
-          document.addEventListener("mousewheel", onWheel);
-        } else {
-          // Firefox < 17
-          document.addEventListener("MozMousePixelScroll", onWheel);
-        }
-      } else { // IE8-
-        document.attachEvent("onmousewheel", onWheel);
+
+    let oldScrollPositoin = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (document.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+, Ch31+
+        document.addEventListener("wheel", onWheel);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        document.addEventListener("mousewheel", onWheel);
+      } else {
+        // Firefox < 17
+        document.addEventListener("MozMousePixelScroll", onWheel);
+      }
+    } else { // IE8-
+      document.attachEvent("onmousewheel", onWheel);
+    }
+
+
+    function onWheel(e) {
+      e = e || window.event;
+
+      if (showInProgress) {
+        e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+        return;
       }
 
+      let newScrollPositoin = window.pageYOffset || document.documentElement.scrollTop;
 
-      function onWheel(e) {
-        e = e || window.event;
+      // wheelDelta не дает возможность узнать количество пикселей
+      let delta = e.deltaY || e.detail || e.wheelDelta;
 
-        // wheelDelta не дает возможность узнать количество пикселей
-        var delta = e.deltaY || e.detail || e.wheelDelta;
-
-        console.log(delta, globalState);
-        // e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+      if (newScrollPositoin == oldScrollPositoin && delta > 10) {
+        console.log("showInProgress", showInProgress);
+        showNext();
+        e.preventDefault ? e.preventDefault() : (e.returnValue = false);
       }
+      if (delta > 10) {
+        oldScrollPositoin = newScrollPositoin
+      }
+    }
   });
 
+  /*
+  ███████ ██   ██  █████  ██████  ███████     ██████  ████████ ███    ██
+  ██      ██   ██ ██   ██ ██   ██ ██          ██   ██    ██    ████   ██
+  ███████ ███████ ███████ ██████  █████       ██████     ██    ██ ██  ██
+       ██ ██   ██ ██   ██ ██   ██ ██          ██   ██    ██    ██  ██ ██
+  ███████ ██   ██ ██   ██ ██   ██ ███████     ██████     ██    ██   ████
+  */
 
+  $(".share-btn").click(function(){
+    console.log(this.dataset.network);
+    share(this.dataset.network);
+  })
+
+
+  let share = (network) => {
+
+    let title = "Россия на пороге эпидемии ВИЧ";
+    let description = "Тревожные факты о масштабах бедствия — в спецпроекте «Газеты.Ru»";
+    let link = "http://dyn.ig.rambler.ru/HIV-spread/";
+    let closeLink = "http://dyn.ig.rambler.ru/HIV-spread/close.html"
+    let twitterText = title + "." + " " + description;
+    let image = "http://dyn.ig.rambler.ru/HIV-spread/share-img.png"
+
+    if (network == "vk") {
+      let url = "http://vk.com/share.php?url=" + link + "&description=" +
+        description + "&image=" + image + "&title=" + title;
+      window.open(url, "_blank", "width=400,height=500");
+    } else if (network == "fb") {
+      let appId = 610415715785775;
+      let url = "https://www.facebook.com/dialog/feed?app_id=" + appId +
+        "&description=" + description + "&display=popup&link=" + link + "&name=" + title + "&next=" +
+        closeLink + "&picture=" + image;
+      window.open(url, "_blank", "width=400,height=500");
+    } else if (network == "tw") {
+      let url = "https://twitter.com/intent/tweet?original_referer=" + link +
+        "&text=" + twitterText + "&tw_p=tweetbutton&url=" + link;
+      window.open(url, "_blank", "width=400,height=500");
+    }
+
+  }
 
   // console.log($(".chart.top-spread .body"));
 
@@ -1605,22 +1680,6 @@
   //   2015: 93000,
   // };
 
+
+  //all code is wrapped  in iiaf to prevent main scope pollution
 })();
-
-
-//
-// if (network == "vk") {
-//   var url = "http://vk.com/share.php?url=" + link + "&description=" +
-//     description + "&image=" + image + "&title=" + title;
-//   window.open(url, "_blank", "width=400,height=500");
-// } else if (network == "fb") {
-//   var appId: number = 252262851796390;
-//   var url = "https://www.facebook.com/dialog/feed?app_id=" + appId +
-//     "&description=" + description + "&display=popup&link=" + link + "&name=" + title + "&next=" +
-//     closeLink + "&picture=" + image;
-//   window.open(url, "_blank", "width=400,height=500");
-// } else if (network == "tw") {
-//   var url = "https://twitter.com/intent/tweet?original_referer=" + link +
-//             "&text=" + twitterText + "&tw_p=tweetbutton&url=" + link;
-//   window.open(url, "_blank", "width=400,height=500");
-// }
