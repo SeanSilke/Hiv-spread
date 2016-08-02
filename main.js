@@ -1523,7 +1523,7 @@
     ];
 
 
-    mainElems.forEach(elem => elem.init());
+    // mainElems.forEach(elem => elem.init());
 
 
 

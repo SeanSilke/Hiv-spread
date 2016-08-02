@@ -1373,9 +1373,7 @@
 
     var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", mapMain), new hookUpQueston(2, $(".question-three"), 3, ".answer-three", newInfectedChart.show), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    mainElems.forEach(function (elem) {
-      return elem.init();
-    });
+    // mainElems.forEach(elem => elem.init());
 
     var results = [{
       title: "Плохой",

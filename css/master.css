@@ -1891,6 +1891,10 @@ background-color: #18B3AC;
     /*background-color: rgba(0, 128, 0, 0.25);*/
 }
 
+.social-btn > img:nth-child(2){
+  margin: 0 27px
+}
+
 .plate11 .result {
   margin: 70px 0;
 }
