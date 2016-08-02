@@ -1098,7 +1098,7 @@
       };
     };
 
-    function hookUpValQueston(question, ValPicker, AnswerSelectors, onAnswer) {
+    function hookUpValQueston(id, question, ValPicker, AnswerSelectors, onAnswer) {
 
       var answerButton = question.find(".answerButton");
 
@@ -1130,6 +1130,8 @@
       var render = function render() {
         if (state.isAnswered) {
           removeButton();
+          //костыль для нормальной обработки проктутки
+          showInProgress = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1157,19 +1159,28 @@
         render();
       });
 
+      $('.footer img')[id].onclick = function () {
+        that.show();
+      };
+
       this.init = function () {
         initQuestion();
         initAnswers();
       };
 
       this.isShown = false;
+
       this.show = function () {
+        sideBars.select(id);
+        if (id == 0) {
+          sideBars.show();
+        }
         showQuestin();
         this.isShown = true;
       };
     };
 
-    function hookUpQueston(question, right, AnswerSelectors, onAnswer) {
+    function hookUpQueston(id, question, right, AnswerSelectors, onAnswer) {
 
       var answerButton = question.find(".answerButton");
       var answer = $(AnswerSelectors);
@@ -1200,6 +1211,8 @@
       var render = function render() {
         if (state.isAnswered) {
           removeButton();
+          //костыль для нормальной обработки проктутки
+          showInProgress = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1255,6 +1268,12 @@
         render();
       });
 
+      // console.log($('.footer img')[id]);
+
+      $('.footer img')[id].onclick = function () {
+        that.show();
+      };
+
       var init = function init() {
         initOptions();
         initQuestion();
@@ -1264,13 +1283,17 @@
       this.isShown = false;
 
       this.show = function () {
+        sideBars.select(id);
+        if (id == 0) {
+          sideBars.show();
+        }
         showQuestin();
         this.isShown = true;
       };
       this.init = init;
     };
 
-    function Footer() {
+    function Footer(id) {
 
       var footer = $(".plate11, .line.bottom");
 
@@ -1278,7 +1301,14 @@
         hideElem(footer);
       };
 
+      var that = this;
+
+      $('.footer img')[id].onclick = function () {
+        that.show();
+      };
+
       this.show = function () {
+        sideBars.select(id);
         console.log("show end");
         this.isShown = true;
         showElem(footer, true);
@@ -1339,9 +1369,9 @@
       };
     }
 
-    var mainElems = [new hookUpQueston($(".question-one"), 2, ".plate3"), new hookUpQueston($(".question-two"), 3, ".plate5", mapMain), new hookUpQueston($(".question-three"), 3, ".answer-three", newInfectedChart.show), new hookUpValQueston($(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston($(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston($(".question-six"), valPicker, ".answer-six"), new hookUpQueston($(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer()];
-
     var sideBars = new SideBars();
+
+    var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", mapMain), new hookUpQueston(2, $(".question-three"), 3, ".answer-three", newInfectedChart.show), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
     mainElems.forEach(function (elem) {
       return elem.init();
@@ -1366,42 +1396,27 @@
         }
         return val;
       }, 0);
+
       var resultTextId = resultVal > 5 ? 2 : resultVal > 3 ? 1 : 0;
-      // let resultTextId z= 2;
       var obj = results[resultTextId];
 
-      // $(".plate11 .grade").text(obj.title)
       $(".plate11 .result .comment").text(obj.text);
     };
 
     var showNext = function showNext() {
-      // console.log("showNext");
-      // console.log(mainElems.length);
       for (var i = mainElems.length - 1; i >= 0; i--) {
-        // console.log(i);
         var e = mainElems[i];
         if (i == 0 && !e.isShown) {
           mainElems[i].show();
           sideBars.show();
           return;
         }
-        // console.log(mainElems,e.isShown ,e.result !== null , i < mainElems.length - 1);
         if (e.isShown && e.result !== null && i < mainElems.length - 1) {
           if (!mainElems[i + 1].isShown) mainElems[i + 1].show();
           return;
         }
       }
     };
-
-    $.each($('.footer img'), function (i, elem) {
-      elem.onclick = function () {
-        mainElems[i].show();
-        sideBars.select(i);
-        if (i == 0) {
-          sideBars.show();
-        }
-      };
-    });
 
     var oldScrollPositoin = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -1435,7 +1450,6 @@
       var delta = e.deltaY || e.detail || e.wheelDelta;
 
       if (newScrollPositoin == oldScrollPositoin && delta > 10) {
-        console.log("showInProgress", showInProgress);
         showNext();
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
       }

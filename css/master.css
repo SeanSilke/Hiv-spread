@@ -75,7 +75,6 @@ body {
   font-family: 'PTSans-Bold';
   text-align: center;
   padding-top: 14px;
-  /*transition: border 5s, background-color 1s, opacity 1s;*/
   pointer-events: none;
   /*-moz-transition: all .51s;*/
   /*-o-transition: all .51s;*/
@@ -249,21 +248,27 @@ body {
     cursor: pointer;
     margin-bottom: 20px;
     position: relative;
-    transition: color 1s, opacity 1s;
+    transition: color 1s, opacity 0.3s;
 }
 
-.answers .elem:hover, .elem.selected {
-  color: #18B3AC;
+.answers .elem:hover {
+    opacity: 0.6;
+}
+
+.elem.selected {
   opacity: 0.6;
+  transition: color 1s, opacity 1s;
 }
 
 .answers .elem.right {
   opacity: 1;
   color: #18B3AC;
+  transition: color 1s, opacity 1s;
 }
 
 .answers .elem.wrong {
   color: #B42025;
+  transition: color 1s, opacity 1s;
 }
 
 
@@ -283,24 +288,26 @@ body {
     margin-right:18px;
     border: 1px solid #ffffff;
     box-shadow: 0 0 1px 0px white inset, 0 0 1px 0px white;
-    transition: border-color 1s, opacity 1s;
+    transition: border-color 1s, opacity 0.3s;
 }
 
-.elem:hover .answer-dot , .elem.selected .answer-dot {
-  border-color: #18B3AC;
-  box-shadow: 0 0 1px 0px #18B3AC inset, 0 0 1px 0px #18B3AC;
+
+ .elem.selected .answer-dot {
   opacity: 0.6;
+  transition: border-color 1s, opacity 1s;
 }
 
 .elem.right .answer-dot {
   border-color: #18B3AC;
   box-shadow: 0 0 1px 0px #18B3AC inset, 0 0 1px 0px #18B3AC;
+  transition: border-color 1s, opacity 1s;
   opacity: 1;
 }
 
 .elem.wrong .answer-dot {
   border-color: #B42025;
   box-shadow: 0 0 1px 0px #B42025 inset, 0 0 1px 0px #B42025;
+  transition: border-color 1s, opacity 1s;
 }
 
 .answer-dot-inner  {
@@ -319,9 +326,10 @@ body {
     background-color: #B42025;
 }
 
-.elem:hover .answer-dot-inner, .elem.selected .answer-dot-inner {
-    background-color: #18B3AC;
+/*.elem:hover .answer-dot-inner,*/
+ .elem.selected .answer-dot-inner {
     opacity: 0.6;
+    background-color: #ffffff;
 }
 
 .elem.right .answer-dot-inner {
