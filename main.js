@@ -357,7 +357,7 @@
       this.selectedReg = selectedReg;
     }
 
-    let map = new Map();
+
 
 
     /*
@@ -368,10 +368,7 @@
     ███████ ███████  ██████  ███████ ██   ████ ██████
     */
 
-
-    let legend = (function() {
-
-      //----Init legned ------
+    function Legend(){
 
       let initColors = function() {
         $(".legend .bloc .color").each(function(id, e) {
@@ -390,20 +387,18 @@
         });
       };
 
-      let init = function() {
+      this.init = function() {
         initColors();
         renderValues();
       };
 
-      let render = function() {
+      this.render = function() {
         renderValues();
       };
 
-      return {
-        "init": init,
-        render: render,
-      };
-    })();
+    }
+
+
 
     /*
     ██    ██ ███████  █████  ██████  ███████
@@ -413,9 +408,8 @@
        ██    ███████ ██   ██ ██   ██ ███████
     */
 
-    let years = (function() {
-
-      let render = function() {
+    function Years() {
+      this.render = function() {
 
         $(".years .col").each(function(id, e) {
           let year = parseInt($(e).attr("id"));
@@ -437,12 +431,11 @@
         renderAll();
       });
 
-      return {
-        render: render
-      };
+    }
 
-
-    })();
+    let map = new Map();
+    let legend =  new Legend();
+    let years = new Years();
 
     /*
     ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
@@ -667,9 +660,10 @@
         popUp.css('opacity', 1);
         popUp.css('visibility', "visible");
       };
+
+
       popUp.click(function(e) {
         e.stopPropagation();
-
       });
 
       closeButton.click(function(e) {
@@ -694,8 +688,6 @@
             svgElem.appendChild(path);
             return;
           }
-
-
 
           let cx = 40,
             cy = 40,
