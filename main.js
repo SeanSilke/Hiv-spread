@@ -263,15 +263,14 @@
     ██      ██ ██   ██ ██
     */
 
-    let map = (function() {
+    function Map() {
 
+      this.render = null;
+      this.selectedReg = null;
+      this.mapElem = null;
+      this.mapElem = document.getElementById("svg-map");
+      let that = this;
 
-      let map = {
-        render: null,
-        selectedReg: null,
-        mapElem: null,
-      };
-      map.mapElem = document.getElementById("svg-map");
       let regions = $("#svg-map path, #svg-map polygon");
       let btn = $(".map .map_header .btn");
       let selectedReg = null;
@@ -315,10 +314,10 @@
       };
 
       let setSelectedRegion = function(regionId) {
-        map.selectedReg && map.selectedReg.classList.remove('selected');
+        that.selectedReg && that.selectedReg.classList.remove('selected');
         if (regionId) {
-          map.selectedReg = document.getElementById(regionId);
-          map.selectedReg.classList.add('selected');
+          that.selectedReg = document.getElementById(regionId);
+          that.selectedReg.classList.add('selected');
         }
       };
 
@@ -334,9 +333,9 @@
         setSelectedRegion(state.regionId);
         setButtons(state.display);
         if (state.regionId) {
-          map.mapElem.classList.add('regSelected');
+          that.mapElem.classList.add('regSelected');
         } else {
-          map.mapElem.classList.remove('regSelected');
+          that.mapElem.classList.remove('regSelected');
         }
       };
 
@@ -344,7 +343,7 @@
         function(e) {
           e.stopPropagation();
           if (e.target.id === state.regionId) {
-            map.mapElem.classList.remove('regSelected');
+            that.mapElem.classList.remove('regSelected');
             state.regionId = "";
           } else {
             state.regionId = e.target.id;
@@ -354,12 +353,12 @@
         }
       );
 
-      map.render = render;
-      map.selectedReg = selectedReg;
+      this.render = render;
+      this.selectedReg = selectedReg;
+    }
 
-      return map;
+    let map = new Map();
 
-    })();
 
     /*
     ██      ███████  ██████  ███████ ███    ██ ██████
