@@ -57,7 +57,7 @@ body {
     }
 }
 @media screen and (min-width: 1024px) {
-    .hide-desctop {
+    .hide-desktop {
         display: none !important;
     }
 }
@@ -716,12 +716,14 @@ body {
     cursor: default;
     border: none;
     padding: 15px;
-    /*pointer-events: none;*/
 }
 .map_header> .item:nth-of-type(2) {
     padding: 13px;
-    margin: 0px 3%;
+    margin: 0px 25px;
 }
+
+
+
 .scrollable {
     position: relative;
     border: 1px solid gray;
@@ -787,6 +789,58 @@ body {
     font-size: 0;
     cursor: pointer;
 }
+
+
+@media screen and (max-width: 1024px) {
+  .map {
+     box-sizing: border-box;
+      padding: 0 20px;
+      width: 320px;
+      margin: auto;
+  }
+
+
+  .map_header .item {
+      display: block;
+      font-size: 16px;
+      font-family: 'PTSans-Regular';
+      color: #EEEEEE;
+      border-radius: 3px;
+  }
+  .map_header .item.btn {
+      border: 2px solid #58595B;
+      cursor: pointer;
+      padding: 13px;
+  }
+  .map_header .item.btn.active {
+      background-color: #B42025;
+      cursor: default;
+      border: none;
+      padding: 15px;
+  }
+  .map_header> .item:nth-of-type(2) {
+      padding: 13px;
+      margin: 0px;
+  }
+
+  .map_header> .item:nth-of-type(3) {
+      margin: 15px 0;
+  }
+
+  .map_header .item.drop_down {
+      box-sizing: border-box;
+      width: 100%;
+  }
+
+  .scrollable {
+      width: 100%;
+  }
+
+}
+
+
+
+
 .map_header .item.drop_down .text {
     padding: 13px;
     display: inline-block;
@@ -869,17 +923,16 @@ body {
 
 .banner {
     width: 420px;
-    /*height: 140px;*/
     background-color: rgba(31, 66, 79, 0.74);
     padding: 27px 20px 20px 35px;
     position: absolute;
-    ;
     border-radius: 3px;
-    opacity: 0;
-    visibility: ;
+    /*банер скрывается через зимеенени прозрачности*/
+    /*opacity: 0;*/
     z-index: 50;
     transition: opacity 0.5s, top 1s, left 1s, visibility 0.5s;
 }
+
 .banner .head .region {
     color: #ffffff;
     font-size: 16px;
@@ -917,7 +970,7 @@ body {
     display: inline-block;
     font-size: 16px;
 }
-.banner .body .item .leble {
+.banner .body .item .label {
     padding-left: 15px;
 }
 .banner .body .item .infected {
@@ -936,6 +989,89 @@ body {
     width: 23%;
     text-align: right;
 }
+
+
+
+.hide-desktop .banner {
+    box-sizing: border-box;
+    width: 100%;
+    /*margin: 0 20px;*/
+    padding: 15px;
+    position: relative;
+}
+
+.hide-desktop  .banner .body .pie {
+    margin-top: 30px;
+}
+
+.hide-desktop .banner .body .data {
+    display: inline-block;
+    width: 130px;
+    vertical-align: top;
+    padding: 20px 0 0 20px;
+}
+
+.hide-desktop  .banner .body .item {
+    margin: 0;
+    font-size: 0;
+}
+
+.hide-desktop  .banner .body .item .infected {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font-size: 20px;
+}
+
+.hide-desktop .banner .body .item {
+    margin: 0;
+    font-size: 0;
+    white-space: nowrap;
+}
+
+.hide-desktop  .banner .body .item .label {
+    padding: 0;
+    display: block;
+    white-space: normal;
+}
+
+.hide-desktop .banner .body .item .dead {
+    color: #18B3AC;
+    font-family: 'PTSans-Bold';
+    display: inline-block;
+    font-size: 20px;
+    width: 100%;
+    text-align: left;
+    padding-top: 15px;
+}
+
+
+.hide-desktop .banner .body .item span {
+    color: #ffffff;
+    font-family: 'PTSans-Regular';
+    display: inline-block;
+    font-size: 14px;
+}
+
+/*@media screen and (max-width: 1024px) {
+
+
+  .banner .body .pie {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: 25px;
+  }
+
+
+  .banner .body .item span {
+      color: #ffffff;
+      font-family: 'PTSans-Regular';
+      display: inline-block;
+      font-size: 16px;
+  }
+
+}*/
+
 
 /*---Legend--*/
 

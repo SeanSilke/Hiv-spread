@@ -201,16 +201,6 @@
 
   var mapMain = function mapMain() {
 
-    //----Data----
-    var data = {};
-
-    // -------------Map State------------
-    var state = {
-      year: 1999,
-      regionId: "",
-      display: "abs"
-    };
-
     /*
     ███    ███  █████  ██████
     ████  ████ ██   ██ ██   ██
@@ -219,21 +209,20 @@
     ██      ██ ██   ██ ██
     */
 
-    var map = function () {
+    function Map() {
 
-      var map = {
-        render: null,
-        selectedReg: null,
-        mapElem: null
-      };
-      map.mapElem = document.getElementById("svg-map");
+      this.render = null;
+      this.selectedReg = null;
+      this.mapElem = null;
+      this.mapElem = document.getElementById("svg-map");
+      var that = this;
+
       var regions = $("#svg-map path, #svg-map polygon");
       var btn = $(".map .map_header .btn");
       var selectedReg = null;
 
       btn.click(function (e) {
         e.stopPropagation();
-        // btn.toggleClass("active");
         state.display = this.dataset.displaytype;
         renderAll();
       });
@@ -271,10 +260,10 @@
       };
 
       var setSelectedRegion = function setSelectedRegion(regionId) {
-        map.selectedReg && map.selectedReg.classList.remove('selected');
+        that.selectedReg && that.selectedReg.classList.remove('selected');
         if (regionId) {
-          map.selectedReg = document.getElementById(regionId);
-          map.selectedReg.classList.add('selected');
+          that.selectedReg = document.getElementById(regionId);
+          that.selectedReg.classList.add('selected');
         }
       };
 
@@ -289,16 +278,16 @@
         setSelectedRegion(state.regionId);
         setButtons(state.display);
         if (state.regionId) {
-          map.mapElem.classList.add('regSelected');
+          that.mapElem.classList.add('regSelected');
         } else {
-          map.mapElem.classList.remove('regSelected');
+          that.mapElem.classList.remove('regSelected');
         }
       };
 
       regions.click(function (e) {
         e.stopPropagation();
         if (e.target.id === state.regionId) {
-          map.mapElem.classList.remove('regSelected');
+          that.mapElem.classList.remove('regSelected');
           state.regionId = "";
         } else {
           state.regionId = e.target.id;
@@ -307,11 +296,9 @@
         renderAll();
       });
 
-      map.render = render;
-      map.selectedReg = selectedReg;
-
-      return map;
-    }();
+      this.render = render;
+      this.selectedReg = selectedReg;
+    }
 
     /*
     ██      ███████  ██████  ███████ ███    ██ ██████
@@ -321,9 +308,7 @@
     ███████ ███████  ██████  ███████ ██   ████ ██████
     */
 
-    var legend = function () {
-
-      //----Init legned ------
+    function Legend() {
 
       var initColors = function initColors() {
         $(".legend .bloc .color").each(function (id, e) {
@@ -342,20 +327,15 @@
         });
       };
 
-      var init = function init() {
+      this.init = function () {
         initColors();
         renderValues();
       };
 
-      var render = function render() {
+      this.render = function () {
         renderValues();
       };
-
-      return {
-        "init": init,
-        render: render
-      };
-    }();
+    }
 
     /*
     ██    ██ ███████  █████  ██████  ███████
@@ -365,9 +345,8 @@
        ██    ███████ ██   ██ ██   ██ ███████
     */
 
-    var years = function () {
-
-      var render = function render() {
+    function Years() {
+      this.render = function () {
 
         $(".years .col").each(function (id, e) {
           var year = parseInt($(e).attr("id"));
@@ -387,11 +366,91 @@
         state.year = year;
         renderAll();
       });
+    }
 
-      return {
-        render: render
+    /*
+    ███████  ██████ ██████   ██████  ██      ██      ███████ ██████
+    ██      ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
+    ███████ ██      ██████  ██    ██ ██      ██      █████   ██████
+         ██ ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
+    ███████  ██████ ██   ██  ██████  ███████ ███████ ███████ ██   ██
+    */
+
+    function Scroller(mainElem) {
+
+      var scrollContainer = mainElem[0],
+          scrollContentWrapper = mainElem.find('.content-wrapper')[0],
+          scrollContent = mainElem.find('.content')[0],
+          contentPosition = 0,
+          scrollerBeingDragged = false,
+          scroller = void 0,
+          topPosition = void 0,
+          scrollerHeight = void 0,
+          normalizedPosition = void 0;
+
+      console.log(scrollContainer);
+
+      function calculateScrollerHeight() {
+        // *Calculation of how tall scroller should be
+        var visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
+        visibleRatio = 0.05;
+        return visibleRatio * scrollContainer.offsetHeight;
+      }
+
+      function moveScroller(evt) {
+        // Move Scroll bar to top offset
+        var scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
+        topPosition = scrollPercentage * (scrollContainer.offsetHeight * 0.915) + scrollContainer.offsetHeight * 0.05; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
+        scroller.style.top = topPosition + 'px';
+      }
+
+      function startDrag(evt) {
+        normalizedPosition = evt.pageY;
+        contentPosition = scrollContentWrapper.scrollTop;
+        scrollerBeingDragged = true;
+      }
+
+      function stopDrag(evt) {
+        scrollerBeingDragged = false;
+      }
+
+      function scrollBarScroll(evt) {
+        if (scrollerBeingDragged === true) {
+          var mouseDifferential = evt.pageY - normalizedPosition;
+          var scrollEquivalent = mouseDifferential * (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
+          scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
+        }
+      }
+
+      this.create = function () {
+        // *Creates scroller element and appends to '.scrollable' div
+        // create scroller element
+        scroller = document.createElement("div");
+        scroller.className = 'scroller';
+
+        // determine how big scroller should be based on content
+        scrollerHeight = calculateScrollerHeight();
+
+        if (scrollerHeight / scrollContainer.offsetHeight < 1) {
+          // *If there is a need to have scroll bar based on content size
+          scroller.style.height = scrollerHeight + 'px';
+
+          // append scroller to scrollContainer div
+          scrollContainer.appendChild(scroller);
+
+          // show scroll path divot
+          scrollContainer.className += ' showScroll';
+
+          // attach related draggable listeners
+          scroller.addEventListener('mousedown', startDrag);
+          window.addEventListener('mouseup', stopDrag);
+          window.addEventListener('mousemove', scrollBarScroll);
+        }
       };
-    }();
+
+      // *** Listeners ***
+      scrollContentWrapper.addEventListener('scroll', moveScroller);
+    }
 
     /*
     ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
@@ -401,21 +460,24 @@
     ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
     */
 
-    var dropDowdn = function () {
+    function DropDowdn(mainElem) {
 
+      var that = this;
       var isOpen = false;
-      var $select = $(".map_header .drop_down .head");
-      var scrollable = $(".scrollable");
-      var closeImg = $(".map_header .item.drop_down .close_button img");
-      var container = $(".scrollable .content");
-      var head = $(".drop_down .text");
+      var $select = mainElem.find(".map_header .drop_down .head");
+      var scrollable = mainElem.find(".scrollable");
+      var closeImg = mainElem.find(".map_header .item.drop_down .close_button img");
+
+      var container = scrollable.find(".content");
+
+      var head = mainElem.find(".drop_down .text");
 
       $select.click(function (e) {
         e.stopPropagation();
         if (isOpen) {
-          close();
+          that.close();
         } else {
-          open();
+          that.open();
         }
       });
 
@@ -423,26 +485,25 @@
         e.stopPropagation();
       });
 
-      var close = function close() {
+      this.close = function () {
         scrollable.css('visibility', 'hidden');
         isOpen = false;
         closeImg[0].style.transform = "rotate(0deg)";
       };
 
-      var open = function open() {
+      this.open = function () {
         scrollable.css('visibility', 'visible');
         isOpen = true;
         closeImg[0].style.transform = "rotate(180deg)";
       };
 
-      var render = function render() {
+      this.render = function () {
         if (state.regionId) {
           head.text(data[state.regionId].shortName);
         } else {
           head.text("Регион");
         }
 
-        // state.regionId && head.text(data[state.regionId].shortName || "Регион")
         // Dirty Hack
         container.empty();
         Object.keys(data).forEach(function (region) {
@@ -458,98 +519,80 @@
           container.append(elem);
 
           elem.click(function (e) {
+            console.log("click");
             e.stopPropagation();
             state.regionId = this.dataset.regionid;
             renderAll();
-            close();
+            that.close();
           });
         });
-        close();
+        that.close();
       };
 
-      var createScroller = function () {
+      console.log("from dropdown", mainElem.find(".scrollable"));
 
-        var scrollContainer = document.querySelector('.scrollable'),
-            scrollContentWrapper = document.querySelector('.scrollable .content-wrapper'),
-            scrollContent = document.querySelector('.scrollable .content'),
-            contentPosition = 0,
-            scrollerBeingDragged = false,
-            scroller = void 0,
-            topPosition = void 0,
-            scrollerHeight = void 0,
-            normalizedPosition = void 0;
+      this.scroller = new Scroller(mainElem.find(".scrollable"));
+    }
 
-        function calculateScrollerHeight() {
-          // *Calculation of how tall scroller should be
-          var visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
-          visibleRatio = 0.05;
-          return visibleRatio * scrollContainer.offsetHeight;
+    /*
+    ██████  ██ ███████  ██████ ██   ██  █████  ██████  ████████
+    ██   ██ ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
+    ██████  ██ █████   ██      ███████ ███████ ██████     ██
+    ██      ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
+    ██      ██ ███████  ██████ ██   ██ ██   ██ ██   ██    ██
+    */
+
+    function PieChart(mainElem, rad) {
+      var path = null;
+      var svgElem = mainElem.find("#svg-pie")[0];
+
+      this.render = function (deg) {
+        if (!svgElem) return;
+        if (path) {
+          svgElem.removeChild(path);
+          path = null;
+        }
+        if (isNaN(deg)) return;
+
+        if (deg > 359) {
+          path = svgElem.querySelector("circle").cloneNode(true);
+          path.setAttribute("fill", "url(#img1)");
+          svgElem.appendChild(path);
+          return;
         }
 
-        function moveScroller(evt) {
-          // Move Scroll bar to top offset
-          var scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
-          topPosition = scrollPercentage * (scrollContainer.offsetHeight * 0.915) + scrollContainer.offsetHeight * 0.05; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
-          scroller.style.top = topPosition + 'px';
+        var cx = rad,
+            cy = rad,
+            rx = rad,
+            ry = rad;
+
+        var p = svgElem.createSVGPoint();
+        p.x = 0;
+        p.y = 1;
+
+        var m = svgElem.createSVGMatrix();
+
+        var p2 = p.matrixTransform(m.rotate(deg));
+
+        p2.x = cx - p2.x * rx;
+        p2.y = cy - p2.y * ry;
+
+        path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+        var d = void 0;
+
+        if (deg > 180) {
+          d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+        } else {
+          d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
         }
 
-        function startDrag(evt) {
-          normalizedPosition = evt.pageY;
-          contentPosition = scrollContentWrapper.scrollTop;
-          scrollerBeingDragged = true;
-        }
+        path.setAttribute("d", d);
+        path.setAttribute("fill", "url(#img1)");
 
-        function stopDrag(evt) {
-          scrollerBeingDragged = false;
-        }
-
-        function scrollBarScroll(evt) {
-          if (scrollerBeingDragged === true) {
-            var mouseDifferential = evt.pageY - normalizedPosition;
-            var scrollEquivalent = mouseDifferential * (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
-            scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
-          }
-        }
-
-        function createScroller() {
-          // *Creates scroller element and appends to '.scrollable' div
-          // create scroller element
-          scroller = document.createElement("div");
-          scroller.className = 'scroller';
-
-          // determine how big scroller should be based on content
-          scrollerHeight = calculateScrollerHeight();
-
-          if (scrollerHeight / scrollContainer.offsetHeight < 1) {
-            // *If there is a need to have scroll bar based on content size
-            scroller.style.height = scrollerHeight + 'px';
-
-            // append scroller to scrollContainer div
-            scrollContainer.appendChild(scroller);
-
-            // show scroll path divot
-            scrollContainer.className += ' showScroll';
-
-            // attach related draggable listeners
-            scroller.addEventListener('mousedown', startDrag);
-            window.addEventListener('mouseup', stopDrag);
-            window.addEventListener('mousemove', scrollBarScroll);
-          }
-        }
-
-        // *** Listeners ***
-        scrollContentWrapper.addEventListener('scroll', moveScroller);
-
-        return createScroller;
-      }();
-
-      return {
-        open: open,
-        close: close,
-        render: render,
-        createScroller: createScroller
+        svgElem.appendChild(path);
       };
-    }();
+    }
 
     /*
     ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████      ██████ ██      ██  ██████ ██   ██ ███████
@@ -572,13 +615,15 @@
     ██       ██████  ██       ██████  ██
     */
 
-    var popUp = function () {
+    function PopUp(mainElem, isMobile) {
 
-      var popUp = $(".banner");
-      var closeButton = $(".banner .head .btn.close");
-      var pieContainer = $(".banner .body .pie");
+      var pieChart = new PieChart(mainElem, 40);
 
-      var dataFields = $(".banner .body .data .item");
+      var popUp = mainElem;
+      var closeButton = popUp.find(".head .btn.close");
+      var pieContainer = popUp.find(".body .pie");
+
+      var dataFields = popUp.find(".body .data .item");
       var stateNameFeald = popUp.find(".head .region span");
       var infectedFeald = dataFields.find(".infected");
       var diedFeald = dataFields.find(".dead");
@@ -590,6 +635,10 @@
         renderAll();
       };
 
+      closeButton.click(function (e) {
+        close();
+      });
+
       var hide = function hide() {
         popUp.css('opacity', 0);
         popUp.css('visibility', "hidden");
@@ -599,66 +648,10 @@
         popUp.css('opacity', 1);
         popUp.css('visibility', "visible");
       };
+
       popUp.click(function (e) {
         e.stopPropagation();
       });
-
-      closeButton.click(function (e) {
-        close();
-      });
-
-      var renderPie = function () {
-        var path = null;
-        var svgElem = document.getElementById("svg-pie");
-
-        var renderPie = function renderPie(deg) {
-          if (!svgElem) return;
-          if (path) {
-            svgElem.removeChild(path);
-            path = null;
-          }
-          if (isNaN(deg)) return;
-
-          if (deg > 359) {
-            path = svgElem.querySelector("circle").cloneNode(true);
-            path.setAttribute("fill", "url(#img1)");
-            svgElem.appendChild(path);
-            return;
-          }
-
-          var cx = 40,
-              cy = 40,
-              rx = 40,
-              ry = 40;
-
-          var p = svgElem.createSVGPoint();
-          p.x = 0;
-          p.y = 1;
-
-          var m = svgElem.createSVGMatrix();
-
-          var p2 = p.matrixTransform(m.rotate(deg));
-
-          p2.x = cx - p2.x * rx;
-          p2.y = cy - p2.y * ry;
-
-          path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-
-          var d = void 0;
-
-          if (deg > 180) {
-            d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
-          } else {
-            d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
-          }
-
-          path.setAttribute("d", d);
-          path.setAttribute("fill", "url(#img1)");
-
-          svgElem.appendChild(path);
-        };
-        return renderPie;
-      }();
 
       var findPosition = function findPosition() {
 
@@ -697,7 +690,7 @@
         });
       };
 
-      var render = function render() {
+      this.render = function () {
 
         if (!state.regionId) {
           hide();
@@ -728,7 +721,7 @@
           $(dataFields[0]).find(".infected").css({
             width: "23%"
           });
-          renderPie(360 * (died / infected));
+          pieChart.render(360 * (died / infected));
           infectedText = "Общее число инфицированных";
         }
 
@@ -738,20 +731,34 @@
         diedFeald.text(died);
 
         if (state.regionId) {
-          setPosition(findPosition());
+          if (!isMobile) setPosition(findPosition());
           open();
         }
+
+        if (isMobile) open();
       };
 
-      var onresize = function onresize() {
-        setPosition(findPosition());
+      this.onresize = function () {
+        if (!isMobile) setPosition(findPosition());
       };
+    }
 
-      return {
-        render: render,
-        onresize: onresize
-      };
-    }();
+    //----Data----
+    var data = {};
+
+    // -------------Map State------------
+    var state = {
+      year: 1999,
+      regionId: "",
+      display: "abs"
+    };
+
+    var map = new Map();
+    var legend = new Legend();
+    var years = new Years();
+    var dropDowdn = new DropDowdn($(".map.hide-mobile"));
+    var popUp = new PopUp($(".hide-mobile .banner"), false, 40);
+    var popUpModile = new PopUp($(".hide-desktop .banner"), true, 50);
 
     /*
     ██████  ███████ ███    ██ ██████  ███████ ██████
@@ -767,11 +774,12 @@
       dropDowdn.render();
       legend.render();
       popUp.render();
+      popUpModile.render();
     };
 
     var initAll = function initAll() {
       legend.init();
-      dropDowdn.createScroller();
+      dropDowdn.scroller.create();
     };
 
     window.onresize = function () {
@@ -817,9 +825,7 @@
 
   $(function () {
 
-    $(".map_body").load("map.svg", function () {
-      // mapMain();
-    });
+    $(".map_body").load("map.svg");
 
     var newInfectedChart = function () {
 
@@ -1371,11 +1377,14 @@
 
     var sideBars = new SideBars();
 
-    var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", mapMain), new hookUpQueston(2, $(".question-three"), 3, ".answer-three", newInfectedChart.show), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
+    var mainElems = [
+    // new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
+    new hookUpQueston(1, $(".question-two"), 3, ".plate5", mapMain), new hookUpQueston(2, $(".question-three"), 2, ".answer-three", newInfectedChart.show), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
     mainElems.forEach(function (elem) {
       return elem.init();
     });
+    // mainElems.forEach(elem => elem.show());
 
     var results = [{
       title: "Плохой",

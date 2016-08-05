@@ -141,7 +141,7 @@
                     <div class="question hide-mobile" >
                         А в каких регионах России в последние годы самый высокий процент инфицированных?
                     </div>
-                    <div class="question hide-desctop">
+                    <div class="question hide-desktop">
                         А в каких регионах России в последние<br> годы самый высокий процент<br> инфицированных?
                     </div>
                     <div class="redDotLine" /> </div>
@@ -154,7 +154,7 @@
                                 </div>
                             </div>
                             <div style="white-space: nowrap;" class="hide-mobile"> Астраханская, Белгородская, Ростовская область </div>
-                            <div style="white-space: nowrap;" class="hide-desctop"> Астраханская, Белгородская, Ростовская обл. </div>
+                            <div style="white-space: nowrap;" class="hide-desktop"> Астраханская, Белгородская, Ростовская обл. </div>
                         </div>
                         <div class="elem" data-id="1">
                             <div class="answer-dot">
@@ -162,7 +162,7 @@
                                 </div>
                             </div>
                             <div style="white-space: nowrap;" class="hide-mobile"> Калининградская, Тульская, Псковская область </div>
-                            <div style="white-space: nowrap;" class="hide-desctop"> Калининградская, Тульская, Псковская обл. </div>
+                            <div style="white-space: nowrap;" class="hide-desktop"> Калининградская, Тульская, Псковская обл. </div>
                         </div>
                     </div>
                     <div class="item">
@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             <div style="white-space: nowrap;"  class="hide-mobile" > Москва, Санкт-Петербург, Краснодарский край </div>
-                            <div style="white-space: nowrap;" class="hide-desctop" > Москва, Санкт-Петербург, Краснодарский кр. </div>
+                            <div style="white-space: nowrap;" class="hide-desktop" > Москва, Санкт-Петербург, Краснодарский кр. </div>
                         </div>
                         <div class="elem" data-id="3">
                             <div class="answer-dot">
@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                             <div style="white-space: nowrap;"  class="hide-mobile"> Самарская, Иркутская, Свердловская область </div>
-                            <div style="white-space: nowrap;" class="hide-desctop"> Самарская, Иркутская, Свердловская обл. </div>
+                            <div style="white-space: nowrap;" class="hide-desktop"> Самарская, Иркутская, Свердловская обл. </div>
                         </div>
                     </div>
                 </div>
@@ -198,11 +198,101 @@
             В последние годы самый высокий процент инфицированных наблюдается в Самарской, Иркутской и Свердловской областях. Подробнее о динамике распространения <br> ВИЧ&#8209инфекции в России рассказывает наша интерактивная карта
         </div>
 
-        <div class="comment-top hide-desctop">
+        <div class="comment-top hide-desktop">
           В последние годы самый высокий процент инфицированных наблюдается в Самарской, Иркутской и Свердловской областях. Подробнее о динамике распространения ВИЧ&#8209инфекции в России:
         </div>
 
-        <div class="map">
+
+
+        <div class="map hide-desktop">
+
+            <div class="map_header">
+                <div class="item btn active" data-displaytype="abs">
+                  <span class="hide-mobile"> Абсолютное число инфицированных </span>
+                  <span class="hide-desktop"> Всего инфицированных </span>
+                </div>
+                <div class="item btn" data-displaytype="rel">
+                  <span  class="hide-mobile">Число инфицированных на 100 тысяч человек</span>
+                  <span class="hide-desktop">Инфицированных на 100 тыс. чел.</span>
+                </div>
+                <div class="item drop_down">
+                    <div class="head">
+                        <div class="text">
+                            Регион
+                        </div>
+                        <div class="close_button">
+                            <img src="arrow.svg" alt="" />
+                        </div>
+                    </div>
+                    <div class="scrollable">
+                        <div class="content-wrapper">
+                            <div class="content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="banner">
+                <div class="head">
+                    <div class="region">
+                        <span>Северная Осетия — Алания</span>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="pie">
+                        <svg id="svg-pie" height="100" width="100">
+                            <defs>
+                                <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
+                                    <image xlink:href="stripes.png" x="0" y="0" width="130" height="130" />
+                                </pattern>
+                            </defs>
+                            <circle cx="50" cy="50" r="50" fill="#ffffff" />
+                        </svg>
+                    </div>
+                    <div class="data">
+                        <div class="item">
+                            <span class="infected">32888</span>
+                            <span class="label">Общее число инфицированных</span>
+                        </div>
+                        <div class="item">
+                            <span class="dead"> 7783 </span>
+                            <span class="label"> из них умерло от инфекции </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+        <div class="map hide-mobile">
+
+            <div class="map_header">
+                <div class="item btn active" data-displaytype="abs">
+                  <span class="hide-mobile"> Абсолютное число инфицированных </span>
+                  <span class="hide-desktop"> Всего инфицированных </span>
+                </div>
+                <div class="item btn" data-displaytype="rel">
+                  <span  class="hide-mobile">Число инфицированных на 100 тысяч человек</span>
+                  <span class="hide-desktop">Инфицированных на 100 тыс. чел.</span>
+                </div>
+                <div class="item drop_down">
+                    <div class="head">
+                        <div class="text">
+                            Регион
+                        </div>
+                        <div class="close_button">
+                            <img src="arrow.svg" alt="" />
+                        </div>
+                    </div>
+                    <div class="scrollable">
+                        <div class="content-wrapper">
+                            <div class="content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="banner">
                 <div class="head">
                     <div class="region">
@@ -225,32 +315,11 @@
                     <div class="data">
                         <div class="item">
                             <span class="infected">32888</span>
-                            <span class="leble">Общее число инфицированных</span>
+                            <span class="label">Общее число инфицированных</span>
                         </div>
                         <div class="item">
                             <span class="dead"> 7783 </span>
-                            <span class="leble"> Число умерших от инфекции </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="map_header">
-                <div class="item btn active" data-displaytype="abs"> Абсолютное число инфицированных</div>
-                <div class="item btn" data-displaytype="rel"> Число инфицированных на 100 тысяч человек</div>
-                <div class="item drop_down">
-                    <div class="head">
-                        <div class="text">
-                            Регион
-                        </div>
-                        <div class="close_button">
-                            <img src="arrow.svg" alt="" />
-                        </div>
-                    </div>
-                    <div class="scrollable">
-                        <div class="content-wrapper">
-                            <div class="content">
-                            </div>
+                            <span class="label"> из них умерло от инфекции </span>
                         </div>
                     </div>
                 </div>
@@ -336,11 +405,11 @@
                 числу ВИЧ&#8209инфицированных вышли Свердловская и Самарская области. По итогам 2014 года за ними следуют Санкт-Петербург, Москва и Московская область. В относительных цифрах (на 100 тысяч населения) самая неблагоприятная ситуация наблюдается в Самарской,
                 Иркутской, Свердловской, Кемеровской и Оренбургской областях
             </div>
-            <div class="item hide-desctop">
+            <div class="item hide-desktop">
                 Первый ВИЧ&#8209инфицированный гражданин СССР был выявлен в 1987 году. В 1989 году произошла трагедия в южных регионах страны: в Калмыкии, Волгоградской и Ростовской областях по небрежности медперсонала было заражено более 260 детей. В первые годы эпидемии
                 больше всего инфицированных числилось в Москве, Калининградской областях и упомянутых южных регионах.
             </div>
-            <div class="item hide-desctop">
+            <div class="item hide-desktop">
                 В конце 2000-х в лидеры по абсолютному числу ВИЧ&#8209инфицированных вышли Свердловская и Самарская области. По итогам 2014 года за ними следуют Санкт-Петербург, Москва и Московская область. В относительных цифрах (на 100 тысяч населения) самая неблагоприятная ситуация наблюдается в Самарской,
                 Иркутской, Свердловской, Кемеровской и Оренбургской областях
             </div>
@@ -361,7 +430,7 @@
                     Число ежегодно выявляемых новых случаев ВИЧ&#8209инфекции
                     <br> в России неуклонно возрастает с…
                 </div>
-                <div class="question hide-desctop">
+                <div class="question hide-desktop">
                     Число ежегодно выявляемых новых <br> случаев ВИЧ&#8209инфекции
                      в России <br> неуклонно возрастает с…
                 </div>
@@ -647,7 +716,7 @@
                     Насколько может увеличиться число ВИЧ&#8209инфицированных в России к 2020 году,
                     <br> по словам министра здравоохранения РФ Вероники Скворцовой?
                 </div>
-                <div class="question hide-desctop">
+                <div class="question hide-desktop">
                     Насколько может увеличиться число ВИЧ&#8209инфицированных в России<br>к 2020 году,
                     по словам министра<br>здравоохранения РФ<br> Вероники Скворцовой?
                 </div>
@@ -1275,11 +1344,11 @@
                 <div class="text header hide-mobile">
                     Топ-10 по распространённости (% населения 15-49 лет)
                 </div>
-                <div class="text header hide-desctop">
+                <div class="text header hide-desktop">
                     Топ-10 по распространённости <br> (% населения 15-49 лет)
                 </div>
 
-                <div class="top-spread-map hide-desctop">
+                <div class="top-spread-map hide-desktop">
                 </div>
 
 
