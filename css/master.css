@@ -603,6 +603,7 @@ body {
         width: 320px;
         text-align: left;
         padding: 0 20px 16px 20px;
+        margin-bottom: 0px;
     }
 }
 .plate5 .comment {
@@ -630,6 +631,7 @@ body {
 }
 @media screen and (max-width: 1024px) {
     .plate5 .comment {
+        margin-top:40px;
         width: 320px;
         padding: 0 20px;
     }
@@ -799,6 +801,43 @@ body {
       margin: auto;
   }
 
+.year-select{
+ /*height: 21px;*/
+ text-align: center;
+
+}
+
+.year-select>div {
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 18px;
+}
+
+.selected-year {
+  font-size: 20px;
+  font-family: 'PTSans-Bold';
+  color: #ffffff;
+  margin: 0 30px;
+}
+
+.year-select.less {
+  background-image: url("../arrowLeft.png");
+  width: 11px;
+  height: 26px;
+  background-repeat: no-repeat;
+  background-position: 0 4px;
+  cursor: pointer;
+}
+
+.year-select.more {
+  background-image: url("../arrowRight.png");
+  width: 11px;
+  height: 26px;
+  background-repeat: no-repeat;
+  background-position: 0 4px;
+  cursor: pointer;
+}
+
 
   .map_header .item {
       display: block;
@@ -824,12 +863,13 @@ body {
   }
 
   .map_header> .item:nth-of-type(3) {
-      margin: 15px 0;
+    margin-bottom: 15px;
   }
 
   .map_header .item.drop_down {
       box-sizing: border-box;
       width: 100%;
+      margin-bottom:15px;
   }
 
   .scrollable {
@@ -1271,10 +1311,10 @@ body {
     height: 50%;
     border-top: 2px dotted #1F424F;
 }
+
+
 .chart.newInfected .body .canvas .text_1, .text_2 {
     position: absolute;
-    ;
-    /*display: inline-block;*/
     font-family: 'PTSans-Regular';
     font-size: 16px;
     color: #93A1A8;
@@ -1288,6 +1328,7 @@ body {
     font-size: 16px;
     color: #93A1A8;
 }
+
 .chart.newInfected .body .canvas .year {
     position: relative;
     display: inline-block;
@@ -1296,6 +1337,7 @@ body {
     text-align: center;
     /*overflow: hidden;*/
 }
+
 .chart.newInfected .body .canvas .year .count {
     font-family: 'PTSans-Regular';
     font-size: 16px;
@@ -1315,7 +1357,8 @@ body {
     height: 100%;
     background-color: #B42025;
     border-radius: 20px 20px 0 0;
-    margin-top: 260px;
+    /*margin-top: 260px;*/
+    margin-top: 160px;
     transition: margin-top 0.3s ease-out;
 }
 .plate6 .text2 {

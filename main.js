@@ -1,6 +1,6 @@
 "use strict";
 
-(function() {
+$(".map_body").load("map.svg", function() {
 
   let h = window.innerHeight ||
     document.documentElement.clientHeight ||
@@ -233,6 +233,547 @@
 
 
   /*
+  ██      ███████  ██████  ███████ ███    ██ ██████
+  ██      ██      ██       ██      ████   ██ ██   ██
+  ██      █████   ██   ███ █████   ██ ██  ██ ██   ██
+  ██      ██      ██    ██ ██      ██  ██ ██ ██   ██
+  ███████ ███████  ██████  ███████ ██   ████ ██████
+  */
+
+  function Legend(mapMain) {
+
+    let initColors = function() {
+      $(".legend .bloc .color").each(function(id, e) {
+        let color = getColor((id + 1) / 10);
+        $(e).css({
+          "background-color": color
+        });
+      });
+    };
+
+    let renderValues = function() {
+      let multiplier = mapMain.state.display == "abs" ? 100 : 10;
+
+      $(".legend .bloc .val").each(function(id, e) {
+        $(e).text(multiplier * Math.pow(2, id));
+      });
+    };
+
+    this.init = function() {
+      initColors();
+      renderValues();
+    };
+
+    this.render = function() {
+      renderValues();
+    };
+
+  }
+
+
+  /*
+  ██    ██ ███████  █████  ██████  ███████
+   ██  ██  ██      ██   ██ ██   ██ ██
+    ████   █████   ███████ ██████  ███████
+     ██    ██      ██   ██ ██   ██      ██
+     ██    ███████ ██   ██ ██   ██ ███████
+  */
+
+  function Years(mapMain) {
+    this.render = function() {
+
+      $(".years .col").each(function(id, e) {
+        let year = parseInt($(e).attr("id"));
+        if (year === mapMain.state.year) {
+          $(e).addClass("active");
+        } else {
+          $(e).removeClass("active");
+        }
+      });
+
+    };
+
+    // _____________click__________
+
+    $(".years .col").on("click", function(e) {
+      e.stopPropagation();
+      let year = parseInt($(this).attr("id"));
+      mapMain.state.year = year;
+      mapMain.render();
+    });
+
+  }
+
+
+      /*
+      ███████  ██████ ██████   ██████  ██      ██      ███████ ██████
+      ██      ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
+      ███████ ██      ██████  ██    ██ ██      ██      █████   ██████
+           ██ ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
+      ███████  ██████ ██   ██  ██████  ███████ ███████ ███████ ██   ██
+      */
+
+
+      function Scroller(mainElem) {
+
+        let scrollContainer = mainElem[0],
+          scrollContentWrapper = mainElem.find('.content-wrapper')[0],
+          scrollContent = mainElem.find('.content')[0],
+          contentPosition = 0,
+          scrollerBeingDragged = false,
+          scroller,
+          topPosition,
+          scrollerHeight,
+          normalizedPosition;
+
+
+        function calculateScrollerHeight() {
+          // *Calculation of how tall scroller should be
+          let visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
+          visibleRatio = 0.05;
+          return visibleRatio * scrollContainer.offsetHeight;
+        }
+
+        function moveScroller(evt) {
+          // Move Scroll bar to top offset
+          let scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
+          topPosition = scrollPercentage * (scrollContainer.offsetHeight * 0.915) + scrollContainer.offsetHeight * 0.05; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
+          scroller.style.top = topPosition + 'px';
+        }
+
+        function startDrag(evt) {
+          normalizedPosition = evt.pageY;
+          contentPosition = scrollContentWrapper.scrollTop;
+          scrollerBeingDragged = true;
+        }
+
+        function stopDrag(evt) {
+          scrollerBeingDragged = false;
+        }
+
+        function scrollBarScroll(evt) {
+          if (scrollerBeingDragged === true) {
+            let mouseDifferential = evt.pageY - normalizedPosition;
+            let scrollEquivalent = mouseDifferential *
+              (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
+            scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
+          }
+        }
+
+        this.create = function () {
+          // *Creates scroller element and appends to '.scrollable' div
+          // create scroller element
+          scroller = document.createElement("div");
+          scroller.className = 'scroller';
+
+          // determine how big scroller should be based on content
+          scrollerHeight = calculateScrollerHeight();
+
+          if (scrollerHeight / scrollContainer.offsetHeight < 1) {
+            // *If there is a need to have scroll bar based on content size
+            scroller.style.height = scrollerHeight + 'px';
+
+            // append scroller to scrollContainer div
+            scrollContainer.appendChild(scroller);
+
+            // show scroll path divot
+            scrollContainer.className += ' showScroll';
+
+            // attach related draggable listeners
+            scroller.addEventListener('mousedown', startDrag);
+            window.addEventListener('mouseup', stopDrag);
+            window.addEventListener('mousemove', scrollBarScroll);
+          }
+
+        }
+
+        // *** Listeners ***
+        scrollContentWrapper.addEventListener('scroll', moveScroller);
+
+      }
+
+      /*
+      ██████  ██ ███████  ██████ ██   ██  █████  ██████  ████████
+      ██   ██ ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
+      ██████  ██ █████   ██      ███████ ███████ ██████     ██
+      ██      ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
+      ██      ██ ███████  ██████ ██   ██ ██   ██ ██   ██    ██
+      */
+
+
+      function PieChart(mainElem,rad) {
+        let path = null;
+        let svgElem = mainElem.find("#svg-pie")[0];
+
+        this.render = function(deg) {
+          if (!svgElem) return;
+          if (path) {
+            svgElem.removeChild(path);
+            path = null;
+          }
+          if (isNaN(deg)) return;
+
+          if (deg > 359) {
+            path = svgElem.querySelector("circle").cloneNode(true);
+            path.setAttribute("fill", "url(#img1)");
+            svgElem.appendChild(path);
+            return;
+          }
+
+          let cx = rad,
+              cy = rad,
+              rx = rad,
+              ry = rad;
+
+          let p = svgElem.createSVGPoint();
+          p.x = 0;
+          p.y = 1;
+
+
+          let m = svgElem.createSVGMatrix();
+
+
+          let p2 = p.matrixTransform(m.rotate(deg));
+
+          p2.x = cx - p2.x * rx;
+          p2.y = cy - p2.y * ry;
+
+          path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+          let d;
+
+          if (deg > 180) {
+            d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+          } else {
+            d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+          }
+
+          path.setAttribute("d", d);
+          path.setAttribute("fill", "url(#img1)");
+
+          svgElem.appendChild(path);
+
+        };
+
+      }
+
+
+
+      /*
+      ██████   ██████  ██████  ██    ██ ██████
+      ██   ██ ██    ██ ██   ██ ██    ██ ██   ██
+      ██████  ██    ██ ██████  ██    ██ ██████
+      ██      ██    ██ ██      ██    ██ ██
+      ██       ██████  ██       ██████  ██
+      */
+
+      function PopUp(mapMain,mainElem,rad,isMobile) {
+
+
+              let pieChart = new PieChart(mainElem,rad);
+
+              let popUp = mainElem;
+              let closeButton = popUp.find(".head .btn.close");
+              let pieContainer = popUp.find(".body .pie");
+
+              let dataFields = popUp.find(".body .data .item");
+              let stateNameFeald = popUp.find(".head .region span");
+              let infectedFeald = dataFields.find(".infected");
+              let diedFeald = dataFields.find(".dead");
+              let infectedTextFeald = $(dataFields.find(".leble")[0]);
+
+              let close = function() {
+                hide();
+                mapMain.state.regionId = "";
+                mapMain.render();
+              };
+
+              closeButton.click(function(e) {
+                close();
+              });
+
+              let hide = function() {
+                popUp.css('opacity', 0);
+                popUp.css('visibility', "hidden");
+
+              };
+
+              let open = function() {
+                popUp.css('opacity', 1);
+                popUp.css('visibility', "visible");
+              };
+
+
+              popUp.click(function(e) {
+                e.stopPropagation();
+              });
+
+
+              this.render = function() {
+                if (!mapMain.state.regionId) {
+                  hide();
+                  return;
+                }
+
+                let name, infected, died, infectedText;
+                if (isMobile) {
+                  name = mapMain.data[mapMain.state.regionId].shortName;
+                }else {
+                  name = mapMain.data[mapMain.state.regionId].name;
+                }
+
+                if (mapMain.state.display == "rel") {
+                  pieContainer.hide();
+                  $(dataFields[1]).hide();
+                  $(dataFields[0]).find(".infected").css({
+                    width: "auto"
+                  });
+                  died = null;
+                  infected = mapMain.data[mapMain.state.regionId].relInfected[mapMain.state.year] || "н/д";
+                  infectedText = "Число инфицированных на 100 тысяч населения";
+                } else {
+                  infected = mapMain.data[mapMain.state.regionId].absInfected[mapMain.state.year] || "н/д";
+                  died = mapMain.data[mapMain.state.regionId].absDied[mapMain.state.year] || "н/д";
+                  pieContainer.show();
+                  $(dataFields[1]).show();
+                  $(dataFields[0]).find(".infected").css({
+                    width: "23%"
+                  });
+                  pieChart.render(360 * (died / infected));
+                  infectedText = "Общее число инфицированных";
+                }
+
+                stateNameFeald.text(name);
+                infectedFeald.text(infected);
+                infectedTextFeald.text(infectedText);
+                diedFeald.text(died);
+
+                // if (mapMain.state.regionId && !isMobile) {
+                //    setPosition(findPosition());
+                // }
+                 open();
+              };
+
+      }
+
+      function YearSelect(mapMain, mainElem) {
+        let year = mainElem.find(".selected-year");
+        let moreBtn = mainElem.find(".more");
+        let lessBtn = mainElem.find(".less");
+
+        moreBtn.click(()=>{
+          if(mapMain.state.year <2014) mapMain.state.year++;
+          mapMain.render();
+        })
+
+        lessBtn.click(()=>{
+          if(mapMain.state.year >1994) mapMain.state.year--;
+          mapMain.render();
+        })
+
+        this.render = ()=> {
+          year.text(mapMain.state.year)
+        }
+      }
+
+
+
+      /*
+      ███    ███  █████  ██████
+      ████  ████ ██   ██ ██   ██
+      ██ ████ ██ ███████ ██████
+      ██  ██  ██ ██   ██ ██
+      ██      ██ ██   ██ ██
+      */
+
+      function Map(mapMain) {
+
+        this.render = null;
+        this.selectedReg = null;
+        this.mapElem = document.getElementById("svg-map");
+        let that = this;
+
+
+        let regions = $("#svg-map path, #svg-map polygon");
+        let selectedReg = null;
+
+        let setRegsColor = function(year) {
+          Object.keys(mapMain.data).forEach(function(reginoId) {
+
+            let value, percent;
+
+            if (mapMain.state.display == "abs") {
+
+              value = mapMain.data[reginoId].absInfected[year];
+
+              if (value < 100) {
+                percent = 0;
+              } else {
+                percent = (Math.log2(value / 100)) / 9;
+              }
+            } else {
+              value = mapMain.data[reginoId].relInfected[year];
+
+              if (value < 10) {
+                percent = 0;
+              } else {
+                percent = (Math.log2(value / 10)) / 9;
+              }
+
+            }
+
+            $('#' + reginoId).css({
+              'fill': getColor(percent),
+            });
+          });
+        };
+
+        let setSelectedRegion = function(regionId) {
+          that.selectedReg && that.selectedReg.classList.remove('selected');
+          if (regionId) {
+            that.selectedReg = document.getElementById(regionId);
+            that.selectedReg.classList.add('selected');
+          }
+        };
+
+
+
+        this.render = function() {
+          setRegsColor(mapMain.state.year);
+          setSelectedRegion(mapMain.state.regionId);
+          if (mapMain.state.regionId) {
+            this.mapElem.classList.add('regSelected');
+          } else {
+            this.mapElem.classList.remove('regSelected');
+          }
+        };
+
+        regions.click(
+          function(e) {
+            e.stopPropagation();
+            if (e.target.id === mapMain.state.regionId) {
+              that.mapElem.classList.remove('regSelected');
+              mapMain.state.regionId = "";
+            } else {
+              mapMain.state.regionId = e.target.id;
+              e.target.parentElement.insertBefore(e.target, null);
+            }
+            mapMain.render();
+          }
+        );
+      }
+
+
+      function TogleBtn(mapMain) {
+        let btn = $(".map .map_header .btn");
+
+        btn.click(function(e) {
+          e.stopPropagation();
+          mapMain.state.display = this.dataset.displaytype;
+          mapMain.render();
+        });
+
+        let setButtons = function(display) {
+          btn.each(function(i, elem) {
+            if (elem.dataset.displaytype == display) elem.classList.add('active');
+            else elem.classList.remove('active');
+          });
+        };
+
+        this.render = function() {
+          setButtons(mapMain.state.display);
+        }
+
+      }
+
+      /*
+      ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
+      ██   ██ ██   ██ ██    ██ ██   ██     ██   ██ ██    ██ ██     ██ ████   ██
+      ██   ██ ██████  ██    ██ ██████      ██   ██ ██    ██ ██  █  ██ ██ ██  ██
+      ██   ██ ██   ██ ██    ██ ██          ██   ██ ██    ██ ██ ███ ██ ██  ██ ██
+      ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
+      */
+
+      function DropDown(mapMain,mainElem) {
+
+        let that = this;
+        let isOpen = false;
+        let $select = mainElem.find(".map_header .drop_down .head");
+        let scrollable = mainElem.find(".scrollable");
+        let closeImg = mainElem.find(".map_header .item.drop_down .close_button img");
+
+        let container = scrollable.find(".content");
+
+        let head = mainElem.find(".drop_down .text");
+
+        $select.click(
+          function(e) {
+            e.stopPropagation();
+            if (isOpen) {
+              that.close();
+            } else {
+              that.open();
+            }
+          }
+        );
+
+        $(".scrollable").click(
+          function(e) {
+            e.stopPropagation();
+          }
+        );
+
+
+        this.close = function() {
+          scrollable.css('visibility', 'hidden');
+          isOpen = false;
+          closeImg[0].style.transform = "rotate(0deg)";
+        };
+
+        this.open = function() {
+          scrollable.css('visibility', 'visible');
+          isOpen = true;
+          closeImg[0].style.transform = "rotate(180deg)";
+        };
+
+        this.render = function() {
+          if (mapMain.state.regionId) {
+            head.text(mapMain.data[mapMain.state.regionId].shortName);
+          } else {
+            head.text("Регион");
+          }
+
+          // Dirty Hack
+          container.empty();
+          Object.keys(mapMain.data).forEach(
+            function(region) {
+
+              let shortName = mapMain.data[region].shortName;
+
+              let elem = $(`<div class="item" data-regionId="${region}"> ${shortName} </div>`);
+
+              if (region === mapMain.state.regionId) {
+                elem = $(`<div class="active" data-regionId="${region}"> ${shortName} </div>`);
+              }
+
+              container.append(elem);
+
+              elem.click(function(e) {
+                console.log("click");
+                e.stopPropagation();
+                mapMain.state.regionId = this.dataset.regionid;
+                mapMain.render();
+                that.close();
+              });
+            }
+          );
+          that.close();
+        };
+
+        this.scroller = new Scroller(mainElem.find(".scrollable"));
+      }
+
+  /*
   ███    ███  █████  ██████      ███    ███  █████  ██ ███    ██
   ████  ████ ██   ██ ██   ██     ████  ████ ██   ██ ██ ████   ██
   ██ ████ ██ ███████ ██████      ██ ████ ██ ███████ ██ ██ ██  ██
@@ -241,678 +782,133 @@
   */
 
 
-  let mapMain = function() {
+  function mapMain(data) {
 
-
-    /*
-    ███    ███  █████  ██████
-    ████  ████ ██   ██ ██   ██
-    ██ ████ ██ ███████ ██████
-    ██  ██  ██ ██   ██ ██
-    ██      ██ ██   ██ ██
-    */
-
-    function Map() {
-
-      this.render = null;
-      this.selectedReg = null;
-      this.mapElem = null;
-      this.mapElem = document.getElementById("svg-map");
-      let that = this;
-
-      let regions = $("#svg-map path, #svg-map polygon");
-      let btn = $(".map .map_header .btn");
-      let selectedReg = null;
-
-      btn.click(function(e) {
-        e.stopPropagation();
-        state.display = this.dataset.displaytype;
-        renderAll();
-      });
-
-      let setRegsColor = function(year) {
-
-        Object.keys(data).forEach(function(reginoId) {
-
-          let value, percent;
-
-          if (state.display == "abs") {
-
-            value = data[reginoId].absInfected[year];
-
-            if (value < 100) {
-              percent = 0;
-            } else {
-              percent = (Math.log2(value / 100)) / 9;
-            }
-          } else {
-            value = data[reginoId].relInfected[year];
-
-            if (value < 10) {
-              percent = 0;
-            } else {
-              percent = (Math.log2(value / 10)) / 9;
-            }
-
-          }
-
-          $('#' + reginoId).css({
-            'fill': getColor(percent),
-          });
-        });
-      };
-
-      let setSelectedRegion = function(regionId) {
-        that.selectedReg && that.selectedReg.classList.remove('selected');
-        if (regionId) {
-          that.selectedReg = document.getElementById(regionId);
-          that.selectedReg.classList.add('selected');
-        }
-      };
-
-      let setButtons = function(display) {
-        btn.each(function(i, elem) {
-          if (elem.dataset.displaytype == display) elem.classList.add('active');
-          else elem.classList.remove('active');
-        });
-      };
-
-      let render = function() {
-        setRegsColor(state.year);
-        setSelectedRegion(state.regionId);
-        setButtons(state.display);
-        if (state.regionId) {
-          that.mapElem.classList.add('regSelected');
-        } else {
-          that.mapElem.classList.remove('regSelected');
-        }
-      };
-
-      regions.click(
-        function(e) {
-          e.stopPropagation();
-          if (e.target.id === state.regionId) {
-            that.mapElem.classList.remove('regSelected');
-            state.regionId = "";
-          } else {
-            state.regionId = e.target.id;
-            e.target.parentElement.insertBefore(e.target, null);
-          }
-          renderAll();
-        }
-      );
-
-      this.render = render;
-      this.selectedReg = selectedReg;
-    }
-
-
-
-
-    /*
-    ██      ███████  ██████  ███████ ███    ██ ██████
-    ██      ██      ██       ██      ████   ██ ██   ██
-    ██      █████   ██   ███ █████   ██ ██  ██ ██   ██
-    ██      ██      ██    ██ ██      ██  ██ ██ ██   ██
-    ███████ ███████  ██████  ███████ ██   ████ ██████
-    */
-
-    function Legend() {
-
-      let initColors = function() {
-        $(".legend .bloc .color").each(function(id, e) {
-          let color = getColor((id + 1) / 10);
-          $(e).css({
-            "background-color": color
-          });
-        });
-      };
-
-      let renderValues = function() {
-        let multiplier = state.display == "abs" ? 100 : 10;
-
-        $(".legend .bloc .val").each(function(id, e) {
-          $(e).text(multiplier * Math.pow(2, id));
-        });
-      };
-
-      this.init = function() {
-        initColors();
-        renderValues();
-      };
-
-      this.render = function() {
-        renderValues();
-      };
-
-    }
-
-
-
-    /*
-    ██    ██ ███████  █████  ██████  ███████
-     ██  ██  ██      ██   ██ ██   ██ ██
-      ████   █████   ███████ ██████  ███████
-       ██    ██      ██   ██ ██   ██      ██
-       ██    ███████ ██   ██ ██   ██ ███████
-    */
-
-    function Years() {
-      this.render = function() {
-
-        $(".years .col").each(function(id, e) {
-          let year = parseInt($(e).attr("id"));
-          if (year === state.year) {
-            $(e).addClass("active");
-          } else {
-            $(e).removeClass("active");
-          }
-        });
-
-      };
-
-      // _____________click__________
-
-      $(".years .col").on("click", function(e) {
-        e.stopPropagation();
-        let year = parseInt($(this).attr("id"));
-        state.year = year;
-        renderAll();
-      });
-
-    }
-
-
-    /*
-    ███████  ██████ ██████   ██████  ██      ██      ███████ ██████
-    ██      ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
-    ███████ ██      ██████  ██    ██ ██      ██      █████   ██████
-         ██ ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
-    ███████  ██████ ██   ██  ██████  ███████ ███████ ███████ ██   ██
-    */
-
-
-    function Scroller(mainElem) {
-
-      let scrollContainer = mainElem[0],
-        scrollContentWrapper = mainElem.find('.content-wrapper')[0],
-        scrollContent = mainElem.find('.content')[0],
-        contentPosition = 0,
-        scrollerBeingDragged = false,
-        scroller,
-        topPosition,
-        scrollerHeight,
-        normalizedPosition;
-
-        console.log(scrollContainer);
-
-      function calculateScrollerHeight() {
-        // *Calculation of how tall scroller should be
-        let visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
-        visibleRatio = 0.05;
-        return visibleRatio * scrollContainer.offsetHeight;
-      }
-
-      function moveScroller(evt) {
-        // Move Scroll bar to top offset
-        let scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
-        topPosition = scrollPercentage * (scrollContainer.offsetHeight * 0.915) + scrollContainer.offsetHeight * 0.05; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
-        scroller.style.top = topPosition + 'px';
-      }
-
-      function startDrag(evt) {
-        normalizedPosition = evt.pageY;
-        contentPosition = scrollContentWrapper.scrollTop;
-        scrollerBeingDragged = true;
-      }
-
-      function stopDrag(evt) {
-        scrollerBeingDragged = false;
-      }
-
-      function scrollBarScroll(evt) {
-        if (scrollerBeingDragged === true) {
-          let mouseDifferential = evt.pageY - normalizedPosition;
-          let scrollEquivalent = mouseDifferential *
-            (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
-          scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
-        }
-      }
-
-      this.create = function () {
-        // *Creates scroller element and appends to '.scrollable' div
-        // create scroller element
-        scroller = document.createElement("div");
-        scroller.className = 'scroller';
-
-        // determine how big scroller should be based on content
-        scrollerHeight = calculateScrollerHeight();
-
-        if (scrollerHeight / scrollContainer.offsetHeight < 1) {
-          // *If there is a need to have scroll bar based on content size
-          scroller.style.height = scrollerHeight + 'px';
-
-          // append scroller to scrollContainer div
-          scrollContainer.appendChild(scroller);
-
-          // show scroll path divot
-          scrollContainer.className += ' showScroll';
-
-          // attach related draggable listeners
-          scroller.addEventListener('mousedown', startDrag);
-          window.addEventListener('mouseup', stopDrag);
-          window.addEventListener('mousemove', scrollBarScroll);
-        }
-
-      }
-
-      // *** Listeners ***
-      scrollContentWrapper.addEventListener('scroll', moveScroller);
-
-    }
-
-    /*
-    ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
-    ██   ██ ██   ██ ██    ██ ██   ██     ██   ██ ██    ██ ██     ██ ████   ██
-    ██   ██ ██████  ██    ██ ██████      ██   ██ ██    ██ ██  █  ██ ██ ██  ██
-    ██   ██ ██   ██ ██    ██ ██          ██   ██ ██    ██ ██ ███ ██ ██  ██ ██
-    ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
-    */
-
-    function DropDowdn(mainElem) {
-
-      let that = this;
-      let isOpen = false;
-      let $select = mainElem.find(".map_header .drop_down .head");
-      let scrollable = mainElem.find(".scrollable");
-      let closeImg = mainElem.find(".map_header .item.drop_down .close_button img");
-
-      let container = scrollable.find(".content");
-
-      let head = mainElem.find(".drop_down .text");
-
-      $select.click(
-        function(e) {
-          e.stopPropagation();
-          if (isOpen) {
-            that.close();
-          } else {
-            that.open();
-          }
-        }
-      );
-
-      $(".scrollable").click(
-        function(e) {
-          e.stopPropagation();
-        }
-      );
-
-
-      this.close = function() {
-        scrollable.css('visibility', 'hidden');
-        isOpen = false;
-        closeImg[0].style.transform = "rotate(0deg)";
-      };
-
-      this.open = function() {
-        scrollable.css('visibility', 'visible');
-        isOpen = true;
-        closeImg[0].style.transform = "rotate(180deg)";
-      };
-
-      this.render = function() {
-        if (state.regionId) {
-          head.text(data[state.regionId].shortName);
-        } else {
-          head.text("Регион");
-        }
-
-        // Dirty Hack
-        container.empty();
-        Object.keys(data).forEach(
-          function(region) {
-
-            let shortName = data[region].shortName;
-
-            let elem = $(`<div class="item" data-regionId="${region}"> ${shortName} </div>`);
-
-            if (region === state.regionId) {
-              elem = $(`<div class="active" data-regionId="${region}"> ${shortName} </div>`);
-            }
-
-            container.append(elem);
-
-            elem.click(function(e) {
-              console.log("click");
-              e.stopPropagation();
-              state.regionId = this.dataset.regionid;
-              renderAll();
-              that.close();
-            });
-          }
-        );
-        that.close();
-      };
-
-      console.log("from dropdown", mainElem.find(".scrollable"));
-
-      this.scroller = new Scroller(mainElem.find(".scrollable"));
-    }
-
-
-    /*
-    ██████  ██ ███████  ██████ ██   ██  █████  ██████  ████████
-    ██   ██ ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
-    ██████  ██ █████   ██      ███████ ███████ ██████     ██
-    ██      ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
-    ██      ██ ███████  ██████ ██   ██ ██   ██ ██   ██    ██
-    */
-
-
-    function PieChart(mainElem,rad) {
-      let path = null;
-      let svgElem = mainElem.find("#svg-pie")[0];
-
-      this.render = function(deg) {
-        if (!svgElem) return;
-        if (path) {
-          svgElem.removeChild(path);
-          path = null;
-        }
-        if (isNaN(deg)) return;
-
-        if (deg > 359) {
-          path = svgElem.querySelector("circle").cloneNode(true);
-          path.setAttribute("fill", "url(#img1)");
-          svgElem.appendChild(path);
-          return;
-        }
-
-        let cx = rad,
-            cy = rad,
-            rx = rad,
-            ry = rad;
-
-        let p = svgElem.createSVGPoint();
-        p.x = 0;
-        p.y = 1;
-
-
-        let m = svgElem.createSVGMatrix();
-
-
-        let p2 = p.matrixTransform(m.rotate(deg));
-
-        p2.x = cx - p2.x * rx;
-        p2.y = cy - p2.y * ry;
-
-        path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-
-        let d;
-
-        if (deg > 180) {
-          d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
-        } else {
-          d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
-        }
-
-        path.setAttribute("d", d);
-        path.setAttribute("fill", "url(#img1)");
-
-        svgElem.appendChild(path);
-
-      };
-
-    }
-
-
-
-    /*
-    ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████      ██████ ██      ██  ██████ ██   ██ ███████
-    ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██        ██      ██      ██ ██      ██  ██  ██
-    ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██        ██      ██      ██ ██      █████   ███████
-    ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██        ██      ██      ██ ██      ██  ██       ██
-    ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██         ██████ ███████ ██  ██████ ██   ██ ███████
-    */
-
-    document.body.addEventListener("click",
-      function(e) {
-        state.regionId = "";
-        renderAll();
-      }
-    );
-
-    /*
-    ██████   ██████  ██████  ██    ██ ██████
-    ██   ██ ██    ██ ██   ██ ██    ██ ██   ██
-    ██████  ██    ██ ██████  ██    ██ ██████
-    ██      ██    ██ ██      ██    ██ ██
-    ██       ██████  ██       ██████  ██
-    */
-
-    function PopUp(mainElem,isMobile) {
-
-
-            let pieChart = new PieChart(mainElem,40);
-
-            let popUp = mainElem;
-            let closeButton = popUp.find(".head .btn.close");
-            let pieContainer = popUp.find(".body .pie");
-
-            let dataFields = popUp.find(".body .data .item");
-            let stateNameFeald = popUp.find(".head .region span");
-            let infectedFeald = dataFields.find(".infected");
-            let diedFeald = dataFields.find(".dead");
-            let infectedTextFeald = $(dataFields.find(".leble")[0]);
-
-            let close = function() {
-              hide();
-              state.regionId = "";
-              renderAll();
-            };
-
-            closeButton.click(function(e) {
-              close();
-            });
-
-            let hide = function() {
-              popUp.css('opacity', 0);
-              popUp.css('visibility', "hidden");
-
-            };
-
-            let open = function() {
-              popUp.css('opacity', 1);
-              popUp.css('visibility', "visible");
-            };
-
-
-            popUp.click(function(e) {
-              e.stopPropagation();
-            });
-
-
-            let findPosition = function() {
-
-              if (!map.selectedReg) return;
-
-              let mapRect = map.mapElem.getBoundingClientRect();
-              let regRect = map.selectedReg.getBoundingClientRect();
-              let popUpRect = popUp[0].getBoundingClientRect();
-
-              let top, left;
-
-              left = regRect.left + regRect.width;
-              top = regRect.top - popUpRect.height;
-              if (top < mapRect.top) {
-                top = mapRect.top + 20;
-              }
-              if (left + popUpRect.width > mapRect.left + mapRect.width) {
-                left = regRect.left - popUpRect.width;
-              }
-
-              left = left + pageXOffset;
-              top = top + pageYOffset;
-
-              return {
-                top: top,
-                left: left,
-              };
-            };
-
-            let setPosition = function(obj) {
-              if (!obj) return;
-              let format = ["right", "top", "left", "bottom"];
-              format.forEach(function(prop) {
-                popUp[0].style[prop] = obj[prop] ? obj[prop] + "px" : "";
-              });
-            };
-
-            this.render = function() {
-
-              if (!state.regionId) {
-                hide();
-                return;
-              }
-
-              let name, infected, died, infectedText;
-
-              name = data[state.regionId].name;
-
-              if (state.display == "rel") {
-                pieContainer.hide();
-                $(dataFields[1]).hide();
-                $(dataFields[0]).find(".infected").css({
-                  width: "auto"
-                });
-                died = null;
-                infected = data[state.regionId].relInfected[state.year] || "н/д";
-                infectedText = "Число инфицированных на 100 тысяч населения";
-              } else {
-                infected = data[state.regionId].absInfected[state.year] || "н/д";
-                died = data[state.regionId].absDied[state.year] || "н/д";
-                pieContainer.show();
-                $(dataFields[1]).show();
-                $(dataFields[0]).find(".infected").css({
-                  width: "23%"
-                });
-                pieChart.render(360 * (died / infected));
-                infectedText = "Общее число инфицированных";
-              }
-
-              stateNameFeald.text(name);
-              infectedFeald.text(infected);
-              infectedTextFeald.text(infectedText);
-              diedFeald.text(died);
-
-              if (state.regionId) {
-                if(!isMobile) setPosition(findPosition());
-                open();
-              }
-
-              if(isMobile) open();
-            };
-
-            this.onresize = function() {
-              if(!isMobile) setPosition(findPosition());
-            };
-
-    }
-
-
-    //----Data----
-    let data = {
-
-    };
+    this.data = data;
+    let mapMain = this;
 
     // -------------Map State------------
-    let state = {
+    this.state = {
       year: 1999,
       regionId: "",
       display: "abs"
     };
 
-    let map = new Map();
-    let legend = new Legend();
-    let years = new Years();
-    let dropDowdn = new DropDowdn($(".map.hide-mobile"));
-    let popUp = new PopUp($(".hide-mobile .banner"),false,40);
-    let popUpModile = new PopUp($(".hide-desktop .banner"),true,50);
+    this.popUpElem = $(".hide-mobile .banner");
 
-    /*
-    ██████  ███████ ███    ██ ██████  ███████ ██████
-    ██   ██ ██      ████   ██ ██   ██ ██      ██   ██
-    ██████  █████   ██ ██  ██ ██   ██ █████   ██████
-    ██   ██ ██      ██  ██ ██ ██   ██ ██      ██   ██
-    ██   ██ ███████ ██   ████ ██████  ███████ ██   ██
-    */
+    let map = new Map(this);
+    let legend = new Legend(this);
+    let years = new Years(this);
+    let dropDown = new DropDown(this,$(".map.hide-mobile"));
+    let popUp = new PopUp(this,this.popUpElem,40,false);
+    let togleBtn = new TogleBtn(this);
 
-    let renderAll = function() {
+
+    let findPosition = function( ) {
+      if (!map.selectedReg) return;
+
+      let mapRect = map.mapElem.getBoundingClientRect();
+      let regRect = map.selectedReg.getBoundingClientRect();
+      let popUpRect = mapMain.popUpElem[0].getBoundingClientRect();
+
+      let top, left;
+
+      left = regRect.left + regRect.width;
+      top = regRect.top - popUpRect.height;
+      if (top < mapRect.top) {
+        top = mapRect.top + 20;
+      }
+      if (left + popUpRect.width > mapRect.left + mapRect.width) {
+        left = regRect.left - popUpRect.width;
+      }
+
+      left = left + pageXOffset;
+      top = top + pageYOffset;
+
+      return {
+        top: top,
+        left: left,
+      };
+    };
+
+    let setPosition = function(obj) {
+      if (!obj) return;
+      let format = ["right", "top", "left", "bottom"];
+      format.forEach(function(prop) {
+        mapMain.popUpElem[0].style[prop] = obj[prop] ? obj[prop] + "px" : "";
+      });
+    };
+
+    this.render = function() {
       map.render();
       years.render();
-      dropDowdn.render();
+      dropDown.render();
       legend.render();
       popUp.render();
-      popUpModile.render()
+      togleBtn.render();
+      if (this.state.regionId) {
+
+         setPosition(findPosition());
+      }
+
     };
 
-    let initAll = function() {
+
+    this.init = function() {
       legend.init();
-      dropDowdn.scroller.create();
-    };
+      dropDown.scroller.create();
 
-    window.onresize = function() {
-      popUp.onresize();
-    };
+      document.body.addEventListener("click",
+        function(e) {
+          mapMain.state.regionId = "";
+          mapMain.render();
+        }
+      );
 
-
-    /*
-    ██████  ███████  █████  ██████      ██████   █████  ████████  █████
-    ██   ██ ██      ██   ██ ██   ██     ██   ██ ██   ██    ██    ██   ██
-    ██████  █████   ███████ ██   ██     ██   ██ ███████    ██    ███████
-    ██   ██ ██      ██   ██ ██   ██     ██   ██ ██   ██    ██    ██   ██
-    ██   ██ ███████ ██   ██ ██████      ██████  ██   ██    ██    ██   ██
-    */
-
-    (function() {
-      let blob = null;
-      let xhr = new XMLHttpRequest();
-      xhr.open("GET", "HIV_Data_by_reg.csv");
-      xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
-      xhr.onload = function() {
-        blob = xhr.response; //xhr.response is now a blob object
-        myReader.readAsText(blob);
+      window.onresize = function() {
+        setPosition(findPosition());
       };
-      xhr.send();
+    };
 
-      let myReader = new FileReader();
-      myReader.addEventListener("loadend", function(e) {
+  };
 
-        data = newDataProseed(e.srcElement.result);
-        initAll();
-        renderAll();
 
-      });
-    })();
+  function mapMainMobile(data) {
+
+    this.data = data;
+    let mapMain = this;
+
+    // -------------Map State------------
+    this.state = {
+      year: 1999,
+      regionId: "Москва",
+      display: "abs"
+    };
+
+    let dropDown = new DropDown(this,$(".map.hide-desktop"));
+    let popUp = new PopUp(this,$(".hide-desktop .banner"),50,true);
+    let togleBtn = new TogleBtn(this);
+    let yearSelect = new YearSelect(this, $('.year-select'));
+
+    this.render = function() {
+      dropDown.render();
+      popUp.render();
+      togleBtn.render();
+      yearSelect.render();
+    };
+
+
+    this.init = function() {
+      dropDown.scroller.create();
+    };
 
   };
 
 
 
-  /*
-  ██████  ███████  ██████  ██ ███    ██ ███████
-  ██   ██ ██      ██       ██ ████   ██ ██
-  ██████  █████   ██   ███ ██ ██ ██  ██ █████
-  ██   ██ ██      ██    ██ ██ ██  ██ ██ ██
-  ██████  ███████  ██████  ██ ██   ████ ███████
-  */
-
-
-
   $(function() {
 
-    $(".map_body").load("map.svg");
+
 
     let newInfectedChart = (() => {
 
@@ -944,10 +940,8 @@
 
       let bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
 
-      //rgb(24,179,172)
-      //rgb(203,132,125)
+
       let startColor = [228, 152, 152];
-      //rgb(190,32,37)
       let endColor = [190, 32, 37];
       let max = 100 * 1000;
 
@@ -990,6 +984,11 @@
       }
 
     })();
+
+
+
+
+
 
 
     let keyReasonChart = (() => {
@@ -1518,9 +1517,34 @@
 
     let sideBars = new SideBars();
 
+    let getDataAndMap = function() {
+      let blob = null;
+      let xhr = new XMLHttpRequest();
+      xhr.open("GET", "HIV_Data_by_reg.csv");
+      xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
+      xhr.onload = function() {
+        blob = xhr.response; //xhr.response is now a blob object
+        myReader.readAsText(blob);
+      };
+      xhr.send();
+
+      let myReader = new FileReader();
+      myReader.addEventListener("loadend", function(e) {
+
+        let data = newDataProseed(e.srcElement.result);
+        let map = new mapMain(data);
+        let mapMobile = new mapMainMobile(data)
+        map.init()
+        map.render();
+        mapMobile.init();
+        mapMobile.render();
+      });
+
+    }
+
     let mainElems = [
       // new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
-      new hookUpQueston(1, $(".question-two"), 3, ".plate5", mapMain),
+      // new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap),
       new hookUpQueston(2, $(".question-three"), 2, ".answer-three", newInfectedChart.show),
       new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"),
       new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
@@ -1530,7 +1554,9 @@
     ];
 
 
-    mainElems.forEach(elem => elem.init());
+    // mainElems.forEach(elem => elem.init());
+
+
     // mainElems.forEach(elem => elem.show());
 
 
@@ -1697,4 +1723,4 @@
 
 
   //all code is wrapped  in iiaf to prevent main scope pollution
-})();
+});
