@@ -908,7 +908,82 @@ $(".map_body").load("map.svg", function() {
 
   $(function() {
 
+    let newInfectedChartMobile = (() => {
 
+      let data = [
+        100,
+        203,
+        1513,
+        4315,
+        3971,
+        19758,
+        59609,
+        88739,
+        52170,
+        39232,
+        37002,
+        39407,
+        43007,
+        44713,
+        54563,
+        58410,
+        58298,
+        62387,
+        70832,
+        79764,
+        89667,
+        93000,
+      ];
+
+
+      let bars = document.querySelectorAll('.chart.newInfected-mobile .body .canvas .block');
+
+
+      let startColor = [228, 152, 152];
+      let endColor = [190, 32, 37];
+      let max = 100 * 1000;
+
+      let i = 0;
+
+      let rendernewInfected = function() {
+        if (i >= data.length) {
+          let labels = document.querySelectorAll('.newInfected_label_text');
+          [].forEach.call(labels, elem => elem.style.opacity = 0.9);
+          return;
+        }
+        let val = data[i];
+        if (val < 4000) {
+          bars[i].style.backgroundColor = 'rgb(24,179,172)';
+          bars[i].style.marginLeft = -190 * 0.98 + "px";
+        } else {
+          let color = getColorMeta(startColor, endColor, val / max);
+          bars[i].style.backgroundColor = `rgb(${color})`;
+          bars[i].style.marginLeft = (0 - 190) * (1 - val / max)  + "px";
+        }
+
+        if (i == 3) {
+          bars[i].style.backgroundColor = 'rgb(24,179,172)';
+        }
+
+        i++;
+        setTimeout(rendernewInfected, 30);
+      };
+
+      let show = () => {
+
+        setTimeout(function() {
+          rendernewInfected();
+        }, 1000);
+
+      };
+
+      return {
+        show
+      }
+
+    })();
+
+  // newInfectedChartMobile.show();
 
     let newInfectedChart = (() => {
 
@@ -986,9 +1061,7 @@ $(".map_body").load("map.svg", function() {
     })();
 
 
-
-
-
+// newInfectedChart.show();
 
 
     let keyReasonChart = (() => {
@@ -1015,15 +1088,15 @@ $(".map_body").load("map.svg", function() {
         [79.1, 17.8, 2.7, 0.4],
         [91.8, 7.4, 0.6, 0.1],
         [95.5, 4.2, 0.2, 0.1],
-        [93.3, 6.4, 0.2, 0.2],
+        [93.2, 6.4, 0.2, 0.2],
         [81.2, 17.7, 0.4, 0.7],
         [72.3, 25.4, 0.5, 1.7],
         [66.7, 29.9, 0.8, 2.5],
-        [64.2, 31.8, 1.1, 3.0],
+        [64.1, 31.8, 1.1, 3.0],
         [63.3, 33.0, 0.7, 2.9],
         [61.5, 35.2, 1.0, 2.3],
         [61.3, 35.6, 1.1, 2.0],
-        [59.8, 37.1, 1.4, 1.8],
+        [59.8, 37, 1.4, 1.8],
         [57.9, 39.7, 1.3, 1.1],
         [56.2, 41.4, 1.3, 1.1],
         [56.4, 41.7, 1.1, 0.8],
@@ -1035,6 +1108,8 @@ $(".map_body").load("map.svg", function() {
 
       let years = document.querySelectorAll('.key-reason-canvas .year');
 
+      let yearsMobile = document.querySelectorAll(".key-reason-mobile .year");
+
       let setValue = function(year, valArr) {
         let bars = year.querySelectorAll(".bar");
         [].forEach.call(bars, function(elem, i) {
@@ -1045,17 +1120,20 @@ $(".map_body").load("map.svg", function() {
         });
       };
 
+      let setValueMobile = function(year, valArr) {
+        let bars = year.querySelectorAll(".bar");
+        [].forEach.call(bars, function(elem, i) {
+          let name = barsPosition[i];
+          let percent = valArr[legend[name]];
+          elem.classList.add(name);
+          elem.style.width = percent + "%";
+        });
+      };
+
       let setYears = (i, fn, years) => {
         if (i > years.length - 1) return;
         fn(years[i], valMatrix[i]);
         setTimeout(setYears, 80, ++i, fn, years);
-      };
-
-
-      let initYears = (i, fn) => {
-        if (i > 20) return;
-        fn(years[i], defYearVal);
-        initYears(++i, fn);
       };
 
       let startIndex = 0;
@@ -1063,15 +1141,23 @@ $(".map_body").load("map.svg", function() {
       let show = () => {
         // setYears(startIndex, setValue, years)
         setTimeout(setYears, 1000, 0, setValue, years);
+        setTimeout(setYears, 1000, 0, setValueMobile, yearsMobile);
       }
 
       //move init to some global init
-      initYears(startIndex, setValue);
+
+      let initYears = (i, fn, years) => {
+        if (i > 20) return;
+        fn(years[i], defYearVal);
+        initYears(++i, fn,years);
+      };
+
+      initYears(startIndex, setValue,years);
+      initYears(startIndex,setValueMobile,yearsMobile)
 
       return {
         show: show,
       }
-
 
     })();
 
@@ -1086,7 +1172,15 @@ $(".map_body").load("map.svg", function() {
       let rightAnswer = 12;
 
 
+      let renderMobile = (percent) => {
+        $(".answers-mobile.hide-desktop .red-meter-9")[0].style.left = (-1+percent) * 100 + "%";
+        $(".valuepicker-mobile-picker-9")[0].style.left = (percent) * 235 + "px";
+        $(".valuepicker-mobile-picker-9").text(Math.round(percent * 14) + 1);
+      }
+
+
       let render = (percent) => {
+        renderMobile(percent)
         ribbonSlider.style.left = percent * max + "px";
         meter.style.left = (0 - (1 - percent) * 100) + "%";
         text.innerHTML = Math.round(percent * 14) + 1;
@@ -1120,12 +1214,31 @@ $(".map_body").load("map.svg", function() {
         drag: onDrag,
       });
 
+      let onDragMobile = (event, ui) => {
+        percent = ui.position.left / 235;
+        render(percent);
+
+        //обработку правильно ответа решил проводить в серекторе по этому можно
+        // не передовать состояние селектора в состояние вопроса
+        state.selected = Math.round(percent * 14) + 1;
+        //callback call
+        fn();
+      };
+
+      $(".valuepicker-mobile-picker-9").draggable({
+        containment: "parent",
+        axis: "x",
+        drag: onDragMobile,
+      });
+
+
       let isRight = () => (Math.round(percent * 14) + 1 == rightAnswer)
 
       return {
         isRight
       }
     };
+
 
     let valPicker2 = function(fn, state) {
       let meter = document.querySelector('.red-meter-8');
@@ -1137,7 +1250,14 @@ $(".map_body").load("map.svg", function() {
       let rightAnswer = 40;
 
 
+      let renderMobile = (percent) => {
+        $(".answers-mobile.hide-desktop .red-meter-8")[0].style.left = (-1+percent) * 100 + "%";
+        $(".valuepicker-mobile-picker-8")[0].style.left = (percent) * 235 + "px";
+        $(".valuepicker-mobile-picker-8").text(Math.round(percent * 100) + "%");
+      }
+
       let render = (percent) => {
+        renderMobile(percent);
         ribbonSlider.style.left = percent * max + "px";
         meter.style.left = (0 - (1 - percent) * 100) + "%";
         text.innerHTML = Math.round(percent * 100) + "%";
@@ -1172,8 +1292,26 @@ $(".map_body").load("map.svg", function() {
         drag: onDrag,
       });
 
+
+      let onDragMobile = (event, ui) => {
+        percent = ui.position.left / 235;
+        render(percent);
+
+        //обработку правильно ответа решил проводить в серекторе по этому можно
+        // не передовать состояние селектора в состояние вопроса
+        state.selected = Math.round(percent * 100);
+        //callback call
+        fn();
+      };
+
+      $(".valuepicker-mobile-picker-8").draggable({
+        containment: "parent",
+        axis: "x",
+        drag: onDragMobile,
+      });
+
       let isRight = () => {
-        return Math.round(percent * 100) == rightAnswer
+        return Math.round(percent * 100) == rightAnswer;
       }
 
       return {
@@ -1181,6 +1319,7 @@ $(".map_body").load("map.svg", function() {
       }
 
     };
+
 
     let valPicker3 = function(fn, state) {
       let circle = document.querySelector('.guess-growth-main-small');
@@ -1211,22 +1350,43 @@ $(".map_body").load("map.svg", function() {
       let calculeteNewVal = h => 1000000 + (4000000) * (1 - h / 230);
 
       let onDrag = (event, ui) => {
+
         let h = ui.position.top;
         r = calculeteNewR(ui.position.top);
         selectedVal = calculeteNewVal(h)
         text = valToText(selectedVal);
         requestAnimationFrame(changeR);
         requestAnimationFrame(changeText);
-        //что записывать в состояние
+        //что записывать в состояние. Это вообще используется?
         state.selected = h / 230;
         fn();
       };
+
+      let onDragY = (event, ui) => {
+
+        let h = 230 - ui.position.left;
+        r = calculeteNewR(h);
+        selectedVal = calculeteNewVal(h)
+        text = valToText(selectedVal);
+        requestAnimationFrame(changeR);
+        requestAnimationFrame(changeText);
+        //что записывать в состояние. Это вообще используется?
+        state.selected = h / 230;
+        fn();
+      };
+
+      $(".valuepicker-mobile-picker").draggable({
+        containment: "parent",
+        axis: "x",
+        drag: onDragY,
+      });
 
       $(".valuepicker-picker").draggable({
         containment: "parent",
         axis: "y",
         drag: onDrag,
       });
+
 
       let isRight = () => (selectedVal < 3000000 && selectedVal > 2000000)
 
@@ -1543,9 +1703,10 @@ $(".map_body").load("map.svg", function() {
     }
 
     let mainElems = [
-      // new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
-      // new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap),
-      new hookUpQueston(2, $(".question-three"), 2, ".answer-three", newInfectedChart.show),
+      new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
+      new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap),
+      new hookUpQueston(2, $(".question-three"), 2, ".answer-three",
+                          function() { newInfectedChart.show(); newInfectedChartMobile.show(); }),
       new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"),
       new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
       new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"),
@@ -1554,7 +1715,7 @@ $(".map_body").load("map.svg", function() {
     ];
 
 
-    // mainElems.forEach(elem => elem.init());
+    mainElems.forEach(elem => elem.init());
 
 
     // mainElems.forEach(elem => elem.show());

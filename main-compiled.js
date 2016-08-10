@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+$(".map_body").load("map.svg", function () {
 
   var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
@@ -192,6 +192,511 @@
   window.onscroll = onscroll;
 
   /*
+  ██      ███████  ██████  ███████ ███    ██ ██████
+  ██      ██      ██       ██      ████   ██ ██   ██
+  ██      █████   ██   ███ █████   ██ ██  ██ ██   ██
+  ██      ██      ██    ██ ██      ██  ██ ██ ██   ██
+  ███████ ███████  ██████  ███████ ██   ████ ██████
+  */
+
+  function Legend(mapMain) {
+
+    var initColors = function initColors() {
+      $(".legend .bloc .color").each(function (id, e) {
+        var color = getColor((id + 1) / 10);
+        $(e).css({
+          "background-color": color
+        });
+      });
+    };
+
+    var renderValues = function renderValues() {
+      var multiplier = mapMain.state.display == "abs" ? 100 : 10;
+
+      $(".legend .bloc .val").each(function (id, e) {
+        $(e).text(multiplier * Math.pow(2, id));
+      });
+    };
+
+    this.init = function () {
+      initColors();
+      renderValues();
+    };
+
+    this.render = function () {
+      renderValues();
+    };
+  }
+
+  /*
+  ██    ██ ███████  █████  ██████  ███████
+   ██  ██  ██      ██   ██ ██   ██ ██
+    ████   █████   ███████ ██████  ███████
+     ██    ██      ██   ██ ██   ██      ██
+     ██    ███████ ██   ██ ██   ██ ███████
+  */
+
+  function Years(mapMain) {
+    this.render = function () {
+
+      $(".years .col").each(function (id, e) {
+        var year = parseInt($(e).attr("id"));
+        if (year === mapMain.state.year) {
+          $(e).addClass("active");
+        } else {
+          $(e).removeClass("active");
+        }
+      });
+    };
+
+    // _____________click__________
+
+    $(".years .col").on("click", function (e) {
+      e.stopPropagation();
+      var year = parseInt($(this).attr("id"));
+      mapMain.state.year = year;
+      mapMain.render();
+    });
+  }
+
+  /*
+  ███████  ██████ ██████   ██████  ██      ██      ███████ ██████
+  ██      ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
+  ███████ ██      ██████  ██    ██ ██      ██      █████   ██████
+       ██ ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
+  ███████  ██████ ██   ██  ██████  ███████ ███████ ███████ ██   ██
+  */
+
+  function Scroller(mainElem) {
+
+    var scrollContainer = mainElem[0],
+        scrollContentWrapper = mainElem.find('.content-wrapper')[0],
+        scrollContent = mainElem.find('.content')[0],
+        contentPosition = 0,
+        scrollerBeingDragged = false,
+        scroller = void 0,
+        topPosition = void 0,
+        scrollerHeight = void 0,
+        normalizedPosition = void 0;
+
+    function calculateScrollerHeight() {
+      // *Calculation of how tall scroller should be
+      var visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
+      visibleRatio = 0.05;
+      return visibleRatio * scrollContainer.offsetHeight;
+    }
+
+    function moveScroller(evt) {
+      // Move Scroll bar to top offset
+      var scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
+      topPosition = scrollPercentage * (scrollContainer.offsetHeight * 0.915) + scrollContainer.offsetHeight * 0.05; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
+      scroller.style.top = topPosition + 'px';
+    }
+
+    function startDrag(evt) {
+      normalizedPosition = evt.pageY;
+      contentPosition = scrollContentWrapper.scrollTop;
+      scrollerBeingDragged = true;
+    }
+
+    function stopDrag(evt) {
+      scrollerBeingDragged = false;
+    }
+
+    function scrollBarScroll(evt) {
+      if (scrollerBeingDragged === true) {
+        var mouseDifferential = evt.pageY - normalizedPosition;
+        var scrollEquivalent = mouseDifferential * (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
+        scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
+      }
+    }
+
+    this.create = function () {
+      // *Creates scroller element and appends to '.scrollable' div
+      // create scroller element
+      scroller = document.createElement("div");
+      scroller.className = 'scroller';
+
+      // determine how big scroller should be based on content
+      scrollerHeight = calculateScrollerHeight();
+
+      if (scrollerHeight / scrollContainer.offsetHeight < 1) {
+        // *If there is a need to have scroll bar based on content size
+        scroller.style.height = scrollerHeight + 'px';
+
+        // append scroller to scrollContainer div
+        scrollContainer.appendChild(scroller);
+
+        // show scroll path divot
+        scrollContainer.className += ' showScroll';
+
+        // attach related draggable listeners
+        scroller.addEventListener('mousedown', startDrag);
+        window.addEventListener('mouseup', stopDrag);
+        window.addEventListener('mousemove', scrollBarScroll);
+      }
+    };
+
+    // *** Listeners ***
+    scrollContentWrapper.addEventListener('scroll', moveScroller);
+  }
+
+  /*
+  ██████  ██ ███████  ██████ ██   ██  █████  ██████  ████████
+  ██   ██ ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
+  ██████  ██ █████   ██      ███████ ███████ ██████     ██
+  ██      ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
+  ██      ██ ███████  ██████ ██   ██ ██   ██ ██   ██    ██
+  */
+
+  function PieChart(mainElem, rad) {
+    var path = null;
+    var svgElem = mainElem.find("#svg-pie")[0];
+
+    this.render = function (deg) {
+      if (!svgElem) return;
+      if (path) {
+        svgElem.removeChild(path);
+        path = null;
+      }
+      if (isNaN(deg)) return;
+
+      if (deg > 359) {
+        path = svgElem.querySelector("circle").cloneNode(true);
+        path.setAttribute("fill", "url(#img1)");
+        svgElem.appendChild(path);
+        return;
+      }
+
+      var cx = rad,
+          cy = rad,
+          rx = rad,
+          ry = rad;
+
+      var p = svgElem.createSVGPoint();
+      p.x = 0;
+      p.y = 1;
+
+      var m = svgElem.createSVGMatrix();
+
+      var p2 = p.matrixTransform(m.rotate(deg));
+
+      p2.x = cx - p2.x * rx;
+      p2.y = cy - p2.y * ry;
+
+      path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+      var d = void 0;
+
+      if (deg > 180) {
+        d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+      } else {
+        d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
+      }
+
+      path.setAttribute("d", d);
+      path.setAttribute("fill", "url(#img1)");
+
+      svgElem.appendChild(path);
+    };
+  }
+
+  /*
+  ██████   ██████  ██████  ██    ██ ██████
+  ██   ██ ██    ██ ██   ██ ██    ██ ██   ██
+  ██████  ██    ██ ██████  ██    ██ ██████
+  ██      ██    ██ ██      ██    ██ ██
+  ██       ██████  ██       ██████  ██
+  */
+
+  function PopUp(mapMain, mainElem, rad, isMobile) {
+
+    var pieChart = new PieChart(mainElem, rad);
+
+    var popUp = mainElem;
+    var closeButton = popUp.find(".head .btn.close");
+    var pieContainer = popUp.find(".body .pie");
+
+    var dataFields = popUp.find(".body .data .item");
+    var stateNameFeald = popUp.find(".head .region span");
+    var infectedFeald = dataFields.find(".infected");
+    var diedFeald = dataFields.find(".dead");
+    var infectedTextFeald = $(dataFields.find(".leble")[0]);
+
+    var close = function close() {
+      hide();
+      mapMain.state.regionId = "";
+      mapMain.render();
+    };
+
+    closeButton.click(function (e) {
+      close();
+    });
+
+    var hide = function hide() {
+      popUp.css('opacity', 0);
+      popUp.css('visibility', "hidden");
+    };
+
+    var open = function open() {
+      popUp.css('opacity', 1);
+      popUp.css('visibility', "visible");
+    };
+
+    popUp.click(function (e) {
+      e.stopPropagation();
+    });
+
+    this.render = function () {
+      if (!mapMain.state.regionId) {
+        hide();
+        return;
+      }
+
+      var name = void 0,
+          infected = void 0,
+          died = void 0,
+          infectedText = void 0;
+      if (isMobile) {
+        name = mapMain.data[mapMain.state.regionId].shortName;
+      } else {
+        name = mapMain.data[mapMain.state.regionId].name;
+      }
+
+      if (mapMain.state.display == "rel") {
+        pieContainer.hide();
+        $(dataFields[1]).hide();
+        $(dataFields[0]).find(".infected").css({
+          width: "auto"
+        });
+        died = null;
+        infected = mapMain.data[mapMain.state.regionId].relInfected[mapMain.state.year] || "н/д";
+        infectedText = "Число инфицированных на 100 тысяч населения";
+      } else {
+        infected = mapMain.data[mapMain.state.regionId].absInfected[mapMain.state.year] || "н/д";
+        died = mapMain.data[mapMain.state.regionId].absDied[mapMain.state.year] || "н/д";
+        pieContainer.show();
+        $(dataFields[1]).show();
+        $(dataFields[0]).find(".infected").css({
+          width: "23%"
+        });
+        pieChart.render(360 * (died / infected));
+        infectedText = "Общее число инфицированных";
+      }
+
+      stateNameFeald.text(name);
+      infectedFeald.text(infected);
+      infectedTextFeald.text(infectedText);
+      diedFeald.text(died);
+
+      // if (mapMain.state.regionId && !isMobile) {
+      //    setPosition(findPosition());
+      // }
+      open();
+    };
+  }
+
+  function YearSelect(mapMain, mainElem) {
+    var year = mainElem.find(".selected-year");
+    var moreBtn = mainElem.find(".more");
+    var lessBtn = mainElem.find(".less");
+
+    moreBtn.click(function () {
+      if (mapMain.state.year < 2014) mapMain.state.year++;
+      mapMain.render();
+    });
+
+    lessBtn.click(function () {
+      if (mapMain.state.year > 1994) mapMain.state.year--;
+      mapMain.render();
+    });
+
+    this.render = function () {
+      year.text(mapMain.state.year);
+    };
+  }
+
+  /*
+  ███    ███  █████  ██████
+  ████  ████ ██   ██ ██   ██
+  ██ ████ ██ ███████ ██████
+  ██  ██  ██ ██   ██ ██
+  ██      ██ ██   ██ ██
+  */
+
+  function Map(mapMain) {
+
+    this.render = null;
+    this.selectedReg = null;
+    this.mapElem = document.getElementById("svg-map");
+    var that = this;
+
+    var regions = $("#svg-map path, #svg-map polygon");
+    var selectedReg = null;
+
+    var setRegsColor = function setRegsColor(year) {
+      Object.keys(mapMain.data).forEach(function (reginoId) {
+
+        var value = void 0,
+            percent = void 0;
+
+        if (mapMain.state.display == "abs") {
+
+          value = mapMain.data[reginoId].absInfected[year];
+
+          if (value < 100) {
+            percent = 0;
+          } else {
+            percent = Math.log2(value / 100) / 9;
+          }
+        } else {
+          value = mapMain.data[reginoId].relInfected[year];
+
+          if (value < 10) {
+            percent = 0;
+          } else {
+            percent = Math.log2(value / 10) / 9;
+          }
+        }
+
+        $('#' + reginoId).css({
+          'fill': getColor(percent)
+        });
+      });
+    };
+
+    var setSelectedRegion = function setSelectedRegion(regionId) {
+      that.selectedReg && that.selectedReg.classList.remove('selected');
+      if (regionId) {
+        that.selectedReg = document.getElementById(regionId);
+        that.selectedReg.classList.add('selected');
+      }
+    };
+
+    this.render = function () {
+      setRegsColor(mapMain.state.year);
+      setSelectedRegion(mapMain.state.regionId);
+      if (mapMain.state.regionId) {
+        this.mapElem.classList.add('regSelected');
+      } else {
+        this.mapElem.classList.remove('regSelected');
+      }
+    };
+
+    regions.click(function (e) {
+      e.stopPropagation();
+      if (e.target.id === mapMain.state.regionId) {
+        that.mapElem.classList.remove('regSelected');
+        mapMain.state.regionId = "";
+      } else {
+        mapMain.state.regionId = e.target.id;
+        e.target.parentElement.insertBefore(e.target, null);
+      }
+      mapMain.render();
+    });
+  }
+
+  function TogleBtn(mapMain) {
+    var btn = $(".map .map_header .btn");
+
+    btn.click(function (e) {
+      e.stopPropagation();
+      mapMain.state.display = this.dataset.displaytype;
+      mapMain.render();
+    });
+
+    var setButtons = function setButtons(display) {
+      btn.each(function (i, elem) {
+        if (elem.dataset.displaytype == display) elem.classList.add('active');else elem.classList.remove('active');
+      });
+    };
+
+    this.render = function () {
+      setButtons(mapMain.state.display);
+    };
+  }
+
+  /*
+  ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
+  ██   ██ ██   ██ ██    ██ ██   ██     ██   ██ ██    ██ ██     ██ ████   ██
+  ██   ██ ██████  ██    ██ ██████      ██   ██ ██    ██ ██  █  ██ ██ ██  ██
+  ██   ██ ██   ██ ██    ██ ██          ██   ██ ██    ██ ██ ███ ██ ██  ██ ██
+  ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
+  */
+
+  function DropDown(mapMain, mainElem) {
+
+    var that = this;
+    var isOpen = false;
+    var $select = mainElem.find(".map_header .drop_down .head");
+    var scrollable = mainElem.find(".scrollable");
+    var closeImg = mainElem.find(".map_header .item.drop_down .close_button img");
+
+    var container = scrollable.find(".content");
+
+    var head = mainElem.find(".drop_down .text");
+
+    $select.click(function (e) {
+      e.stopPropagation();
+      if (isOpen) {
+        that.close();
+      } else {
+        that.open();
+      }
+    });
+
+    $(".scrollable").click(function (e) {
+      e.stopPropagation();
+    });
+
+    this.close = function () {
+      scrollable.css('visibility', 'hidden');
+      isOpen = false;
+      closeImg[0].style.transform = "rotate(0deg)";
+    };
+
+    this.open = function () {
+      scrollable.css('visibility', 'visible');
+      isOpen = true;
+      closeImg[0].style.transform = "rotate(180deg)";
+    };
+
+    this.render = function () {
+      if (mapMain.state.regionId) {
+        head.text(mapMain.data[mapMain.state.regionId].shortName);
+      } else {
+        head.text("Регион");
+      }
+
+      // Dirty Hack
+      container.empty();
+      Object.keys(mapMain.data).forEach(function (region) {
+
+        var shortName = mapMain.data[region].shortName;
+
+        var elem = $("<div class=\"item\" data-regionId=\"" + region + "\"> " + shortName + " </div>");
+
+        if (region === mapMain.state.regionId) {
+          elem = $("<div class=\"active\" data-regionId=\"" + region + "\"> " + shortName + " </div>");
+        }
+
+        container.append(elem);
+
+        elem.click(function (e) {
+          console.log("click");
+          e.stopPropagation();
+          mapMain.state.regionId = this.dataset.regionid;
+          mapMain.render();
+          that.close();
+        });
+      });
+      that.close();
+    };
+
+    this.scroller = new Scroller(mainElem.find(".scrollable"));
+  }
+
+  /*
   ███    ███  █████  ██████      ███    ███  █████  ██ ███    ██
   ████  ████ ██   ██ ██   ██     ████  ████ ██   ██ ██ ████   ██
   ██ ████ ██ ███████ ██████      ██ ████ ██ ███████ ██ ██ ██  ██
@@ -199,633 +704,173 @@
   ██      ██ ██   ██ ██          ██      ██ ██   ██ ██ ██   ████
   */
 
-  var mapMain = function mapMain() {
+  function mapMain(data) {
 
-    /*
-    ███    ███  █████  ██████
-    ████  ████ ██   ██ ██   ██
-    ██ ████ ██ ███████ ██████
-    ██  ██  ██ ██   ██ ██
-    ██      ██ ██   ██ ██
-    */
-
-    function Map() {
-
-      this.render = null;
-      this.selectedReg = null;
-      this.mapElem = null;
-      this.mapElem = document.getElementById("svg-map");
-      var that = this;
-
-      var regions = $("#svg-map path, #svg-map polygon");
-      var btn = $(".map .map_header .btn");
-      var selectedReg = null;
-
-      btn.click(function (e) {
-        e.stopPropagation();
-        state.display = this.dataset.displaytype;
-        renderAll();
-      });
-
-      var setRegsColor = function setRegsColor(year) {
-
-        Object.keys(data).forEach(function (reginoId) {
-
-          var value = void 0,
-              percent = void 0;
-
-          if (state.display == "abs") {
-
-            value = data[reginoId].absInfected[year];
-
-            if (value < 100) {
-              percent = 0;
-            } else {
-              percent = Math.log2(value / 100) / 9;
-            }
-          } else {
-            value = data[reginoId].relInfected[year];
-
-            if (value < 10) {
-              percent = 0;
-            } else {
-              percent = Math.log2(value / 10) / 9;
-            }
-          }
-
-          $('#' + reginoId).css({
-            'fill': getColor(percent)
-          });
-        });
-      };
-
-      var setSelectedRegion = function setSelectedRegion(regionId) {
-        that.selectedReg && that.selectedReg.classList.remove('selected');
-        if (regionId) {
-          that.selectedReg = document.getElementById(regionId);
-          that.selectedReg.classList.add('selected');
-        }
-      };
-
-      var setButtons = function setButtons(display) {
-        btn.each(function (i, elem) {
-          if (elem.dataset.displaytype == display) elem.classList.add('active');else elem.classList.remove('active');
-        });
-      };
-
-      var render = function render() {
-        setRegsColor(state.year);
-        setSelectedRegion(state.regionId);
-        setButtons(state.display);
-        if (state.regionId) {
-          that.mapElem.classList.add('regSelected');
-        } else {
-          that.mapElem.classList.remove('regSelected');
-        }
-      };
-
-      regions.click(function (e) {
-        e.stopPropagation();
-        if (e.target.id === state.regionId) {
-          that.mapElem.classList.remove('regSelected');
-          state.regionId = "";
-        } else {
-          state.regionId = e.target.id;
-          e.target.parentElement.insertBefore(e.target, null);
-        }
-        renderAll();
-      });
-
-      this.render = render;
-      this.selectedReg = selectedReg;
-    }
-
-    /*
-    ██      ███████  ██████  ███████ ███    ██ ██████
-    ██      ██      ██       ██      ████   ██ ██   ██
-    ██      █████   ██   ███ █████   ██ ██  ██ ██   ██
-    ██      ██      ██    ██ ██      ██  ██ ██ ██   ██
-    ███████ ███████  ██████  ███████ ██   ████ ██████
-    */
-
-    function Legend() {
-
-      var initColors = function initColors() {
-        $(".legend .bloc .color").each(function (id, e) {
-          var color = getColor((id + 1) / 10);
-          $(e).css({
-            "background-color": color
-          });
-        });
-      };
-
-      var renderValues = function renderValues() {
-        var multiplier = state.display == "abs" ? 100 : 10;
-
-        $(".legend .bloc .val").each(function (id, e) {
-          $(e).text(multiplier * Math.pow(2, id));
-        });
-      };
-
-      this.init = function () {
-        initColors();
-        renderValues();
-      };
-
-      this.render = function () {
-        renderValues();
-      };
-    }
-
-    /*
-    ██    ██ ███████  █████  ██████  ███████
-     ██  ██  ██      ██   ██ ██   ██ ██
-      ████   █████   ███████ ██████  ███████
-       ██    ██      ██   ██ ██   ██      ██
-       ██    ███████ ██   ██ ██   ██ ███████
-    */
-
-    function Years() {
-      this.render = function () {
-
-        $(".years .col").each(function (id, e) {
-          var year = parseInt($(e).attr("id"));
-          if (year === state.year) {
-            $(e).addClass("active");
-          } else {
-            $(e).removeClass("active");
-          }
-        });
-      };
-
-      // _____________click__________
-
-      $(".years .col").on("click", function (e) {
-        e.stopPropagation();
-        var year = parseInt($(this).attr("id"));
-        state.year = year;
-        renderAll();
-      });
-    }
-
-    /*
-    ███████  ██████ ██████   ██████  ██      ██      ███████ ██████
-    ██      ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
-    ███████ ██      ██████  ██    ██ ██      ██      █████   ██████
-         ██ ██      ██   ██ ██    ██ ██      ██      ██      ██   ██
-    ███████  ██████ ██   ██  ██████  ███████ ███████ ███████ ██   ██
-    */
-
-    function Scroller(mainElem) {
-
-      var scrollContainer = mainElem[0],
-          scrollContentWrapper = mainElem.find('.content-wrapper')[0],
-          scrollContent = mainElem.find('.content')[0],
-          contentPosition = 0,
-          scrollerBeingDragged = false,
-          scroller = void 0,
-          topPosition = void 0,
-          scrollerHeight = void 0,
-          normalizedPosition = void 0;
-
-      console.log(scrollContainer);
-
-      function calculateScrollerHeight() {
-        // *Calculation of how tall scroller should be
-        var visibleRatio = scrollContainer.offsetHeight / scrollContentWrapper.scrollHeight;
-        visibleRatio = 0.05;
-        return visibleRatio * scrollContainer.offsetHeight;
-      }
-
-      function moveScroller(evt) {
-        // Move Scroll bar to top offset
-        var scrollPercentage = evt.target.scrollTop / scrollContentWrapper.scrollHeight;
-        topPosition = scrollPercentage * (scrollContainer.offsetHeight * 0.915) + scrollContainer.offsetHeight * 0.05; // 5px arbitrary offset so scroll bar doesn't move too far beyond content wrapper bounding box
-        scroller.style.top = topPosition + 'px';
-      }
-
-      function startDrag(evt) {
-        normalizedPosition = evt.pageY;
-        contentPosition = scrollContentWrapper.scrollTop;
-        scrollerBeingDragged = true;
-      }
-
-      function stopDrag(evt) {
-        scrollerBeingDragged = false;
-      }
-
-      function scrollBarScroll(evt) {
-        if (scrollerBeingDragged === true) {
-          var mouseDifferential = evt.pageY - normalizedPosition;
-          var scrollEquivalent = mouseDifferential * (scrollContentWrapper.scrollHeight / scrollContainer.offsetHeight);
-          scrollContentWrapper.scrollTop = contentPosition + scrollEquivalent;
-        }
-      }
-
-      this.create = function () {
-        // *Creates scroller element and appends to '.scrollable' div
-        // create scroller element
-        scroller = document.createElement("div");
-        scroller.className = 'scroller';
-
-        // determine how big scroller should be based on content
-        scrollerHeight = calculateScrollerHeight();
-
-        if (scrollerHeight / scrollContainer.offsetHeight < 1) {
-          // *If there is a need to have scroll bar based on content size
-          scroller.style.height = scrollerHeight + 'px';
-
-          // append scroller to scrollContainer div
-          scrollContainer.appendChild(scroller);
-
-          // show scroll path divot
-          scrollContainer.className += ' showScroll';
-
-          // attach related draggable listeners
-          scroller.addEventListener('mousedown', startDrag);
-          window.addEventListener('mouseup', stopDrag);
-          window.addEventListener('mousemove', scrollBarScroll);
-        }
-      };
-
-      // *** Listeners ***
-      scrollContentWrapper.addEventListener('scroll', moveScroller);
-    }
-
-    /*
-    ██████  ██████   ██████  ██████      ██████   ██████  ██     ██ ███    ██
-    ██   ██ ██   ██ ██    ██ ██   ██     ██   ██ ██    ██ ██     ██ ████   ██
-    ██   ██ ██████  ██    ██ ██████      ██   ██ ██    ██ ██  █  ██ ██ ██  ██
-    ██   ██ ██   ██ ██    ██ ██          ██   ██ ██    ██ ██ ███ ██ ██  ██ ██
-    ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
-    */
-
-    function DropDowdn(mainElem) {
-
-      var that = this;
-      var isOpen = false;
-      var $select = mainElem.find(".map_header .drop_down .head");
-      var scrollable = mainElem.find(".scrollable");
-      var closeImg = mainElem.find(".map_header .item.drop_down .close_button img");
-
-      var container = scrollable.find(".content");
-
-      var head = mainElem.find(".drop_down .text");
-
-      $select.click(function (e) {
-        e.stopPropagation();
-        if (isOpen) {
-          that.close();
-        } else {
-          that.open();
-        }
-      });
-
-      $(".scrollable").click(function (e) {
-        e.stopPropagation();
-      });
-
-      this.close = function () {
-        scrollable.css('visibility', 'hidden');
-        isOpen = false;
-        closeImg[0].style.transform = "rotate(0deg)";
-      };
-
-      this.open = function () {
-        scrollable.css('visibility', 'visible');
-        isOpen = true;
-        closeImg[0].style.transform = "rotate(180deg)";
-      };
-
-      this.render = function () {
-        if (state.regionId) {
-          head.text(data[state.regionId].shortName);
-        } else {
-          head.text("Регион");
-        }
-
-        // Dirty Hack
-        container.empty();
-        Object.keys(data).forEach(function (region) {
-
-          var shortName = data[region].shortName;
-
-          var elem = $("<div class=\"item\" data-regionId=\"" + region + "\"> " + shortName + " </div>");
-
-          if (region === state.regionId) {
-            elem = $("<div class=\"active\" data-regionId=\"" + region + "\"> " + shortName + " </div>");
-          }
-
-          container.append(elem);
-
-          elem.click(function (e) {
-            console.log("click");
-            e.stopPropagation();
-            state.regionId = this.dataset.regionid;
-            renderAll();
-            that.close();
-          });
-        });
-        that.close();
-      };
-
-      console.log("from dropdown", mainElem.find(".scrollable"));
-
-      this.scroller = new Scroller(mainElem.find(".scrollable"));
-    }
-
-    /*
-    ██████  ██ ███████  ██████ ██   ██  █████  ██████  ████████
-    ██   ██ ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
-    ██████  ██ █████   ██      ███████ ███████ ██████     ██
-    ██      ██ ██      ██      ██   ██ ██   ██ ██   ██    ██
-    ██      ██ ███████  ██████ ██   ██ ██   ██ ██   ██    ██
-    */
-
-    function PieChart(mainElem, rad) {
-      var path = null;
-      var svgElem = mainElem.find("#svg-pie")[0];
-
-      this.render = function (deg) {
-        if (!svgElem) return;
-        if (path) {
-          svgElem.removeChild(path);
-          path = null;
-        }
-        if (isNaN(deg)) return;
-
-        if (deg > 359) {
-          path = svgElem.querySelector("circle").cloneNode(true);
-          path.setAttribute("fill", "url(#img1)");
-          svgElem.appendChild(path);
-          return;
-        }
-
-        var cx = rad,
-            cy = rad,
-            rx = rad,
-            ry = rad;
-
-        var p = svgElem.createSVGPoint();
-        p.x = 0;
-        p.y = 1;
-
-        var m = svgElem.createSVGMatrix();
-
-        var p2 = p.matrixTransform(m.rotate(deg));
-
-        p2.x = cx - p2.x * rx;
-        p2.y = cy - p2.y * ry;
-
-        path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-
-        var d = void 0;
-
-        if (deg > 180) {
-          d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 1 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
-        } else {
-          d = "M" + cx + " " + (cy - ry) + "A" + rx + " " + ry + " 0 0 1" + p2.x + " " + p2.y + "L" + cx + " " + cy + "z";
-        }
-
-        path.setAttribute("d", d);
-        path.setAttribute("fill", "url(#img1)");
-
-        svgElem.appendChild(path);
-      };
-    }
-
-    /*
-    ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████      ██████ ██      ██  ██████ ██   ██ ███████
-    ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██        ██      ██      ██ ██      ██  ██  ██
-    ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██        ██      ██      ██ ██      █████   ███████
-    ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██        ██      ██      ██ ██      ██  ██       ██
-    ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██         ██████ ███████ ██  ██████ ██   ██ ███████
-    */
-
-    document.body.addEventListener("click", function (e) {
-      state.regionId = "";
-      renderAll();
-    });
-
-    /*
-    ██████   ██████  ██████  ██    ██ ██████
-    ██   ██ ██    ██ ██   ██ ██    ██ ██   ██
-    ██████  ██    ██ ██████  ██    ██ ██████
-    ██      ██    ██ ██      ██    ██ ██
-    ██       ██████  ██       ██████  ██
-    */
-
-    function PopUp(mainElem, isMobile) {
-
-      var pieChart = new PieChart(mainElem, 40);
-
-      var popUp = mainElem;
-      var closeButton = popUp.find(".head .btn.close");
-      var pieContainer = popUp.find(".body .pie");
-
-      var dataFields = popUp.find(".body .data .item");
-      var stateNameFeald = popUp.find(".head .region span");
-      var infectedFeald = dataFields.find(".infected");
-      var diedFeald = dataFields.find(".dead");
-      var infectedTextFeald = $(dataFields.find(".leble")[0]);
-
-      var close = function close() {
-        hide();
-        state.regionId = "";
-        renderAll();
-      };
-
-      closeButton.click(function (e) {
-        close();
-      });
-
-      var hide = function hide() {
-        popUp.css('opacity', 0);
-        popUp.css('visibility', "hidden");
-      };
-
-      var open = function open() {
-        popUp.css('opacity', 1);
-        popUp.css('visibility', "visible");
-      };
-
-      popUp.click(function (e) {
-        e.stopPropagation();
-      });
-
-      var findPosition = function findPosition() {
-
-        if (!map.selectedReg) return;
-
-        var mapRect = map.mapElem.getBoundingClientRect();
-        var regRect = map.selectedReg.getBoundingClientRect();
-        var popUpRect = popUp[0].getBoundingClientRect();
-
-        var top = void 0,
-            left = void 0;
-
-        left = regRect.left + regRect.width;
-        top = regRect.top - popUpRect.height;
-        if (top < mapRect.top) {
-          top = mapRect.top + 20;
-        }
-        if (left + popUpRect.width > mapRect.left + mapRect.width) {
-          left = regRect.left - popUpRect.width;
-        }
-
-        left = left + pageXOffset;
-        top = top + pageYOffset;
-
-        return {
-          top: top,
-          left: left
-        };
-      };
-
-      var setPosition = function setPosition(obj) {
-        if (!obj) return;
-        var format = ["right", "top", "left", "bottom"];
-        format.forEach(function (prop) {
-          popUp[0].style[prop] = obj[prop] ? obj[prop] + "px" : "";
-        });
-      };
-
-      this.render = function () {
-
-        if (!state.regionId) {
-          hide();
-          return;
-        }
-
-        var name = void 0,
-            infected = void 0,
-            died = void 0,
-            infectedText = void 0;
-
-        name = data[state.regionId].name;
-
-        if (state.display == "rel") {
-          pieContainer.hide();
-          $(dataFields[1]).hide();
-          $(dataFields[0]).find(".infected").css({
-            width: "auto"
-          });
-          died = null;
-          infected = data[state.regionId].relInfected[state.year] || "н/д";
-          infectedText = "Число инфицированных на 100 тысяч населения";
-        } else {
-          infected = data[state.regionId].absInfected[state.year] || "н/д";
-          died = data[state.regionId].absDied[state.year] || "н/д";
-          pieContainer.show();
-          $(dataFields[1]).show();
-          $(dataFields[0]).find(".infected").css({
-            width: "23%"
-          });
-          pieChart.render(360 * (died / infected));
-          infectedText = "Общее число инфицированных";
-        }
-
-        stateNameFeald.text(name);
-        infectedFeald.text(infected);
-        infectedTextFeald.text(infectedText);
-        diedFeald.text(died);
-
-        if (state.regionId) {
-          if (!isMobile) setPosition(findPosition());
-          open();
-        }
-
-        if (isMobile) open();
-      };
-
-      this.onresize = function () {
-        if (!isMobile) setPosition(findPosition());
-      };
-    }
-
-    //----Data----
-    var data = {};
+    this.data = data;
+    var mapMain = this;
 
     // -------------Map State------------
-    var state = {
+    this.state = {
       year: 1999,
       regionId: "",
       display: "abs"
     };
 
-    var map = new Map();
-    var legend = new Legend();
-    var years = new Years();
-    var dropDowdn = new DropDowdn($(".map.hide-mobile"));
-    var popUp = new PopUp($(".hide-mobile .banner"), false, 40);
-    var popUpModile = new PopUp($(".hide-desktop .banner"), true, 50);
+    this.popUpElem = $(".hide-mobile .banner");
 
-    /*
-    ██████  ███████ ███    ██ ██████  ███████ ██████
-    ██   ██ ██      ████   ██ ██   ██ ██      ██   ██
-    ██████  █████   ██ ██  ██ ██   ██ █████   ██████
-    ██   ██ ██      ██  ██ ██ ██   ██ ██      ██   ██
-    ██   ██ ███████ ██   ████ ██████  ███████ ██   ██
-    */
+    var map = new Map(this);
+    var legend = new Legend(this);
+    var years = new Years(this);
+    var dropDown = new DropDown(this, $(".map.hide-mobile"));
+    var popUp = new PopUp(this, this.popUpElem, 40, false);
+    var togleBtn = new TogleBtn(this);
 
-    var renderAll = function renderAll() {
+    var findPosition = function findPosition() {
+      if (!map.selectedReg) return;
+
+      var mapRect = map.mapElem.getBoundingClientRect();
+      var regRect = map.selectedReg.getBoundingClientRect();
+      var popUpRect = mapMain.popUpElem[0].getBoundingClientRect();
+
+      var top = void 0,
+          left = void 0;
+
+      left = regRect.left + regRect.width;
+      top = regRect.top - popUpRect.height;
+      if (top < mapRect.top) {
+        top = mapRect.top + 20;
+      }
+      if (left + popUpRect.width > mapRect.left + mapRect.width) {
+        left = regRect.left - popUpRect.width;
+      }
+
+      left = left + pageXOffset;
+      top = top + pageYOffset;
+
+      return {
+        top: top,
+        left: left
+      };
+    };
+
+    var setPosition = function setPosition(obj) {
+      if (!obj) return;
+      var format = ["right", "top", "left", "bottom"];
+      format.forEach(function (prop) {
+        mapMain.popUpElem[0].style[prop] = obj[prop] ? obj[prop] + "px" : "";
+      });
+    };
+
+    this.render = function () {
       map.render();
       years.render();
-      dropDowdn.render();
+      dropDown.render();
       legend.render();
       popUp.render();
-      popUpModile.render();
+      togleBtn.render();
+      if (this.state.regionId) {
+
+        setPosition(findPosition());
+      }
     };
 
-    var initAll = function initAll() {
+    this.init = function () {
       legend.init();
-      dropDowdn.scroller.create();
-    };
+      dropDown.scroller.create();
 
-    window.onresize = function () {
-      popUp.onresize();
-    };
-
-    /*
-    ██████  ███████  █████  ██████      ██████   █████  ████████  █████
-    ██   ██ ██      ██   ██ ██   ██     ██   ██ ██   ██    ██    ██   ██
-    ██████  █████   ███████ ██   ██     ██   ██ ███████    ██    ███████
-    ██   ██ ██      ██   ██ ██   ██     ██   ██ ██   ██    ██    ██   ██
-    ██   ██ ███████ ██   ██ ██████      ██████  ██   ██    ██    ██   ██
-    */
-
-    (function () {
-      var blob = null;
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "HIV_Data_by_reg.csv");
-      xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
-      xhr.onload = function () {
-        blob = xhr.response; //xhr.response is now a blob object
-        myReader.readAsText(blob);
-      };
-      xhr.send();
-
-      var myReader = new FileReader();
-      myReader.addEventListener("loadend", function (e) {
-
-        data = newDataProseed(e.srcElement.result);
-        initAll();
-        renderAll();
+      document.body.addEventListener("click", function (e) {
+        mapMain.state.regionId = "";
+        mapMain.render();
       });
-    })();
+
+      window.onresize = function () {
+        setPosition(findPosition());
+      };
+    };
   };
 
-  /*
-  ██████  ███████  ██████  ██ ███    ██ ███████
-  ██   ██ ██      ██       ██ ████   ██ ██
-  ██████  █████   ██   ███ ██ ██ ██  ██ █████
-  ██   ██ ██      ██    ██ ██ ██  ██ ██ ██
-  ██████  ███████  ██████  ██ ██   ████ ███████
-  */
+  function mapMainMobile(data) {
+
+    this.data = data;
+    var mapMain = this;
+
+    // -------------Map State------------
+    this.state = {
+      year: 1999,
+      regionId: "Москва",
+      display: "abs"
+    };
+
+    var dropDown = new DropDown(this, $(".map.hide-desktop"));
+    var popUp = new PopUp(this, $(".hide-desktop .banner"), 50, true);
+    var togleBtn = new TogleBtn(this);
+    var yearSelect = new YearSelect(this, $('.year-select'));
+
+    this.render = function () {
+      dropDown.render();
+      popUp.render();
+      togleBtn.render();
+      yearSelect.render();
+    };
+
+    this.init = function () {
+      dropDown.scroller.create();
+    };
+  };
 
   $(function () {
 
-    $(".map_body").load("map.svg");
+    var newInfectedChartMobile = function () {
+
+      var data = [100, 203, 1513, 4315, 3971, 19758, 59609, 88739, 52170, 39232, 37002, 39407, 43007, 44713, 54563, 58410, 58298, 62387, 70832, 79764, 89667, 93000];
+
+      var bars = document.querySelectorAll('.chart.newInfected-mobile .body .canvas .block');
+
+      var startColor = [228, 152, 152];
+      var endColor = [190, 32, 37];
+      var max = 100 * 1000;
+
+      var i = 0;
+
+      var rendernewInfected = function rendernewInfected() {
+        if (i >= data.length) {
+          var labels = document.querySelectorAll('.newInfected_label_text');
+          [].forEach.call(labels, function (elem) {
+            return elem.style.opacity = 0.9;
+          });
+          return;
+        }
+        var val = data[i];
+        if (val < 4000) {
+          bars[i].style.backgroundColor = 'rgb(24,179,172)';
+          bars[i].style.marginLeft = -190 * 0.98 + "px";
+        } else {
+          var color = getColorMeta(startColor, endColor, val / max);
+          bars[i].style.backgroundColor = "rgb(" + color + ")";
+          bars[i].style.marginLeft = (0 - 190) * (1 - val / max) + "px";
+        }
+
+        if (i == 3) {
+          bars[i].style.backgroundColor = 'rgb(24,179,172)';
+        }
+
+        i++;
+        setTimeout(rendernewInfected, 30);
+      };
+
+      var show = function show() {
+
+        setTimeout(function () {
+          rendernewInfected();
+        }, 1000);
+      };
+
+      return {
+        show: show
+      };
+    }();
+
+    // newInfectedChartMobile.show();
 
     var newInfectedChart = function () {
 
@@ -833,10 +878,7 @@
 
       var bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
 
-      //rgb(24,179,172)
-      //rgb(203,132,125)
       var startColor = [228, 152, 152];
-      //rgb(190,32,37)
       var endColor = [190, 32, 37];
       var max = 100 * 1000;
 
@@ -880,6 +922,8 @@
       };
     }();
 
+    // newInfectedChart.show();
+
     var keyReasonChart = function () {
 
       //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
@@ -895,11 +939,13 @@
         fromMather: 3
       };
 
-      var valMatrix = [[3.3, 43, 53, 0.7], [6, 41, 52.9, 0.1], [84, 7, 8.7, 0.3], [87, 10.9, 1.9, 0.2], [79.1, 17.8, 2.7, 0.4], [91.8, 7.4, 0.6, 0.1], [95.5, 4.2, 0.2, 0.1], [93.3, 6.4, 0.2, 0.2], [81.2, 17.7, 0.4, 0.7], [72.3, 25.4, 0.5, 1.7], [66.7, 29.9, 0.8, 2.5], [64.2, 31.8, 1.1, 3.0], [63.3, 33.0, 0.7, 2.9], [61.5, 35.2, 1.0, 2.3], [61.3, 35.6, 1.1, 2.0], [59.8, 37.1, 1.4, 1.8], [57.9, 39.7, 1.3, 1.1], [56.2, 41.4, 1.3, 1.1], [56.4, 41.7, 1.1, 0.8], [54.9, 43.1, 1, 1.0], [58.4, 39.7, 1.1, 0.8]];
+      var valMatrix = [[3.3, 43, 53, 0.7], [6, 41, 52.9, 0.1], [84, 7, 8.7, 0.3], [87, 10.9, 1.9, 0.2], [79.1, 17.8, 2.7, 0.4], [91.8, 7.4, 0.6, 0.1], [95.5, 4.2, 0.2, 0.1], [93.2, 6.4, 0.2, 0.2], [81.2, 17.7, 0.4, 0.7], [72.3, 25.4, 0.5, 1.7], [66.7, 29.9, 0.8, 2.5], [64.1, 31.8, 1.1, 3.0], [63.3, 33.0, 0.7, 2.9], [61.5, 35.2, 1.0, 2.3], [61.3, 35.6, 1.1, 2.0], [59.8, 37, 1.4, 1.8], [57.9, 39.7, 1.3, 1.1], [56.2, 41.4, 1.3, 1.1], [56.4, 41.7, 1.1, 0.8], [54.9, 43.1, 1, 1.0], [58.4, 39.7, 1.1, 0.8]];
 
       var defYearVal = [25, 25, 25, 25];
 
       var years = document.querySelectorAll('.key-reason-canvas .year');
+
+      var yearsMobile = document.querySelectorAll(".key-reason-mobile .year");
 
       var setValue = function setValue(year, valArr) {
         var bars = year.querySelectorAll(".bar");
@@ -911,16 +957,20 @@
         });
       };
 
+      var setValueMobile = function setValueMobile(year, valArr) {
+        var bars = year.querySelectorAll(".bar");
+        [].forEach.call(bars, function (elem, i) {
+          var name = barsPosition[i];
+          var percent = valArr[legend[name]];
+          elem.classList.add(name);
+          elem.style.width = percent + "%";
+        });
+      };
+
       var setYears = function setYears(i, fn, years) {
         if (i > years.length - 1) return;
         fn(years[i], valMatrix[i]);
         setTimeout(setYears, 80, ++i, fn, years);
-      };
-
-      var initYears = function initYears(i, fn) {
-        if (i > 20) return;
-        fn(years[i], defYearVal);
-        initYears(++i, fn);
       };
 
       var startIndex = 0;
@@ -928,10 +978,19 @@
       var show = function show() {
         // setYears(startIndex, setValue, years)
         setTimeout(setYears, 1000, 0, setValue, years);
+        setTimeout(setYears, 1000, 0, setValueMobile, yearsMobile);
       };
 
       //move init to some global init
-      initYears(startIndex, setValue);
+
+      var initYears = function initYears(i, fn, years) {
+        if (i > 20) return;
+        fn(years[i], defYearVal);
+        initYears(++i, fn, years);
+      };
+
+      initYears(startIndex, setValue, years);
+      initYears(startIndex, setValueMobile, yearsMobile);
 
       return {
         show: show
@@ -948,7 +1007,14 @@
       var text = document.querySelector('.red-meter-9>div');
       var rightAnswer = 12;
 
+      var renderMobile = function renderMobile(percent) {
+        $(".answers-mobile.hide-desktop .red-meter-9")[0].style.left = (-1 + percent) * 100 + "%";
+        $(".valuepicker-mobile-picker-9")[0].style.left = percent * 235 + "px";
+        $(".valuepicker-mobile-picker-9").text(Math.round(percent * 14) + 1);
+      };
+
       var render = function render(percent) {
+        renderMobile(percent);
         ribbonSlider.style.left = percent * max + "px";
         meter.style.left = 0 - (1 - percent) * 100 + "%";
         text.innerHTML = Math.round(percent * 14) + 1;
@@ -982,6 +1048,23 @@
         drag: onDrag
       });
 
+      var onDragMobile = function onDragMobile(event, ui) {
+        percent = ui.position.left / 235;
+        render(percent);
+
+        //обработку правильно ответа решил проводить в серекторе по этому можно
+        // не передовать состояние селектора в состояние вопроса
+        state.selected = Math.round(percent * 14) + 1;
+        //callback call
+        fn();
+      };
+
+      $(".valuepicker-mobile-picker-9").draggable({
+        containment: "parent",
+        axis: "x",
+        drag: onDragMobile
+      });
+
       var isRight = function isRight() {
         return Math.round(percent * 14) + 1 == rightAnswer;
       };
@@ -1000,7 +1083,14 @@
       var text = document.querySelector('.red-meter-8>div');
       var rightAnswer = 40;
 
+      var renderMobile = function renderMobile(percent) {
+        $(".answers-mobile.hide-desktop .red-meter-8")[0].style.left = (-1 + percent) * 100 + "%";
+        $(".valuepicker-mobile-picker-8")[0].style.left = percent * 235 + "px";
+        $(".valuepicker-mobile-picker-8").text(Math.round(percent * 100) + "%");
+      };
+
       var render = function render(percent) {
+        renderMobile(percent);
         ribbonSlider.style.left = percent * max + "px";
         meter.style.left = 0 - (1 - percent) * 100 + "%";
         text.innerHTML = Math.round(percent * 100) + "%";
@@ -1033,6 +1123,23 @@
         containment: "parent",
         axis: "x",
         drag: onDrag
+      });
+
+      var onDragMobile = function onDragMobile(event, ui) {
+        percent = ui.position.left / 235;
+        render(percent);
+
+        //обработку правильно ответа решил проводить в серекторе по этому можно
+        // не передовать состояние селектора в состояние вопроса
+        state.selected = Math.round(percent * 100);
+        //callback call
+        fn();
+      };
+
+      $(".valuepicker-mobile-picker-8").draggable({
+        containment: "parent",
+        axis: "x",
+        drag: onDragMobile
       });
 
       var isRight = function isRight() {
@@ -1078,16 +1185,36 @@
       };
 
       var onDrag = function onDrag(event, ui) {
+
         var h = ui.position.top;
         r = calculeteNewR(ui.position.top);
         selectedVal = calculeteNewVal(h);
         text = valToText(selectedVal);
         requestAnimationFrame(changeR);
         requestAnimationFrame(changeText);
-        //что записывать в состояние
+        //что записывать в состояние. Это вообще используется?
         state.selected = h / 230;
         fn();
       };
+
+      var onDragY = function onDragY(event, ui) {
+
+        var h = 230 - ui.position.left;
+        r = calculeteNewR(h);
+        selectedVal = calculeteNewVal(h);
+        text = valToText(selectedVal);
+        requestAnimationFrame(changeR);
+        requestAnimationFrame(changeText);
+        //что записывать в состояние. Это вообще используется?
+        state.selected = h / 230;
+        fn();
+      };
+
+      $(".valuepicker-mobile-picker").draggable({
+        containment: "parent",
+        axis: "x",
+        drag: onDragY
+      });
 
       $(".valuepicker-picker").draggable({
         containment: "parent",
@@ -1377,13 +1504,38 @@
 
     var sideBars = new SideBars();
 
-    var mainElems = [
-    // new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
-    new hookUpQueston(1, $(".question-two"), 3, ".plate5", mapMain), new hookUpQueston(2, $(".question-three"), 2, ".answer-three", newInfectedChart.show), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
+    var getDataAndMap = function getDataAndMap() {
+      var blob = null;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "HIV_Data_by_reg.csv");
+      xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
+      xhr.onload = function () {
+        blob = xhr.response; //xhr.response is now a blob object
+        myReader.readAsText(blob);
+      };
+      xhr.send();
+
+      var myReader = new FileReader();
+      myReader.addEventListener("loadend", function (e) {
+
+        var data = newDataProseed(e.srcElement.result);
+        var map = new mapMain(data);
+        var mapMobile = new mapMainMobile(data);
+        map.init();
+        map.render();
+        mapMobile.init();
+        mapMobile.render();
+      });
+    };
+
+    var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap), new hookUpQueston(2, $(".question-three"), 2, ".answer-three", function () {
+      newInfectedChart.show();newInfectedChartMobile.show();
+    }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
     mainElems.forEach(function (elem) {
       return elem.init();
     });
+
     // mainElems.forEach(elem => elem.show());
 
     var results = [{
@@ -1536,4 +1688,4 @@
   // };
 
   //all code is wrapped  in iiaf to prevent main scope pollution
-})();
+});
