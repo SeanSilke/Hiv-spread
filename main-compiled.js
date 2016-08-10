@@ -865,8 +865,6 @@ $(".map_body").load("map.svg", function () {
         }, 1000);
       };
 
-      rendernewInfected();
-
       return {
         show: show
       };
@@ -1534,7 +1532,9 @@ $(".map_body").load("map.svg", function () {
       newInfectedChart.show();newInfectedChartMobile.show();
     }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    // mainElems.forEach(elem => elem.init());
+    mainElems.forEach(function (elem) {
+      return elem.init();
+    });
 
     // mainElems.forEach(elem => elem.show());
 

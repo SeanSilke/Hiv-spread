@@ -977,8 +977,6 @@ $(".map_body").load("map.svg", function() {
 
       };
 
-        rendernewInfected();
-
       return {
         show
       }
@@ -1717,7 +1715,7 @@ $(".map_body").load("map.svg", function() {
     ];
 
 
-    // mainElems.forEach(elem => elem.init());
+    mainElems.forEach(elem => elem.init());
 
 
     // mainElems.forEach(elem => elem.show());

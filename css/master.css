@@ -40,6 +40,8 @@
     font-weight: normal;
     font-style: normal;
 }
+
+
 body {
     padding: 0;
     margin: 0;
@@ -475,9 +477,10 @@ body {
 }
 @media screen and (max-width: 1024px) {
     .plate3 .comment {
+      font-size: 16px;
       padding: 0 20px;
       box-sizing: border-box;
-        width: 320px;
+      width: 320px;
     }
 }
 .plate3-text-item {
@@ -624,7 +627,7 @@ body {
     vertical-align: top;
     width: 50%;
     font-size: 16px;
-    font-family: "PTSans-Bold";
+    font-family: "PTSerif-Regular";
     color: #ffffff;
 }
 .plate5 .comment .item:nth-child(1) {
@@ -644,7 +647,7 @@ body {
         width: 100%;
         font-size: 16px;
         padding: 0;
-        font-family: "PTSans-Bold";
+        font-family: "PTSerif-Regular";
         color: #ffffff;
     }
     .plate5 .comment .item:nth-child(3) {
