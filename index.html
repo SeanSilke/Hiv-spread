@@ -209,21 +209,38 @@
 
             <div class="map_header">
 
-              <div class="year-select">
-                <div class ="year-select less"> </div>
-                <div class="selected-year"> 9999</div>
-                <div class= "year-select more"> </div>
-              </div>
 
-
-
-
-                <div class="item btn active" data-displaytype="abs">
+                <div class="item drop_down" style = "z-index:200">
+                  <div class="head">
+                      <div class="text">
+                          Всего инфицированных
+                      </div>
+                      <div class="close_button">
+                          <img src="arrow.svg" alt="" />
+                      </div>
+                  </div>
+                  <div class="scrollable short">
+                      <div class="content-wrapper">
+                          <div class="content">
+                            <div class="item togle-abs-rel active" data-displaytype="abs"> Всего инфицированных </div>
+                            <div class="item togle-abs-rel" data-displaytype="rel"> На 100 тыс. чел. </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                <!-- <div class="item btn active" data-displaytype="abs">
                   <span> Всего инфицированных </span>
                 </div>
                 <div class="item btn" data-displaytype="rel">
                   <span>Инфицированных на 100 тыс. чел.</span>
+                </div> -->
+
+                <div class="year-select">
+                  <div class ="year-select less"> </div>
+                  <div class="selected-year"> 9999</div>
+                  <div class= "year-select more"> </div>
                 </div>
+
                 <div class="item drop_down">
                     <div class="head">
                         <div class="text">
@@ -335,7 +352,6 @@
             </div>
 
             <div class="map_body hide-mobile">
-              <div class = "play-btn"> </div>
 
             </div>
 
@@ -2082,8 +2098,8 @@
     <script src="jquery.ui.touch-punch.js"></script>
 
 
-    <!-- <script src="main-compil/ed.js" charset="utf-8"></script> -->
-    <script src="main.js" charset="utf-8"></script>
+    <script src="main-compil/ed.js" charset="utf-8"></script>
+    <!-- <script src="main.js" charset="utf-8"></script> -->
 </body>
 
 </html>

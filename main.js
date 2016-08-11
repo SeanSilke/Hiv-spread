@@ -1,14 +1,52 @@
 "use strict";
 
-$(".map_body").load("map.svg", function() {
+(function() {
 
-  let h = window.innerHeight ||
-    document.documentElement.clientHeight ||
-    document.body.clientHeight;
+
+  /*
+   ██████  ██       ██████  ██████   █████  ██      ███████
+  ██       ██      ██    ██ ██   ██ ██   ██ ██      ██
+  ██   ███ ██      ██    ██ ██████  ███████ ██      ███████
+  ██    ██ ██      ██    ██ ██   ██ ██   ██ ██           ██
+   ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
+  */
 
   let showInProgress = false;
 
+
+  /*
+  ██      ██ ██████  ██████   █████  ██████  ██    ██     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
+  ██      ██ ██   ██ ██   ██ ██   ██ ██   ██  ██  ██      ██      ██    ██ ████   ██ ██         ██    ██ ██    ██ ████   ██ ██
+  ██      ██ ██████  ██████  ███████ ██████    ████       █████   ██    ██ ██ ██  ██ ██         ██    ██ ██    ██ ██ ██  ██ ███████
+  ██      ██ ██   ██ ██   ██ ██   ██ ██   ██    ██        ██      ██    ██ ██  ██ ██ ██         ██    ██ ██    ██ ██  ██ ██      ██
+  ███████ ██ ██████  ██   ██ ██   ██ ██   ██    ██        ██       ██████  ██   ████  ██████    ██    ██  ██████  ██   ████ ███████
+  */
+
+
+  let addMouseewheelEvent = function(elem, fn) {
+    if (document.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+, Ch31+
+        elem.addEventListener("wheel", fn);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        elem.addEventListener("mousewheel", fn);
+      } else {
+        // Firefox < 17
+        elem.addEventListener("MozMousePixelScroll", fn);
+      }
+    } else { // IE8-
+      elem.attachEvent("onmousewheel", fn);
+    }
+
+  }
+
   let showElem = ($elem, isLast) => {
+
+    let h = window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight;
+
     showInProgress = true;
     $elem.css({
         display: "block",
@@ -343,7 +381,6 @@ $(".map_body").load("map.svg", function() {
 
 
   function Scroller(mainElem) {
-
     let scrollContainer = mainElem[0],
       scrollContentWrapper = mainElem.find('.content-wrapper')[0],
       scrollContent = mainElem.find('.content')[0],
@@ -353,6 +390,8 @@ $(".map_body").load("map.svg", function() {
       topPosition,
       scrollerHeight,
       normalizedPosition;
+
+        console.log(scrollContainer);
 
 
     function calculateScrollerHeight() {
@@ -414,6 +453,10 @@ $(".map_body").load("map.svg", function() {
       }
 
     }
+
+    let onWheel = (e) => e.stopPropagation()
+
+    addMouseewheelEvent(scrollContentWrapper,onWheel);
 
     // *** Listeners ***
     scrollContentWrapper.addEventListener('scroll', moveScroller);
@@ -736,13 +779,13 @@ $(".map_body").load("map.svg", function() {
 
     let that = this;
     let isOpen = false;
-    let $select = mainElem.find(".map_header .drop_down .head");
+    let $select = mainElem.find(" .head");
     let scrollable = mainElem.find(".scrollable");
-    let closeImg = mainElem.find(".map_header .item.drop_down .close_button img");
+    let closeImg = mainElem.find(" .close_button img");
 
     let container = scrollable.find(".content");
 
-    let head = mainElem.find(".drop_down .text");
+    let head = mainElem.find(".text");
 
     $select.click(
       function(e) {
@@ -767,13 +810,17 @@ $(".map_body").load("map.svg", function() {
     this.close = function() {
       scrollable.css('visibility', 'hidden');
       isOpen = false;
-      closeImg[0].style.transform = "rotate(0deg)";
+      closeImg.css({
+        transform : "rotate(0deg)",
+      })
     };
 
     this.open = function() {
       scrollable.css('visibility', 'visible');
       isOpen = true;
-      closeImg[0].style.transform = "rotate(180deg)";
+      closeImg.css({
+        transform: "rotate(180deg)",
+      })
     };
 
     this.render = function() {
@@ -811,6 +858,75 @@ $(".map_body").load("map.svg", function() {
     };
 
     this.scroller = new Scroller(mainElem.find(".scrollable"));
+  }
+
+
+  function DropDownMobile(mapMain, mainElem) {
+    let that = this;
+    let isOpen = false;
+    let $select = mainElem.find(" .head");
+    let scrollable = mainElem.find(".scrollable");
+    let closeImg = mainElem.find(" .close_button img");
+
+    let container = scrollable.find(".content");
+
+    let head = mainElem.find(".text");
+
+    let dropDownElems = mainElem.find(".togle-abs-rel");
+
+    $select.click(
+      function(e) {
+        e.stopPropagation();
+        if (isOpen) {
+          that.close();
+        } else {
+          that.open();
+        }
+      }
+    );
+
+    $(".scrollable").click(
+      function(e) {
+        e.stopPropagation();
+      }
+    );
+
+    this.close = function() {
+      scrollable.css('visibility', 'hidden');
+      isOpen = false;
+      closeImg.css({
+        transform : "rotate(0deg)",
+      })
+    };
+
+    this.open = function() {
+      scrollable.css('visibility', 'visible');
+      isOpen = true;
+      closeImg.css({
+        transform: "rotate(180deg)",
+      })
+    };
+
+    dropDownElems.click(function(e){
+      e.stopPropagation();
+      mapMain.state.display = this.dataset.displaytype;
+      mapMain.render();
+      that.close();
+    })
+
+    this.render = function() {
+      $.each( dropDownElems, (i,e)=> {
+        if(e.dataset.displaytype == mapMain.state.display){
+          e.classList.add("active")
+          head.text(e.innerHTML)
+        }else{
+          e.classList.remove("active")
+        }
+      } )
+      that.close();
+    };
+
+
   }
 
   /*
@@ -929,21 +1045,28 @@ $(".map_body").load("map.svg", function() {
       display: "abs"
     };
 
-    let dropDown = new DropDown(this, $(".map.hide-desktop"));
+
+    let dropDown = new DropDown(this, $(".map.hide-desktop .item.drop_down:last-of-type "));
+    let dropDownMobile = new DropDownMobile(this, $(".map.hide-desktop .item.drop_down").first());
     let popUp = new PopUp(this, $(".hide-desktop .banner"), 50, true);
-    let togleBtn = new TogleBtn(this);
     let yearSelect = new YearSelect(this, $('.year-select'));
 
     this.render = function() {
       dropDown.render();
       popUp.render();
-      togleBtn.render();
       yearSelect.render();
+      dropDownMobile.render();
     };
 
 
     this.init = function() {
       dropDown.scroller.create();
+
+      document.body.addEventListener("click",
+        function(e) {
+          mapMain.render();
+        }
+      );
     };
 
   };
@@ -1727,6 +1850,8 @@ $(".map_body").load("map.svg", function() {
     let sideBars = new SideBars();
 
     let getDataAndMap = function() {
+      $(".map_body").load("map.svg",function() {
+
       let blob = null;
       let xhr = new XMLHttpRequest();
       xhr.open("GET", "HIV_Data_by_reg.csv");
@@ -1748,9 +1873,10 @@ $(".map_body").load("map.svg", function() {
         mapMobile.init();
         mapMobile.render();
       });
+    })
     }
 
-    // getDataAndMap();
+    getDataAndMap();
 
     // keyReasonChart.show();
 
@@ -1770,7 +1896,7 @@ $(".map_body").load("map.svg", function() {
     ];
 
 
-    mainElems.forEach(elem => elem.init());
+    // mainElems.forEach(elem => elem.init());
 
 
     // mainElems.forEach(elem => elem.show());
@@ -1822,21 +1948,7 @@ $(".map_body").load("map.svg", function() {
 
     let oldScrollPositoin = window.pageYOffset || document.documentElement.scrollTop;
 
-    if (document.addEventListener) {
-      if ('onwheel' in document) {
-        // IE9+, FF17+, Ch31+
-        document.addEventListener("wheel", onWheel);
-      } else if ('onmousewheel' in document) {
-        // устаревший вариант события
-        document.addEventListener("mousewheel", onWheel);
-      } else {
-        // Firefox < 17
-        document.addEventListener("MozMousePixelScroll", onWheel);
-      }
-    } else { // IE8-
-      document.attachEvent("onmousewheel", onWheel);
-    }
-
+    addMouseewheelEvent(document,onWheel)
 
     function onWheel(e) {
       e = e || window.event;
@@ -1856,7 +1968,7 @@ $(".map_body").load("map.svg", function() {
         e.preventDefault ? e.preventDefault() : (e.returnValue = false);
       }
       if (delta > 10) {
-        oldScrollPositoin = newScrollPositoin
+        oldScrollPositoin = newScrollPositoin;
       }
     }
   });
@@ -1939,4 +2051,4 @@ $(".map_body").load("map.svg", function() {
 
 
   //all code is wrapped  in iiaf to prevent main scope pollution
-});
+})();

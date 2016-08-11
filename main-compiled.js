@@ -1,12 +1,47 @@
 "use strict";
 
-$(".map_body").load("map.svg", function () {
+(function () {
 
-  var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  /*
+   ██████  ██       ██████  ██████   █████  ██      ███████
+  ██       ██      ██    ██ ██   ██ ██   ██ ██      ██
+  ██   ███ ██      ██    ██ ██████  ███████ ██      ███████
+  ██    ██ ██      ██    ██ ██   ██ ██   ██ ██           ██
+   ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
+  */
 
   var showInProgress = false;
 
+  /*
+  ██      ██ ██████  ██████   █████  ██████  ██    ██     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
+  ██      ██ ██   ██ ██   ██ ██   ██ ██   ██  ██  ██      ██      ██    ██ ████   ██ ██         ██    ██ ██    ██ ████   ██ ██
+  ██      ██ ██████  ██████  ███████ ██████    ████       █████   ██    ██ ██ ██  ██ ██         ██    ██ ██    ██ ██ ██  ██ ███████
+  ██      ██ ██   ██ ██   ██ ██   ██ ██   ██    ██        ██      ██    ██ ██  ██ ██ ██         ██    ██ ██    ██ ██  ██ ██      ██
+  ███████ ██ ██████  ██   ██ ██   ██ ██   ██    ██        ██       ██████  ██   ████  ██████    ██    ██  ██████  ██   ████ ███████
+  */
+
+  var addMouseewheelEvent = function addMouseewheelEvent(elem, fn) {
+    if (document.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+, Ch31+
+        elem.addEventListener("wheel", fn);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        elem.addEventListener("mousewheel", fn);
+      } else {
+        // Firefox < 17
+        elem.addEventListener("MozMousePixelScroll", fn);
+      }
+    } else {
+      // IE8-
+      elem.attachEvent("onmousewheel", fn);
+    }
+  };
+
   var showElem = function showElem($elem, isLast) {
+
+    var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
     showInProgress = true;
     $elem.css({
       display: "block"
@@ -253,10 +288,37 @@ $(".map_body").load("map.svg", function () {
 
     $(".years .col").on("click", function (e) {
       e.stopPropagation();
+      mapMain.state.isPlaing = false;
       var year = parseInt($(this).attr("id"));
       mapMain.state.year = year;
       mapMain.render();
     });
+  }
+
+  function Play(mapMain) {
+
+    var that = this;
+
+    this.play = function () {
+      if (!mapMain.state.isPlaing) {
+        return;
+      }
+
+      if (mapMain.render) {
+
+        if (mapMain.state.year == 2014) {
+          mapMain.state.year = 1994;
+        } else {
+          mapMain.state.year++;
+        }
+
+        mapMain.render();
+      }
+
+      setTimeout(function () {
+        that.play();
+      }, 1000);
+    };
   }
 
   /*
@@ -268,7 +330,6 @@ $(".map_body").load("map.svg", function () {
   */
 
   function Scroller(mainElem) {
-
     var scrollContainer = mainElem[0],
         scrollContentWrapper = mainElem.find('.content-wrapper')[0],
         scrollContent = mainElem.find('.content')[0],
@@ -278,6 +339,8 @@ $(".map_body").load("map.svg", function () {
         topPosition = void 0,
         scrollerHeight = void 0,
         normalizedPosition = void 0;
+
+    console.log(scrollContainer);
 
     function calculateScrollerHeight() {
       // *Calculation of how tall scroller should be
@@ -336,6 +399,12 @@ $(".map_body").load("map.svg", function () {
         window.addEventListener('mousemove', scrollBarScroll);
       }
     };
+
+    var onWheel = function onWheel(e) {
+      return e.stopPropagation();
+    };
+
+    addMouseewheelEvent(scrollContentWrapper, onWheel);
 
     // *** Listeners ***
     scrollContentWrapper.addEventListener('scroll', moveScroller);
@@ -585,6 +654,7 @@ $(".map_body").load("map.svg", function () {
 
     regions.click(function (e) {
       e.stopPropagation();
+      // mapMain.state.isPlaing =false;
       if (e.target.id === mapMain.state.regionId) {
         that.mapElem.classList.remove('regSelected');
         mapMain.state.regionId = "";
@@ -596,11 +666,20 @@ $(".map_body").load("map.svg", function () {
     });
   }
 
+  /*
+  ████████  ██████   ██████  ██      ███████ ██████  ████████ ███    ██
+     ██    ██    ██ ██       ██      ██      ██   ██    ██    ████   ██
+     ██    ██    ██ ██   ███ ██      █████   ██████     ██    ██ ██  ██
+     ██    ██    ██ ██    ██ ██      ██      ██   ██    ██    ██  ██ ██
+     ██     ██████   ██████  ███████ ███████ ██████     ██    ██   ████
+  */
+
   function TogleBtn(mapMain) {
     var btn = $(".map .map_header .btn");
 
     btn.click(function (e) {
       e.stopPropagation();
+      mapMain.state.isPlaing = false;
       mapMain.state.display = this.dataset.displaytype;
       mapMain.render();
     });
@@ -628,16 +707,17 @@ $(".map_body").load("map.svg", function () {
 
     var that = this;
     var isOpen = false;
-    var $select = mainElem.find(".map_header .drop_down .head");
+    var $select = mainElem.find(" .head");
     var scrollable = mainElem.find(".scrollable");
-    var closeImg = mainElem.find(".map_header .item.drop_down .close_button img");
+    var closeImg = mainElem.find(" .close_button img");
 
     var container = scrollable.find(".content");
 
-    var head = mainElem.find(".drop_down .text");
+    var head = mainElem.find(".text");
 
     $select.click(function (e) {
       e.stopPropagation();
+      mapMain.state.isPlaing = false;
       if (isOpen) {
         that.close();
       } else {
@@ -647,18 +727,23 @@ $(".map_body").load("map.svg", function () {
 
     $(".scrollable").click(function (e) {
       e.stopPropagation();
+      mapMain.state.isPlaing = false;
     });
 
     this.close = function () {
       scrollable.css('visibility', 'hidden');
       isOpen = false;
-      closeImg[0].style.transform = "rotate(0deg)";
+      closeImg.css({
+        transform: "rotate(0deg)"
+      });
     };
 
     this.open = function () {
       scrollable.css('visibility', 'visible');
       isOpen = true;
-      closeImg[0].style.transform = "rotate(180deg)";
+      closeImg.css({
+        transform: "rotate(180deg)"
+      });
     };
 
     this.render = function () {
@@ -696,6 +781,68 @@ $(".map_body").load("map.svg", function () {
     this.scroller = new Scroller(mainElem.find(".scrollable"));
   }
 
+  function DropDownMobile(mapMain, mainElem) {
+    var that = this;
+    var isOpen = false;
+    var $select = mainElem.find(" .head");
+    var scrollable = mainElem.find(".scrollable");
+    var closeImg = mainElem.find(" .close_button img");
+
+    var container = scrollable.find(".content");
+
+    var head = mainElem.find(".text");
+
+    var dropDownElems = mainElem.find(".togle-abs-rel");
+
+    $select.click(function (e) {
+      e.stopPropagation();
+      if (isOpen) {
+        that.close();
+      } else {
+        that.open();
+      }
+    });
+
+    $(".scrollable").click(function (e) {
+      e.stopPropagation();
+    });
+
+    this.close = function () {
+      scrollable.css('visibility', 'hidden');
+      isOpen = false;
+      closeImg.css({
+        transform: "rotate(0deg)"
+      });
+    };
+
+    this.open = function () {
+      scrollable.css('visibility', 'visible');
+      isOpen = true;
+      closeImg.css({
+        transform: "rotate(180deg)"
+      });
+    };
+
+    dropDownElems.click(function (e) {
+      e.stopPropagation();
+      mapMain.state.display = this.dataset.displaytype;
+      mapMain.render();
+      that.close();
+    });
+
+    this.render = function () {
+      $.each(dropDownElems, function (i, e) {
+        if (e.dataset.displaytype == mapMain.state.display) {
+          e.classList.add("active");
+          head.text(e.innerHTML);
+        } else {
+          e.classList.remove("active");
+        }
+      });
+      that.close();
+    };
+  }
+
   /*
   ███    ███  █████  ██████      ███    ███  █████  ██ ███    ██
   ████  ████ ██   ██ ██   ██     ████  ████ ██   ██ ██ ████   ██
@@ -711,9 +858,10 @@ $(".map_body").load("map.svg", function () {
 
     // -------------Map State------------
     this.state = {
-      year: 1999,
+      year: 1994,
       regionId: "",
-      display: "abs"
+      display: "abs",
+      isPlaing: true
     };
 
     this.popUpElem = $(".hide-mobile .banner");
@@ -724,6 +872,7 @@ $(".map_body").load("map.svg", function () {
     var dropDown = new DropDown(this, $(".map.hide-mobile"));
     var popUp = new PopUp(this, this.popUpElem, 40, false);
     var togleBtn = new TogleBtn(this);
+    var play = new Play(this);
 
     var findPosition = function findPosition() {
       if (!map.selectedReg) return;
@@ -777,9 +926,11 @@ $(".map_body").load("map.svg", function () {
     this.init = function () {
       legend.init();
       dropDown.scroller.create();
+      play.play();
 
       document.body.addEventListener("click", function (e) {
         mapMain.state.regionId = "";
+        mapMain.state.isPlaing = false;
         mapMain.render();
       });
 
@@ -801,20 +952,24 @@ $(".map_body").load("map.svg", function () {
       display: "abs"
     };
 
-    var dropDown = new DropDown(this, $(".map.hide-desktop"));
+    var dropDown = new DropDown(this, $(".map.hide-desktop .item.drop_down:last-of-type "));
+    var dropDownMobile = new DropDownMobile(this, $(".map.hide-desktop .item.drop_down").first());
     var popUp = new PopUp(this, $(".hide-desktop .banner"), 50, true);
-    var togleBtn = new TogleBtn(this);
     var yearSelect = new YearSelect(this, $('.year-select'));
 
     this.render = function () {
       dropDown.render();
       popUp.render();
-      togleBtn.render();
       yearSelect.render();
+      dropDownMobile.render();
     };
 
     this.init = function () {
       dropDown.scroller.create();
+
+      document.body.addEventListener("click", function (e) {
+        mapMain.render();
+      });
     };
   };
 
@@ -968,7 +1123,12 @@ $(".map_body").load("map.svg", function () {
       };
 
       var setYears = function setYears(i, fn, years) {
-        if (i > years.length - 1) return;
+        if (i > years.length - 1) {
+          $(".key-reason-mobile-year-text").css({
+            opacity: 0.9
+          });
+          return;
+        }
         fn(years[i], valMatrix[i]);
         setTimeout(setYears, 80, ++i, fn, years);
       };
@@ -1505,36 +1665,42 @@ $(".map_body").load("map.svg", function () {
     var sideBars = new SideBars();
 
     var getDataAndMap = function getDataAndMap() {
-      var blob = null;
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "HIV_Data_by_reg.csv");
-      xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
-      xhr.onload = function () {
-        blob = xhr.response; //xhr.response is now a blob object
-        myReader.readAsText(blob);
-      };
-      xhr.send();
+      $(".map_body").load("map.svg", function () {
 
-      var myReader = new FileReader();
-      myReader.addEventListener("loadend", function (e) {
+        var blob = null;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "HIV_Data_by_reg.csv");
+        xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
+        xhr.onload = function () {
+          blob = xhr.response; //xhr.response is now a blob object
+          myReader.readAsText(blob);
+        };
+        xhr.send();
 
-        var data = newDataProseed(e.srcElement.result);
-        var map = new mapMain(data);
-        var mapMobile = new mapMainMobile(data);
-        map.init();
-        map.render();
-        mapMobile.init();
-        mapMobile.render();
+        var myReader = new FileReader();
+        myReader.addEventListener("loadend", function (e) {
+
+          var data = newDataProseed(e.srcElement.result);
+          var map = new mapMain(data);
+          var mapMobile = new mapMainMobile(data);
+          map.init();
+          map.render();
+          mapMobile.init();
+          mapMobile.render();
+        });
       });
     };
 
+    getDataAndMap();
+
+    // keyReasonChart.show();
+
     var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap), new hookUpQueston(2, $(".question-three"), 2, ".answer-three", function () {
-      newInfectedChart.show();newInfectedChartMobile.show();
+      newInfectedChart.show();
+      newInfectedChartMobile.show();
     }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    mainElems.forEach(function (elem) {
-      return elem.init();
-    });
+    // mainElems.forEach(elem => elem.init());
 
     // mainElems.forEach(elem => elem.show());
 
@@ -1581,21 +1747,7 @@ $(".map_body").load("map.svg", function () {
 
     var oldScrollPositoin = window.pageYOffset || document.documentElement.scrollTop;
 
-    if (document.addEventListener) {
-      if ('onwheel' in document) {
-        // IE9+, FF17+, Ch31+
-        document.addEventListener("wheel", onWheel);
-      } else if ('onmousewheel' in document) {
-        // устаревший вариант события
-        document.addEventListener("mousewheel", onWheel);
-      } else {
-        // Firefox < 17
-        document.addEventListener("MozMousePixelScroll", onWheel);
-      }
-    } else {
-      // IE8-
-      document.attachEvent("onmousewheel", onWheel);
-    }
+    addMouseewheelEvent(document, onWheel);
 
     function onWheel(e) {
       e = e || window.event;
@@ -1688,4 +1840,4 @@ $(".map_body").load("map.svg", function () {
   // };
 
   //all code is wrapped  in iiaf to prevent main scope pollution
-});
+})();

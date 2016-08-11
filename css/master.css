@@ -701,15 +701,6 @@ body {
     height: 580px;
 }
 
-.play-btn {
-  width: 78px;
-  height: 78px;
-  background-image: url("../play-btn.png");
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
 .text {
     font-size: 16px;
     font-family: 'PTSans-Regular';
@@ -741,7 +732,7 @@ body {
     padding: 15px;
 }
 .map_header> .item:nth-of-type(2) {
-    padding: 13px;
+    /*padding: 13px;*/
     margin: 0px 25px;
 }
 .scrollable {
@@ -757,6 +748,11 @@ body {
     top: 47px;
     visibility: hidden;
 }
+
+.scrollable.short {
+  height: 80px;
+}
+
 .scrollable.showScroll::after {
     position: absolute;
     content: '';
@@ -866,7 +862,7 @@ body {
         padding: 15px;
     }
     .map_header> .item:nth-of-type(2) {
-        padding: 13px;
+        /*padding: 13px;*/
         margin: 0px;
     }
     .map_header> .item:nth-of-type(3) {
