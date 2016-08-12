@@ -61,6 +61,7 @@
 
     var scrollTo = $elem.height() < h ? $elem.offset().top - h / 2 + $elem.height() / 2 : $elem.offset().top;
 
+    //перемотка к нужному месту
     $('html, body').clearQueue().animate({
       scrollTop: scrollTo
     }, {
@@ -1394,8 +1395,8 @@
     function hookUpValQueston(id, question, ValPicker, AnswerSelectors, onAnswer) {
 
       var answerButton = question.find(".answerButton");
-
       var answer = $(AnswerSelectors);
+      this.isShown = false;
 
       var initAnswers = function initAnswers() {
         hideElem(answer);
@@ -1425,6 +1426,7 @@
           removeButton();
           //костыль для нормальной обработки проктутки
           showInProgress = true;
+
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1446,12 +1448,14 @@
       var that = this;
       this.result = null;
 
+      //Click on answer
       answerButton.click(function () {
         state.isAnswered = true;
         that.result = valPicker.isRight();
         render();
       });
 
+      //Show question
       $('.footer img')[id].onclick = function () {
         that.show();
       };
@@ -1460,8 +1464,6 @@
         initQuestion();
         initAnswers();
       };
-
-      this.isShown = false;
 
       this.show = function () {
         sideBars.select(id);
@@ -1691,7 +1693,7 @@
       });
     };
 
-    getDataAndMap();
+    // getDataAndMap();
 
     // keyReasonChart.show();
 
@@ -1700,9 +1702,7 @@
       newInfectedChartMobile.show();
     }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    mainElems.forEach(function (elem) {
-      return elem.init();
-    });
+    // mainElems.forEach(elem => elem.init());
 
     // mainElems.forEach(elem => elem.show());
 

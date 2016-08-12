@@ -41,13 +41,46 @@
 
   }
 
+
+  let setHelperPosotin = (winHeight,$elem) => {
+    let helperPosition = ($elem.offset().top + $elem.height() / 2 + winHeight / 2);
+
+    if ( helperPosition > $('.prop').offset().top) {
+      $('.prop').css({
+        top: helperPosition
+      });
+    }
+  }
+
+  let scrollToElemCenter = (winHeight,$elem, callback) => {
+    let scrollTo;
+
+    if ( $elem.height() < winHeight){
+      scrollTo =  $elem.offset().top - winHeight / 2 + $elem.height() / 2
+    }else {
+      scrollTo =  $elem.offset().top;
+    }
+
+    //перемотка к нужному месту
+    $('html, body').clearQueue()
+      .animate({
+        scrollTop: scrollTo
+      }, {
+        duration: 1000,
+        done: callback,
+      });
+
+  }
+
   let showElem = ($elem, isLast) => {
 
-    let h = window.innerHeight ||
+    showInProgress = true;
+
+    let winHeight = window.innerHeight ||
       document.documentElement.clientHeight ||
       document.body.clientHeight;
 
-    showInProgress = true;
+
     $elem.css({
         display: "block",
       }).clearQueue()
@@ -55,26 +88,14 @@
         opacity: 1
       }, 1000);
 
-    let center = $elem.height() > h ? h / 2 : $elem.height() / 2;
 
-    let helperPosition = ($elem.offset().top + $elem.height() / 2 + h / 2);
-
-    if (!isLast && helperPosition > $('.prop').offset().top) {
-      $('.prop').css({
-        top: helperPosition
-      });
+    if (!isLast) {
+      setHelperPosotin(winHeight,$elem)
     }
 
-    let scrollTo = $elem.height() < h ? $elem.offset().top - h / 2 + $elem.height() / 2 : $elem.offset().top;
+    let callback = () => showInProgress = false
 
-
-    $('html, body').clearQueue()
-      .animate({
-        scrollTop: scrollTo
-      }, {
-        duration: 1000,
-        done: () => showInProgress = false
-      });
+    scrollToElemCenter(winHeight,$elem, callback)
 
   };
 
@@ -1572,8 +1593,8 @@
     function hookUpValQueston(id, question, ValPicker, AnswerSelectors, onAnswer) {
 
       let answerButton = question.find(".answerButton");
-
       let answer = $(AnswerSelectors);
+      this.isShown = false;
 
 
       let initAnswers = () => {
@@ -1602,8 +1623,6 @@
       let render = function() {
         if (state.isAnswered) {
           removeButton();
-          //костыль для нормальной обработки проктутки
-          showInProgress = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1625,12 +1644,14 @@
       let that = this;
       this.result = null;
 
+      //Click on answer
       answerButton.click(function() {
         state.isAnswered = true;
         that.result = valPicker.isRight()
         render();
       });
 
+      //Show question
       $('.footer img')[id].onclick = function() {
         that.show();
       }
@@ -1639,8 +1660,6 @@
         initQuestion();
         initAnswers();
       }
-
-      this.isShown = false;
 
       this.show = function() {
         sideBars.select(id);
@@ -1687,8 +1706,6 @@
       let render = function() {
         if (state.isAnswered) {
           removeButton();
-          //костыль для нормальной обработки проктутки
-          showInProgress = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1876,7 +1893,7 @@
     })
     }
 
-    getDataAndMap();
+    // getDataAndMap();
 
     // keyReasonChart.show();
 
