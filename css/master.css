@@ -40,10 +40,9 @@
     font-weight: normal;
     font-style: normal;
 }
-
-
-* { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
-
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 body {
     padding: 0;
     margin: 0;
@@ -51,10 +50,10 @@ body {
     font-size: 0;
     overflow-y: scroll;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    ;
 }
-@media screen and (max-width: 1024px) {
-
-}
+@media screen and (max-width: 1024px) {}
 @media screen and (max-width: 1024px) {
     .hide-mobile {
         display: none !important;
@@ -153,11 +152,34 @@ body {
         float: none;
     }
 }
+@keyframes mymove {
+    from {
+        -webkit-transform: translateX(0);
+    }
+    to {
+        -webkit-transform: translateX(-550px);
+    }
+}
 .plate1 {
     width: 100%;
+    position: relative;
+}
+.plate1-after {
     background-image: url("../ribon1.png");
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     background-position: center 394px;
+    animation: mymove 150s infinite;
+    animation-timing-function: linear;
+    position: absolute;
+    left: 0;
+    right: -550px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: -1;
+    animation: mymove 150s infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
 }
 .plate1 .content {
     position: relative;
@@ -446,12 +468,24 @@ body {
 .plate3 {
     width: 100%;
     min-width: 1024px;
+    position: relative;
+}
+.plate3-after {
     background-image: url("../ribon2.png");
     background-repeat: repeat-x;
     background-position: 50% 120px;
-    position: relative;
-    animation: mymove 100s infinite;
+    animation: mymove 150s infinite;
     animation-timing-function: linear;
+    position: absolute;
+    left: 0;
+    right: -550px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: -1;
+    animation: mymove 150s infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
 }
 @media screen and (max-width: 1024px) {
     .plate3 {
@@ -461,16 +495,6 @@ body {
 
 /* Standard syntax */
 
-@keyframes mymove {
-    0% {
-        background-position-x: 0px;
-    }
-    /*25%  {top: 200px;}
-  75%  {top: 50px}*/
-    100% {
-        background-position-x: 1851px;
-    }
-}
 .plate3 .comment {
     font-size: 16px;
     font-family: 'PTSerif-Regular';
@@ -480,10 +504,10 @@ body {
 }
 @media screen and (max-width: 1024px) {
     .plate3 .comment {
-      font-size: 16px;
-      padding: 0 20px;
-      box-sizing: border-box;
-      width: 320px;
+        font-size: 16px;
+        padding: 0 20px;
+        box-sizing: border-box;
+        width: 320px;
     }
 }
 .plate3-text-item {
@@ -700,7 +724,6 @@ body {
     width: 955px;
     height: 580px;
 }
-
 .text {
     font-size: 16px;
     font-family: 'PTSans-Regular';
@@ -748,11 +771,9 @@ body {
     top: 47px;
     visibility: hidden;
 }
-
 .scrollable.short {
-  height: 80px;
+    height: 80px;
 }
-
 .scrollable.showScroll::after {
     position: absolute;
     content: '';
@@ -1156,9 +1177,22 @@ body {
 .plate6 {
     margin-top: 65px;
     width: 100%;
+    position: relative;
+}
+.plate6-after {
     background-image: url("../ribon3.png");
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     background-position: 50% 775px;
+    position: absolute;
+    left: 0;
+    right: -550px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: -1;
+    animation: mymove 150s infinite;
+    animation-timing-function: linear;
+    animation-direction: reverse;
 }
 .plate6 .content {
     width: 1024px;
@@ -1166,10 +1200,8 @@ body {
     margin: 0 auto;
 }
 @media screen and (max-width: 1024px) {
-    .plate6 {
+    .plate6-after {
         margin-top: 45px;
-        width: 100%;
-        background-repeat: repeat-x;
         background-image: url("../ribon3-Mobile.png");
         background-position: 50% 1311px;
     }
@@ -1319,13 +1351,11 @@ body {
     font-size: 16px;
     color: #93A1A8;
 }
-
 .newInfected_scale_text {
     font-family: 'PTSans-Regular';
     font-size: 16px;
     color: #93A1A8;
 }
-
 .chart.newInfected .body .canvas .bar {
     display: inline-block;
     vertical-align: top;
@@ -1375,23 +1405,23 @@ body {
 .plate7-after {
     content: "";
     background-image: url("../ribon4.png");
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     background-position: 50% 335px;
-    top: 0;
+    position: absolute;
     left: 0;
+    right: -550px;
+    top: 0;
     bottom: 0;
-    right: 0;
     position: absolute;
     z-index: -1;
+    animation: mymove 150s infinite;
+    animation-timing-function: linear;
 }
-
 @media screen and (max-width: 1024px) {
-  .plate7-after {
-
-      /*background-image: none;*/
-          background-position: 50% 452px;
-
-  }
+    .plate7-after {
+        /*background-image: none;*/
+        background-position: 50% 452px;
+    }
 }
 .plate7 .content {
     width: 1024px;
@@ -1440,7 +1470,6 @@ body {
     text-align: left;
     font-size: 0;
 }
-
 .plate7 .content .guess-growth .valuepicker {
     height: 100%;
     width: 10%;
@@ -1477,20 +1506,16 @@ body {
     width: 60%;
     position: relative;
 }
-
 @media screen and (max-width: 1024px) {
-  .plate7 .content .guess-growth {
-      width: 320px;
-      /*height: 320px;*/
-  }
-
-  .guess-growth-main {
-      width: 100%;
-      position: relative;
-  }
-
+    .plate7 .content .guess-growth {
+        width: 320px;
+        /*height: 320px;*/
+    }
+    .guess-growth-main {
+        width: 100%;
+        position: relative;
+    }
 }
-
 .guess-growth-main-big {
     width: 230px;
     height: 230px;
@@ -1527,8 +1552,6 @@ body {
     transition: all 1s;
     opacity: 0;
 }
-
-
 .answered .guess-growth-main-right {
     opacity: 1;
 }
@@ -1679,8 +1702,7 @@ body {
     overflow: hidden;
     position: relative;
 }
-
-.ribbon-slider-8-answer , .ribbon-slider-9-answer {
+.ribbon-slider-8-answer, .ribbon-slider-9-answer {
     box-sizing: border-box;
     position: absolute;
     width: 45px;
@@ -1688,7 +1710,7 @@ body {
     border-radius: 50%;
     background-color: #18B3AC;
     top: 88px;
-    left: 383px;
+    left: 706px;
     z-index: 100;
     box-shadow: 0px 0px 3px rgba(43, 108, 110, 0.75);
     color: #ffffff;
@@ -1699,11 +1721,10 @@ body {
     transition: all 1s;
     opacity: 0;
 }
-.answered .ribbon-slider-8-answer , .answered .ribbon-slider-9-answer {
+.answered .ribbon-slider-8-answer, .answered .ribbon-slider-9-answer {
     opacity: 1;
     z-index: 200;
 }
-
 .thermometer .green-meter {
     box-sizing: border-box;
     position: relative;
@@ -1724,7 +1745,7 @@ body {
 .thermometer .green-meter.big {
     color: transparent;
 }
-.thermometer .red-meter-8 , .thermometer .red-meter-9 {
+.thermometer .red-meter-8, .thermometer .red-meter-9 {
     position: absolute;
     left: -60%;
     bottom: 0px;
@@ -2067,14 +2088,18 @@ body {
 .plate10-after {
     content: "";
     background-image: url("../ribon5.png");
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
+    ;
     background-position: 50% 166px;
     top: 0;
     left: 0;
     bottom: 0;
-    right: 0;
+    right: -550px;
     position: absolute;
     z-index: -1;
+    animation: mymove 100s infinite;
+    animation-timing-function: linear;
+      animation-direction: reverse;
 }
 .plate10 .content {
     text-align: center;
@@ -2090,7 +2115,7 @@ body {
 }
 @media screen and (max-width: 1024px) {
     .plate10 .content {
-      box-sizing: border-box;
+        box-sizing: border-box;
         text-align: center;
         width: 320px;
         height: 100%;
@@ -2348,10 +2373,28 @@ body {
 }
 .plate11 {
     width: 100%;
-    background-image: url("../ribon6.png");
-    background-repeat: no-repeat;
-    background-position: 50% 185px;
+
+    position: relative;
+
 }
+
+.plate11-after {
+  background-image: url("../ribon6.png");
+  background-repeat: repeat-x;
+  background-position: 50% 185px;
+  animation: mymove 150s infinite;
+  animation-timing-function: linear;
+  position: absolute;
+  left: 0;
+  right: -550px;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: -1;
+  animation: mymove 150s infinite;
+  animation-timing-function: linear;
+}
+
 .plate11 .content {
     text-align: center;
     width: 1024px;
@@ -2359,10 +2402,10 @@ body {
     margin: 0 auto;
 }
 @media screen and (max-width: 1024px) {
-    .plate11 {
-      background-image: url("../ribon6-Mobile.png");
-      background-repeat: repeat-x;
-      background-position: 50% 247px;
+    .plate11-after {
+        background-image: url("../ribon6-Mobile.png");
+        background-repeat: repeat-x;
+        background-position: 50% 247px;
     }
     .plate11 .content {
         width: 320px;
@@ -2474,8 +2517,8 @@ body {
     margin-top: 45px;
 }
 .chart.newInfected-mobile .body {
-  position: relative;
-  box-sizing: border-box;
+    position: relative;
+    box-sizing: border-box;
     height: 100%;
     width: 100%;
     margin: 0 auto;
@@ -2483,7 +2526,7 @@ body {
     padding: 0 20px;
 }
 .chart.newInfected-mobile .row {
-  box-sizing: border-box;
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
     font-size: 0;
@@ -2494,241 +2537,195 @@ body {
     font-family: 'PTSans-Regular';
     font-size: 16px;
     color: #93A1A8;
-    margin-right:18px;
+    margin-right: 18px;
     margin-top: 9px;
 }
-
 .chart.newInfected-mobile .row .canvas {
-  display: inline-block;
-  width: 190px;
-  overflow-x: hidden;
+    display: inline-block;
+    width: 190px;
+    overflow-x: hidden;
 }
-
-
 .chart.newInfected-mobile .row .canvas .block {
-  width: 100%;
-  background-color: #B42025;
-  border-radius: 0px 10px 10px 0px;
-  height:12px;
-  margin-top: 14px;
-  margin-left: -190px;
-  transition: margin-left 0.3s ease-out;
+    width: 100%;
+    background-color: #B42025;
+    border-radius: 0px 10px 10px 0px;
+    height: 12px;
+    margin-top: 14px;
+    margin-left: -190px;
+    transition: margin-left 0.3s ease-out;
 }
-
-
 .newInfected_label_text {
-  font-size: 16px;
-  font-family: "PTSans-Regular";
-  transition: opacity 1s;
-  opacity: 0;
+    font-size: 16px;
+    font-family: "PTSans-Regular";
+    transition: opacity 1s;
+    opacity: 0;
 }
-
-
 .valuepicker-mobile {
-  width: 250px;
-  height: 40px;
-  position: relative;
-  margin: 0 auto;
-  margin-top: 20px;
+    width: 250px;
+    height: 40px;
+    position: relative;
+    margin: 0 auto;
+    margin-top: 20px;
 }
-
-.valuepicker-mobile-picker{
-  box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  border: 5px solid #18B3AC;
-  position: absolute;
-  z-index: 1000;
-  cursor: pointer;
-   margin-top: -10px;
+.valuepicker-mobile-picker {
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 5px solid #18B3AC;
+    position: absolute;
+    z-index: 1000;
+    cursor: pointer;
+    margin-top: -10px;
 }
-
 .valuepicker-mobile-line {
-
- height: 2px;
- width: 230px;
- margin: 0 auto;
- background-color: #D4D4D4;
+    height: 2px;
+    width: 230px;
+    margin: 0 auto;
+    background-color: #D4D4D4;
 }
-
-
-
 .answers-mobile {
-  width: 100%;
-  padding: 0 0;
-  position: relative;
+    width: 100%;
+    padding: 0 0;
+    position: relative;
 }
-
 .answers-mobile .thermometer {
-
     width: 100%;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
 }
-
-
-
-.valuepicker-mobile-picker-8 , .valuepicker-mobile-picker-9 {
-  box-sizing: border-box;
-  position: absolute;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: #18B3AC;
-  top: -6px;
-  left: 0px;
-  z-index: 100;
-  box-shadow: 0px 0px 3px rgba(43, 108, 110, 0.75);
-  color: #ffffff;
-  font-family: 'PTSans-Regular';
-  font-size: 16px;
-  text-align: center;
-  padding: 13px 0;
-  /*transition: all 1s;*/
-  /*opacity: 1;*/
-  cursor: pointer;
-  z-index: 100;
+.valuepicker-mobile-picker-8, .valuepicker-mobile-picker-9 {
+    box-sizing: border-box;
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    top: -6px;
+    left: 0px;
+    z-index: 100;
+    box-shadow: 0px 0px 3px rgba(43, 108, 110, 0.75);
+    color: #000000;
+    font-family: 'PTSans-Regular';
+    font-size: 16px;
+    text-align: center;
+    padding: 13px 0;
+    /*transition: all 1s;*/
+    /*opacity: 1;*/
+    cursor: pointer;
+    z-index: 100;
 }
-
-
-.ribbon-slider-8-answer-mobile{
-  top: -6px;
-  left: 94.5px;
-  z-index: 50;
+.ribbon-slider-8-answer-mobile {
+    top: -6px;
+    left: 94.5px;
+    z-index: 50;
 }
-
 .ribbon-slider-9-answer-mobile {
-  top: -6px;
-  left: 180.5px;
+    top: -6px;
+    left: 180.5px;
 }
-
 .key-reason-mobile {
-  width: 100%;
+    width: 100%;
 }
-
 .key-reason-mobile .year {
-  font-size: 0;
+    font-size: 0;
     position: relative;
     width: 100%;
     height: 16px;
     margin-bottom: 8px;
 }
-
-.key-reason-mobile-year-text{
-  font-size: 16px;
-  font-family: 'PTSans-Regular';
-  color: #ffffff;
-  position: absolute;
-  top: -3px;
-  left: 51px;
-  opacity: 0;
-  transition: all 2s;
+.key-reason-mobile-year-text {
+    font-size: 16px;
+    font-family: 'PTSans-Regular';
+    color: #ffffff;
+    position: absolute;
+    top: -3px;
+    left: 51px;
+    opacity: 0;
+    transition: all 2s;
 }
-
 .key-reason-mobile .bar {
-  display: inline-block;
-  height: 100%;
-  width: 25%;
-      transition: width 1s;
+    display: inline-block;
+    height: 100%;
+    width: 25%;
+    transition: width 1s;
 }
-
 .year-number {
-  position: absolute;
-  top: 0;
-  left: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
-
-
-
 .key-reason-mobile .title {
-  color: #ffffff;
-  font-size: 16px;
-font-family:"PTSans-Bold";
-text-align: center;
-  margin-top: 40px;
-  margin-bottom: 17px;
-
+    color: #ffffff;
+    font-size: 16px;
+    font-family: "PTSans-Bold";
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 17px;
 }
-
 .key-reason-mobile .coll {
-  margin-top: 13px;
-  display: block;
-  font-size: 0;
-  width: 100% !important;
+    margin-top: 13px;
+    display: block;
+    font-size: 0;
+    width: 100% !important;
 }
-
 .key-reason-mobile .coll .description {
-  white-space: normal;
+    white-space: normal;
 }
-
-.key-reason-mobile .coll:nth-child(2) .description{
-  line-height: 35px;
+.key-reason-mobile .coll:nth-child(2) .description {
+    line-height: 35px;
 }
-
-.key-reason-mobile .coll:nth-child(3) .description{
-  line-height: 35px;
+.key-reason-mobile .coll:nth-child(3) .description {
+    line-height: 35px;
 }
-
 .key-reason-mobile .coll .square {
-  margin: 5px 15px 0 0;
+    margin: 5px 15px 0 0;
 }
-
 .key-reason-mobile .key-reason-legend {
-  margin-bottom:15px;
+    margin-bottom: 15px;
 }
-
-
-
 @media screen and (max-width: 1024px) {
-  .plate1 {
-    background-image: url("../ribon1-Mobile.png");
-    background-repeat: repeat-x;
-    background-position: center 309px;
-  }
-}
+    .plate1-after {
+      background-image: url("../ribon1-Mobile.png");
+      background-repeat: repeat-x;
+      background-position: center 309px;
 
+    }
+}
 @media screen and (max-width: 1024px) {
-  .plate3 {
-    background-image: url("../ribon2-Mobile.png");
-    background-position: 50% 141px;
-  }
+    .plate3-after {
+        background-image: url("../ribon2-Mobile.png");
+        background-position: 50% 141px;
+    }
 }
-
-
 @media screen and (max-width: 1024px) {
-  .plate10-after {
-    background-position: 50% 258px;
-  }
+    .plate10-after {
+        background-position: 50% 258px;
+    }
 }
-
-
 .newInfected-mobile-line-0 {
-  height: 650px;
-      color: green;
-      width: 2px;
-      background-color: #ffffff;
-      position: absolute;
-      left: 71px;
-
+    height: 650px;
+    color: green;
+    width: 2px;
+    background-color: #ffffff;
+    position: absolute;
+    left: 71px;
 }
-
 .newInfected-mobile-line-50 {
-  height: 650px;
-      width: 0px;
-      position: absolute;
-      left: 165px;
-      border-right: 2px dotted #1F424F;
-      z-index: -1;
+    height: 650px;
+    width: 0px;
+    position: absolute;
+    left: 165px;
+    border-right: 2px dotted #1F424F;
+    z-index: -1;
 }
-
 .newInfected-mobile-line-100 {
-  height: 650px;
-      width: 0px;
-      position: absolute;
-      left: 260px;
+    height: 650px;
+    width: 0px;
+    position: absolute;
+    left: 260px;
     border-right: 2px dotted #1F424F;
     z-index: -1;
 }
