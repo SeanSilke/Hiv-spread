@@ -2378,7 +2378,7 @@ body {
 }
 .plate10 .footer {
     margin-bottom: 40px;
-    margin-top: 60px;
+    padding-top: 60px;
 }
 @media screen and (max-width: 1024px) {
     .plate10 .comment {
