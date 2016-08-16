@@ -11,7 +11,7 @@
    ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
   */
 
-  let showInProgress = false;
+  let scrollInProgress = false;
 
 
   /*
@@ -41,25 +41,69 @@
 
   }
 
+ let scrollToElemTop = ($elem, isLast) => {
 
-  let setHelperPosotin = (winHeight,$elem) => {
-    let helperPosition = ($elem.offset().top + $elem.height() / 2 + winHeight / 2);
+   let winHeight = $(window).height()
 
-    if ( helperPosition > $('.prop').offset().top) {
-      $('.prop').css({
-        top: helperPosition
-      });
+   let helperElem = $('.prop');
+
+   let setHelperPosotin = (winHeight,$elem) => {
+     console.log($elem);
+     let helperPosition = ($elem.offset().top + winHeight);
+
+     if ( helperPosition > helperElem.offset().top) {
+       helperElem.css({
+         top: helperPosition
+       });
+     }
+   }
+
+  if(!isLast) setHelperPosotin(winHeight ,$elem);
+
+  //перемотка к нужному месту
+  $('html, body').clearQueue()
+    .animate({
+      scrollTop: $elem.offset().top,
+    }, {
+      duration: 1000,
+      done: ()=> scrollInProgress = false
+    });
+
+
+ }
+
+
+  let scrollToElemCenter = ($elem, isLast) => {
+
+    let setHelperPosotin = (winHeight,$elem) => {
+      let helperPosition = ($elem.offset().top + $elem.height() / 2 + winHeight / 2);
+
+      if ( helperPosition > $('.prop').offset().top) {
+        $('.prop').css({
+          top: helperPosition
+        });
+      }
     }
-  }
 
-  let scrollToElemCenter = (winHeight,$elem, callback) => {
+    scrollInProgress = true;
+
+    let winHeight = $(window).height()
+
+    //Добавление элемента
+    if (!isLast) {
+      setHelperPosotin(winHeight,$elem);
+    }
+
+    //определение финальной позиции
     let scrollTo;
 
-    if ( $elem.height() < winHeight){
+
+    // если элемнет больше размера экрана то прокрутка будте до его верха
+    // if ( $elem.height() < winHeight){
       scrollTo =  $elem.offset().top - winHeight / 2 + $elem.height() / 2
-    }else {
-      scrollTo =  $elem.offset().top;
-    }
+    // }else {
+    //   scrollTo =  $elem.offset().top;
+    // }
 
     //перемотка к нужному месту
     $('html, body').clearQueue()
@@ -67,19 +111,12 @@
         scrollTop: scrollTo
       }, {
         duration: 1000,
-        done: callback,
+        done: ()=> scrollInProgress = false
       });
 
   }
 
-  let showElem = ($elem, isLast) => {
-
-    showInProgress = true;
-
-    let winHeight = window.innerHeight ||
-      document.documentElement.clientHeight ||
-      document.body.clientHeight;
-
+  let showElem = ($elem) => {
 
     $elem.css({
         display: "block",
@@ -87,16 +124,6 @@
       .animate({
         opacity: 1
       }, 1000);
-
-
-    if (!isLast) {
-      setHelperPosotin(winHeight,$elem)
-    }
-
-    let callback = () => showInProgress = false
-
-    scrollToElemCenter(winHeight,$elem, callback)
-
   };
 
   let hideElem = ($elem) => {
@@ -266,12 +293,10 @@
     let onscroll = function() {
       let scrolled = window.pageYOffset || document.documentElement.scrollTop;
       let windowCenter = scrolled + window.innerHeight / 2;
-      // console.log("windowCenter",windowCenter);
 
       let botomIndex = getBotomRefIndex(windowCenter);
       let percent = getPersents(windowCenter, refPoint[botomIndex - 1], refPoint[botomIndex]);
       let color = getColorMeta(colors[botomIndex - 1], colors[botomIndex], percent);
-      // console.log(colors[botomIndex-1],colors[botomIndex], percent);
 
       if (color !== bgColor) {
         window.requestAnimationFrame(function() {
@@ -280,8 +305,6 @@
         bgColor = color;
       }
     };
-
-    // onscroll();
 
     return onscroll;
 
@@ -411,9 +434,6 @@
       topPosition,
       scrollerHeight,
       normalizedPosition;
-
-        console.log(scrollContainer);
-
 
     function calculateScrollerHeight() {
       // *Calculation of how tall scroller should be
@@ -1067,7 +1087,7 @@
     };
 
 
-    let dropDown = new DropDown(this, $(".map.hide-desktop .item.drop_down:last-of-type "));
+    let dropDown = new DropDown(this, $(".map.hide-desktop .item.drop_down:last-of-type"));
     let dropDownMobile = new DropDownMobile(this, $(".map.hide-desktop .item.drop_down").first());
     let popUp = new PopUp(this, $(".hide-desktop .banner"), 50, true);
     let yearSelect = new YearSelect(this, $('.year-select'));
@@ -1604,6 +1624,8 @@
       let showAnswers = () => {
         showElem(answer);
         onAnswer && onAnswer();
+        // scrollToElemCenter(answer)
+        scrollToElemTop($($(".answerButton")[id]))
       };
 
       let initQuestion = () => {
@@ -1612,6 +1634,8 @@
 
       let showQuestin = () => {
         showElem(question)
+        // scrollToElemCenter(question)
+        scrollToElemTop($($('.footer')[id]))
       };
 
       let state = {
@@ -1686,6 +1710,8 @@
       let showAnswers = () => {
         showElem(answer);
         onAnswer && onAnswer();
+        // scrollToElemCenter(answer)
+        scrollToElemTop($($(".answerButton")[id]))
       };
 
       let initQuestion = () => {
@@ -1694,7 +1720,9 @@
 
 
       let showQuestin = () => {
-        showElem(question)
+        showElem(question);
+        // scrollToElemCenter(question);
+        scrollToElemTop($($('.footer')[id]))
       };
 
       let state = {
@@ -1802,9 +1830,9 @@
 
       this.show = function() {
         sideBars.select(id);
-        console.log("show end");
         this.isShown = true;
-        showElem(footer, true)
+        showElem(footer)
+        scrollToElemTop($($('.footer')[id]),true)
         renderResult();
       };
 
@@ -1847,21 +1875,16 @@
         })
       }
 
-      let show = () => {
-
-        $mainElem.clearQueue()
-          .animate({
-            opacity: 1
-          }, 1000);
-      }
 
       this.isShown = false
       this.select = select;
       this.render = render;
-      this.show = function() {
+      this.show = function(){
         this.isShown = true;
-        show();
-      };
+        showElem($mainElem)
+      }
+
+
     }
 
     let sideBars = new SideBars();
@@ -1900,7 +1923,7 @@
     let mainElems = [
       new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
       new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap),
-      new hookUpQueston(2, $(".question-three"), 2, ".answer-three",
+      new hookUpQueston(2, $(".question-three"), 2, ".answer-three, .plate6-after",
         function() {
           newInfectedChart.show();
           newInfectedChartMobile.show();
@@ -1970,7 +1993,7 @@
     function onWheel(e) {
       e = e || window.event;
 
-      if (showInProgress) {
+      if (scrollInProgress) {
         e.preventDefault ? e.preventDefault() : (e.returnValue = false);
         return;
       }
@@ -2031,41 +2054,4 @@
 
   }
 
-  // console.log($(".chart.top-spread .body"));
-
-  // $(".top-spread-map").load("top-spread.svg", function() {
-  //   // console.log("Done");
-  //
-  // });
-
-
-
-
-  // let data = {
-  //   1994: 100,
-  //   1995: 203,
-  //   1996: 1513,
-  //   1997: 4315,
-  //   1998: 3971,
-  //   1999: 19758,
-  //   2000: 59609,
-  //   2001: 88739,
-  //   2002: 52170,
-  //   2003: 39232,
-  //   2004: 37002,
-  //   2005: 39407,
-  //   2006: 43007,
-  //   2007: 44713,
-  //   2008: 54563,
-  //   2009: 58410,
-  //   2010: 58298,
-  //   2011: 62387,
-  //   2012: 70832,
-  //   2013: 79764,
-  //   2014: 89667,
-  //   2015: 93000,
-  // };
-
-
-  //all code is wrapped  in iiaf to prevent main scope pollution
 })();

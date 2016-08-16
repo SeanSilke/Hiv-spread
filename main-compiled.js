@@ -10,7 +10,7 @@
    ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
   */
 
-  var showInProgress = false;
+  var scrollInProgress = false;
 
   /*
   ██      ██ ██████  ██████   █████  ██████  ██    ██     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
@@ -38,28 +38,66 @@
     }
   };
 
-  var showElem = function showElem($elem, isLast) {
+  var scrollToElemTop = function scrollToElemTop($elem, isLast) {
 
-    var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var winHeight = $(window).height();
 
-    showInProgress = true;
-    $elem.css({
-      display: "block"
-    }).clearQueue().animate({
-      opacity: 1
-    }, 1000);
+    var helperElem = $('.prop');
 
-    var center = $elem.height() > h ? h / 2 : $elem.height() / 2;
+    var setHelperPosotin = function setHelperPosotin(winHeight, $elem) {
+      console.log($elem);
+      var helperPosition = $elem.offset().top + winHeight;
 
-    var helperPosition = $elem.offset().top + $elem.height() / 2 + h / 2;
+      if (helperPosition > helperElem.offset().top) {
+        helperElem.css({
+          top: helperPosition
+        });
+      }
+    };
 
-    if (!isLast && helperPosition > $('.prop').offset().top) {
-      $('.prop').css({
-        top: helperPosition
-      });
+    if (!isLast) setHelperPosotin(winHeight, $elem);
+
+    //перемотка к нужному месту
+    $('html, body').clearQueue().animate({
+      scrollTop: $elem.offset().top
+    }, {
+      duration: 1000,
+      done: function done() {
+        return scrollInProgress = false;
+      }
+    });
+  };
+
+  var scrollToElemCenter = function scrollToElemCenter($elem, isLast) {
+
+    var setHelperPosotin = function setHelperPosotin(winHeight, $elem) {
+      var helperPosition = $elem.offset().top + $elem.height() / 2 + winHeight / 2;
+
+      if (helperPosition > $('.prop').offset().top) {
+        $('.prop').css({
+          top: helperPosition
+        });
+      }
+    };
+
+    scrollInProgress = true;
+
+    var winHeight = $(window).height();
+
+    //Добавление элемента
+    if (!isLast) {
+      setHelperPosotin(winHeight, $elem);
     }
 
-    var scrollTo = $elem.height() < h ? $elem.offset().top - h / 2 + $elem.height() / 2 : $elem.offset().top;
+    //определение финальной позиции
+    var scrollTo = void 0;
+
+    // если элемнет больше размера экрана то прокрутка будте до его верха
+    // if ( $elem.height() < winHeight){
+    scrollTo = $elem.offset().top - winHeight / 2 + $elem.height() / 2;
+    // }else {
+    //   scrollTo =  $elem.offset().top;
+    // }
 
     //перемотка к нужному месту
     $('html, body').clearQueue().animate({
@@ -67,9 +105,18 @@
     }, {
       duration: 1000,
       done: function done() {
-        return showInProgress = false;
+        return scrollInProgress = false;
       }
     });
+  };
+
+  var showElem = function showElem($elem) {
+
+    $elem.css({
+      display: "block"
+    }).clearQueue().animate({
+      opacity: 1
+    }, 1000);
   };
 
   var hideElem = function hideElem($elem) {
@@ -205,12 +252,10 @@
     var onscroll = function onscroll() {
       var scrolled = window.pageYOffset || document.documentElement.scrollTop;
       var windowCenter = scrolled + window.innerHeight / 2;
-      // console.log("windowCenter",windowCenter);
 
       var botomIndex = getBotomRefIndex(windowCenter);
       var percent = getPersents(windowCenter, refPoint[botomIndex - 1], refPoint[botomIndex]);
       var color = getColorMeta(colors[botomIndex - 1], colors[botomIndex], percent);
-      // console.log(colors[botomIndex-1],colors[botomIndex], percent);
 
       if (color !== bgColor) {
         window.requestAnimationFrame(function () {
@@ -219,8 +264,6 @@
         bgColor = color;
       }
     };
-
-    // onscroll();
 
     return onscroll;
   }();
@@ -340,8 +383,6 @@
         topPosition = void 0,
         scrollerHeight = void 0,
         normalizedPosition = void 0;
-
-    console.log(scrollContainer);
 
     function calculateScrollerHeight() {
       // *Calculation of how tall scroller should be
@@ -953,7 +994,7 @@
       display: "abs"
     };
 
-    var dropDown = new DropDown(this, $(".map.hide-desktop .item.drop_down:last-of-type "));
+    var dropDown = new DropDown(this, $(".map.hide-desktop .item.drop_down:last-of-type"));
     var dropDownMobile = new DropDownMobile(this, $(".map.hide-desktop .item.drop_down").first());
     var popUp = new PopUp(this, $(".hide-desktop .banner"), 50, true);
     var yearSelect = new YearSelect(this, $('.year-select'));
@@ -1405,6 +1446,8 @@
       var showAnswers = function showAnswers() {
         showElem(answer);
         onAnswer && onAnswer();
+        // scrollToElemCenter(answer)
+        scrollToElemTop($($(".answerButton")[id]));
       };
 
       var initQuestion = function initQuestion() {
@@ -1413,6 +1456,8 @@
 
       var showQuestin = function showQuestin() {
         showElem(question);
+        // scrollToElemCenter(question)
+        scrollToElemTop($($('.footer')[id]));
       };
 
       var state = {
@@ -1424,9 +1469,6 @@
       var render = function render() {
         if (state.isAnswered) {
           removeButton();
-          //костыль для нормальной обработки проктутки
-          showInProgress = true;
-
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1487,6 +1529,8 @@
       var showAnswers = function showAnswers() {
         showElem(answer);
         onAnswer && onAnswer();
+        // scrollToElemCenter(answer)
+        scrollToElemTop($($(".answerButton")[id]));
       };
 
       var initQuestion = function initQuestion() {
@@ -1495,6 +1539,8 @@
 
       var showQuestin = function showQuestin() {
         showElem(question);
+        // scrollToElemCenter(question);
+        scrollToElemTop($($('.footer')[id]));
       };
 
       var state = {
@@ -1506,8 +1552,6 @@
       var render = function render() {
         if (state.isAnswered) {
           removeButton();
-          //костыль для нормальной обработки проктутки
-          showInProgress = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1604,9 +1648,9 @@
 
       this.show = function () {
         sideBars.select(id);
-        console.log("show end");
         this.isShown = true;
-        showElem(footer, true);
+        showElem(footer);
+        scrollToElemTop($($('.footer')[id]), true);
         renderResult();
       };
     }
@@ -1648,19 +1692,12 @@
         });
       };
 
-      var show = function show() {
-
-        $mainElem.clearQueue().animate({
-          opacity: 1
-        }, 1000);
-      };
-
       this.isShown = false;
       this.select = select;
       this.render = render;
       this.show = function () {
         this.isShown = true;
-        show();
+        showElem($mainElem);
       };
     }
 
@@ -1697,12 +1734,14 @@
 
     // keyReasonChart.show();
 
-    var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap), new hookUpQueston(2, $(".question-three"), 2, ".answer-three", function () {
+    var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap), new hookUpQueston(2, $(".question-three"), 2, ".answer-three, .plate6-after", function () {
       newInfectedChart.show();
       newInfectedChartMobile.show();
     }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    // mainElems.forEach(elem => elem.init());
+    mainElems.forEach(function (elem) {
+      return elem.init();
+    });
 
     // mainElems.forEach(elem => elem.show());
 
@@ -1754,7 +1793,7 @@
     function onWheel(e) {
       e = e || window.event;
 
-      if (showInProgress) {
+      if (scrollInProgress) {
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
         return;
       }
@@ -1808,38 +1847,4 @@
       window.open(_url2, "_blank", "width=400,height=500");
     }
   };
-
-  // console.log($(".chart.top-spread .body"));
-
-  // $(".top-spread-map").load("top-spread.svg", function() {
-  //   // console.log("Done");
-  //
-  // });
-
-  // let data = {
-  //   1994: 100,
-  //   1995: 203,
-  //   1996: 1513,
-  //   1997: 4315,
-  //   1998: 3971,
-  //   1999: 19758,
-  //   2000: 59609,
-  //   2001: 88739,
-  //   2002: 52170,
-  //   2003: 39232,
-  //   2004: 37002,
-  //   2005: 39407,
-  //   2006: 43007,
-  //   2007: 44713,
-  //   2008: 54563,
-  //   2009: 58410,
-  //   2010: 58298,
-  //   2011: 62387,
-  //   2012: 70832,
-  //   2013: 79764,
-  //   2014: 89667,
-  //   2015: 93000,
-  // };
-
-  //all code is wrapped  in iiaf to prevent main scope pollution
 })();

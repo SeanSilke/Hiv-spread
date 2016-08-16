@@ -201,6 +201,7 @@ body {
     width: 50%;
     height: 70%;
     padding: 60px 0;
+    padding-bottom: 250px;
 }
 @media screen and (max-width: 1024px) {
     .plate1 .content .item {
@@ -255,7 +256,7 @@ body {
     cursor: pointer;
 }
 .plate1 .footer {
-    margin-top: 230px;
+  padding-top: 40px;
 }
 @media screen and (max-width: 1024px) {
     .plate1 .footer {
@@ -518,6 +519,12 @@ body {
     color: #ffffff;
     position: relative;
 }
+
+.plate3-text-item-bottom{
+  padding-bottom: 180px;
+}
+
+
 .plate3-text-item-big {
     font-size: 63px;
 }
@@ -525,11 +532,12 @@ body {
     padding-top: 210px;
 }
 .plate3 .footer {
-    padding-top: 220px;
+    padding-top: 40px;
 }
 @media screen and (max-width: 1024px) {
     .plate3-text-item {
         font-size: 14px;
+        padding-bottom: 0px;
     }
     .plate3-text-item-big {
         font-size: 36px;
@@ -686,11 +694,11 @@ body {
     }
 }
 .plate5 .footer {
-    margin-top: 60px;
+    padding-top: 60px;
 }
 @media screen and (max-width: 1024px) {
     .plate5 .footer {
-        margin-top: 30px;
+        padding-top: 30px;
     }
 }
 #svg-map path, #svg-map polygon {
@@ -1374,12 +1382,13 @@ body {
     color: #ffffff;
     text-align: center;
     margin: 150px auto 0 auto;
+    margin-bottom: 80px;
 }
 .plate6 .text2 .item:nth-child(2) {
     font-size: 63px;
 }
 .plate6 .footer {
-    margin-top: 140px;
+    padding-top: 60px;
 }
 @media screen and (max-width: 1024px) {
     .plate6 .text2 {
@@ -1587,6 +1596,7 @@ body {
     background-size: 194px 194px;
 }
 .plate7 .head_text {
+  padding-bottom: 50px;
     font-family: 'PTSerif-Regular';
     font-size: 24px;
     width: 590px;
@@ -1607,7 +1617,7 @@ body {
     }
 }
 .plate7 .footer {
-    margin-top: 90px;
+    padding-top: 40px;
 }
 .plate8 {
     margin-top: 65px;
@@ -1710,7 +1720,6 @@ body {
     border-radius: 50%;
     background-color: #18B3AC;
     top: 88px;
-    left: 706px;
     z-index: 100;
     box-shadow: 0px 0px 3px rgba(43, 108, 110, 0.75);
     color: #ffffff;
@@ -1721,6 +1730,16 @@ body {
     transition: all 1s;
     opacity: 0;
 }
+
+.ribbon-slider-8-answer {
+  left: 382px;
+}
+
+.ribbon-slider-9-answer  {
+      left: 706px;
+}
+
+
 .answered .ribbon-slider-8-answer, .answered .ribbon-slider-9-answer {
     opacity: 1;
     z-index: 200;
@@ -1883,7 +1902,7 @@ body {
     width: 330px;
 }
 .plate8 .footer {
-    margin-top: 70px;
+    padding-top: 70px;
 }
 @media screen and (max-width: 1024px) {
     .plate8 .footer {
@@ -1984,7 +2003,7 @@ body {
     /*margin-bottom: 80px;*/
 }
 .plate9 .footer {
-    margin-top: 70px;
+    padding-top: 70px;
 }
 @media screen and (max-width: 1024px) {
     .plate9 .answerButton {
@@ -2350,6 +2369,7 @@ body {
 }
 .plate10 .comment {
     margin: 60px auto 60px auto;
+    margin-bottom: 0px;
     text-align: left;
     width: 570px;
     font-family: 'PTSerif-Regular';
@@ -2358,6 +2378,7 @@ body {
 }
 .plate10 .footer {
     margin-bottom: 40px;
+    margin-top: 60px;
 }
 @media screen and (max-width: 1024px) {
     .plate10 .comment {
