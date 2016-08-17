@@ -136,13 +136,18 @@ body {
     }
 }
 .ramblerIG {
-  padding: 17px;
-  padding-right: 30px;
-    /*padding: 21px;*/
+  padding-top: 18px;
+    background-image: url("../ramblerIG.svg");
     float: right;
+    width: 300px;
+    height: 14px;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+
 }
 .gazeta {
-  padding: 21px;
+  padding: 17px;
+
   padding-left: 30px;
       padding-bottom: 10px;
 }
@@ -2474,7 +2479,7 @@ body {
     }
 }
 .plate11 .have-exam {
-    margin: 180px 0 160px 0;
+    margin: 180px 0 55px 0;
 }
 @media screen and (max-width: 1023px) {
     .plate11 .have-exam {
@@ -2803,4 +2808,21 @@ body {
 
 .whiteDotline {
 background-image: url("../whiteDotLine.png");
+}
+
+
+.credentials {
+  font-size: 16px;
+  font-family:"PTSerif-Regular";
+  color: #ffffff;
+  margin: 50px 0px;
+}
+
+.credentials p {
+  margin: 25px 0px;
+}
+
+.credentials a {
+  text-decoration: none;
+  color: #ffffff;
 }
