@@ -1362,7 +1362,9 @@
       });
 
       var isRight = function isRight() {
-        return Math.round(percent * 100) == rightAnswer;
+        var answer = Math.round(percent * 100);
+
+        return answer > 35 && answer < 45;
       };
 
       return {

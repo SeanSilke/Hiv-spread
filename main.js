@@ -1543,7 +1543,9 @@
       });
 
       let isRight = () => {
-        return Math.round(percent * 100) == rightAnswer;
+        let answer =  Math.round(percent * 100)
+
+        return answer > 35 && answer < 45;
       }
 
       return {
