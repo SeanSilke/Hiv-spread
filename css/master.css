@@ -53,13 +53,13 @@ body {
     overflow-x: hidden;
     ;
 }
-@media screen and (max-width: 1024px) {}
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {}
+@media screen and (max-width: 1023px) {
     .hide-mobile {
         display: none !important;
     }
 }
-@media screen and (min-width: 1025px) {
+@media screen and (min-width: 1024px) {
     .hide-desktop {
         display: none !important;
     }
@@ -118,7 +118,7 @@ body {
 .bottom {
     margin-top: 20px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .line.bottom {
         height: 100px;
     }
@@ -129,26 +129,33 @@ body {
     margin: 0 auto;
     /*background-color: green;*/
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .line .center {
         text-align: center;
         width: 320px;
     }
 }
 .ramblerIG {
-    padding: 21px;
-    padding-left: 30px
+  padding: 17px;
+  padding-right: 30px;
     /*padding: 21px;*/
-}
-.gazeta {
-    padding: 17px;
-    padding-right: 30px;
     float: right;
 }
-@media screen and (max-width: 1024px) {
+.gazeta {
+  padding: 21px;
+  padding-left: 30px;
+      padding-bottom: 10px;
+}
+@media screen and (max-width: 1023px) {
     .gazeta {
         padding: 0 auto;
         padding-top: 17px;
+        float: none;
+    }
+
+    .ramblerIG {
+      padding: 17px;
+        /*padding: 21px;*/
         float: none;
     }
 }
@@ -168,8 +175,6 @@ body {
     background-image: url("../ribon1.png");
     background-repeat: repeat-x;
     background-position: center 394px;
-    animation: mymove 150s infinite;
-    animation-timing-function: linear;
     position: absolute;
     left: 0;
     right: -550px;
@@ -177,7 +182,7 @@ body {
     bottom: 0;
     position: absolute;
     z-index: -1;
-    animation: mymove 150s infinite;
+    animation: mymove 75s infinite;
     animation-timing-function: linear;
     animation-direction: reverse;
 }
@@ -188,7 +193,7 @@ body {
     height: 100%;
     font-size: 0;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate1 .content {
         max-width: 320px;
     }
@@ -203,7 +208,7 @@ body {
     padding: 60px 0;
     padding-bottom: 250px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate1 .content .item {
         width: 100%;
         text-align: center;
@@ -215,7 +220,7 @@ body {
     color: #EEEEEE;
     font-family: 'PTSerif-Regular';
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate1 .content .item .head {
         font-size: 33.2px;
         color: #EEEEEE;
@@ -239,7 +244,7 @@ body {
     padding-top: 60px;
     text-align: left;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate1 .content .item .text {
         font-size: 16px;
         padding: 0 20px;
@@ -258,7 +263,7 @@ body {
 .plate1 .footer {
   padding-top: 40px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate1 .footer {
         margin-top: 130px;
     }
@@ -267,7 +272,7 @@ body {
     margin-top: 65px;
     width: 100%;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate2 {
         margin-top: 30px;
     }
@@ -277,7 +282,7 @@ body {
     height: 100%;
     margin: 0 auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate2 .content {
         width: 320px;
         height: 100%;
@@ -292,7 +297,7 @@ body {
     background-repeat: no-repeat;
     background-position: bottom;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .redDotLine {
         margin-bottom: 23px
     }
@@ -303,7 +308,7 @@ body {
     font-family: "PTSans-Bold";
     text-align: center;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate2 .content .question {
         font-size: 16px;
         padding: 0 20px;
@@ -315,7 +320,7 @@ body {
     color: #ffffff;
     font-family: "PTSans-Regular"
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate2 .answers {
         margin-bottom: 35px;
     }
@@ -335,7 +340,7 @@ body {
 .plate2 .answers .item:nth-child(2) .elem {
     text-align: left;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate2 .answers .item:nth-child(1) .elem {
         text-align: left;
     }
@@ -347,7 +352,7 @@ body {
     position: relative;
     transition: color 1s, opacity 0.3s;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate2 .answers .item {
         box-sizing: border-box;
         font-size: 14px;
@@ -475,8 +480,6 @@ body {
     background-image: url("../ribon2.png");
     background-repeat: repeat-x;
     background-position: 50% 120px;
-    animation: mymove 150s infinite;
-    animation-timing-function: linear;
     position: absolute;
     left: 0;
     right: -550px;
@@ -484,11 +487,11 @@ body {
     bottom: 0;
     position: absolute;
     z-index: -1;
-    animation: mymove 150s infinite;
+    animation: mymove 75s infinite;
     animation-timing-function: linear;
     animation-direction: reverse;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate3 {
         min-width: 320px;
     }
@@ -497,13 +500,13 @@ body {
 /* Standard syntax */
 
 .plate3 .comment {
-    font-size: 16px;
-    font-family: 'PTSerif-Regular';
-    color: #ffffff;
-    width: 553px;
+    font-size: 24px;
+    font-family: "PTSans-Bold";
+        color: #ffffff;
+        width: 740px;
     margin: 0 auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate3 .comment {
         font-size: 16px;
         padding: 0 20px;
@@ -534,7 +537,7 @@ body {
 .plate3 .footer {
     padding-top: 40px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate3-text-item {
         font-size: 14px;
         padding-bottom: 0px;
@@ -559,7 +562,7 @@ body {
     width: 1024px;
     margin: 0 auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate4 {
         width: 100%;
         min-width: 320px;
@@ -577,7 +580,7 @@ body {
     font-family: "PTSans-Bold";
     text-align: center;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate4 .content .question {
         font-size: 16px;
     }
@@ -603,7 +606,7 @@ body {
 .plate4 .answers .item:nth-child(2) .elem {
     text-align: left;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate4 .answers .item {
         box-sizing: border-box;
         font-size: 14px;
@@ -636,7 +639,7 @@ body {
     text-align: center;
     margin-bottom: 65px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate5 .comment-top {
         box-sizing: border-box;
         font-size: 16px;
@@ -671,7 +674,7 @@ body {
 .plate5 .comment .item:nth-child(2) {
     padding-left: 30px
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate5 .comment {
         margin-top: 40px;
         width: 320px;
@@ -696,7 +699,7 @@ body {
 .plate5 .footer {
     padding-top: 60px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate5 .footer {
         padding-top: 30px;
     }
@@ -834,7 +837,7 @@ body {
     font-size: 0;
     cursor: pointer;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .map {
         box-sizing: border-box;
         padding: 0 20px;
@@ -1105,7 +1108,7 @@ body {
     font-size: 14px;
 }
 
-/*@media screen and (max-width: 1024px) {
+/*@media screen and (max-width: 1023px) {
 
 
   .banner .body .pie {
@@ -1198,7 +1201,7 @@ body {
     bottom: 0;
     position: absolute;
     z-index: -1;
-    animation: mymove 150s infinite;
+    animation: mymove 75s infinite;
     animation-timing-function: linear;
     animation-direction: reverse;
 }
@@ -1207,7 +1210,7 @@ body {
     height: 100%;
     margin: 0 auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate6-after {
         margin-top: 45px;
         background-image: url("../ribon3-Mobile.png");
@@ -1250,7 +1253,7 @@ body {
 .plate6 .answers .item .elem {
     margin-bottom: 20px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate6 .content .question {
         font-size: 16px;
     }
@@ -1286,7 +1289,7 @@ body {
     margin: 0 auto;
     /*margin-top: 65px;*/
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate6 .comment {
         box-sizing: border-box;
         font-size: 16px;
@@ -1390,7 +1393,7 @@ body {
 .plate6 .footer {
     padding-top: 60px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate6 .text2 {
         display: block;
         font-family: "PTSerif-Regular";
@@ -1423,10 +1426,10 @@ body {
     bottom: 0;
     position: absolute;
     z-index: -1;
-    animation: mymove 150s infinite;
+    animation: mymove 75s infinite;
     animation-timing-function: linear;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate7-after {
         /*background-image: none;*/
         background-position: 50% 452px;
@@ -1438,7 +1441,7 @@ body {
     margin: 0 auto;
     text-align: center;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate7 .content {
         width: 320px;
     }
@@ -1456,7 +1459,7 @@ body {
     margin: 25px 0 35px 0;
     display: inline-block;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate7 .content .question {
         font-size: 16px;
         color: #ffffff;
@@ -1515,7 +1518,7 @@ body {
     width: 60%;
     position: relative;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate7 .content .guess-growth {
         width: 320px;
         /*height: 320px;*/
@@ -1538,8 +1541,8 @@ body {
     box-shadow: 0 0 1px 0px #B42025 inset, 0 0 1px 0px #B42025;
 }
 .guess-growth-main-small {
-    width: 46px;
-    height: 46px;
+    width: 38.3333333333px;
+    height: 38.3333333333px;
     border-radius: 50%;
     background-color: #B42025;
     position: absolute;
@@ -1603,7 +1606,7 @@ body {
     margin: 20px auto 0 auto;
     color: #ffffff;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate7 .head_text {
         box-sizing: border-box;
         font-family: 'PTSerif-Regular';
@@ -1634,7 +1637,7 @@ body {
     font-family: "PTSans-Bold";
     text-align: center;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate8 {
         margin-top: 50px;
     }
@@ -1800,7 +1803,7 @@ body {
     margin: 0 auto;
     /*margin-top: 65px;*/
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate8 .comment {
         width: 100%;
     }
@@ -1904,7 +1907,7 @@ body {
 .plate8 .footer {
     padding-top: 70px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate8 .footer {
         margin-top: 40px;
     }
@@ -1931,7 +1934,7 @@ body {
     margin: 65px auto 0 auto;
     position: relative;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate9 {
         margin-top: 40px;
         width: 100%;
@@ -2005,7 +2008,7 @@ body {
 .plate9 .footer {
     padding-top: 70px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate9 .answerButton {
         margin-top: 50px;
     }
@@ -2019,7 +2022,7 @@ body {
     width: 570px;
     margin: 0 auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate9 .chart.top-infected {
         width: 100%;
         margin: 0 auto;
@@ -2032,7 +2035,7 @@ body {
     display: inline-block;
     margin-bottom: 35px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate9 .chart.top-infected .header {
         font-size: 16px;
         margin-bottom: 35px;
@@ -2072,7 +2075,7 @@ body {
     text-align: right;
     padding-right: 20px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .top-infected-row>div {
         box-sizing: border-box;
         display: inline-block;
@@ -2099,7 +2102,7 @@ body {
     margin-top: 65px;
     width: 100%;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate10 {
         margin-top: 40px;
     }
@@ -2132,7 +2135,7 @@ body {
     font-family: "PTSans-Bold";
     text-align: center;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate10 .content {
         box-sizing: border-box;
         text-align: center;
@@ -2168,7 +2171,7 @@ body {
 .plate10 .answers .item .elem {
     margin-bottom: 20px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate10 .answers .item {
         box-sizing: border-box;
         font-size: 16px;
@@ -2193,7 +2196,7 @@ body {
 .answer-seven {
     padding-top: 100px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .answer-seven {
         padding-top: 50px;
     }
@@ -2229,7 +2232,7 @@ body {
     margin: 20px auto 0 auto;
     color: #ffffff;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate10 .head-name {
         font-size: 20px;
     }
@@ -2259,7 +2262,7 @@ body {
     height: 372px;
     margin: 0 auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .chart.top-spread {
         margin-top: 100px;
     }
@@ -2298,7 +2301,7 @@ body {
     font-family: 'PTSans-Regular';
     font-size: 0;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .top-spread-chart {
         display: block;
         width: 100%;
@@ -2334,7 +2337,7 @@ body {
     text-align: right;
     padding-right: 15px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .top-spread-chart-row .coll>div:nth-child(1) {
         width: 15%;
         text-align: left;
@@ -2356,7 +2359,7 @@ body {
     background-size: 100%;
     background-repeat: no-repeat;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .top-spread-map {
         display: inline-block;
         width: 100%;
@@ -2380,7 +2383,7 @@ body {
     margin-bottom: 40px;
     padding-top: 60px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate10 .comment {
         box-sizing: border-box;
         margin: 40px 0;
@@ -2403,8 +2406,6 @@ body {
   background-image: url("../ribon6.png");
   background-repeat: repeat-x;
   background-position: 50% 185px;
-  animation: mymove 150s infinite;
-  animation-timing-function: linear;
   position: absolute;
   left: 0;
   right: -550px;
@@ -2412,7 +2413,7 @@ body {
   bottom: 0;
   position: absolute;
   z-index: -1;
-  animation: mymove 150s infinite;
+  animation: mymove 75s infinite;
   animation-timing-function: linear;
 }
 
@@ -2422,7 +2423,7 @@ body {
     height: 100%;
     margin: 0 auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate11-after {
         background-image: url("../ribon6-Mobile.png");
         background-repeat: repeat-x;
@@ -2446,7 +2447,7 @@ body {
     margin-top: 30px;
     color: #ffffff;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate11 .result {
         margin: 0;
     }
@@ -2462,7 +2463,7 @@ body {
 .plate11 .have-exam {
     margin: 180px 0 160px 0;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate11 .have-exam {
         margin: 40px 0 45px 0;
     }
@@ -2488,7 +2489,7 @@ body {
     font-size: 24px;
     color: #18B3AC;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate11 .have-exam .question {
         font-family: 'PTSans-Bold';
         font-size: 24px;
@@ -2521,7 +2522,7 @@ body {
     font-size: 24px;
     padding-bottom: 40px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate11 .social .text {
         font-size: 20px;
         padding-bottom: 20px;
@@ -2583,7 +2584,7 @@ body {
 }
 .valuepicker-mobile {
     width: 250px;
-    height: 40px;
+    height: 20px;
     position: relative;
     margin: 0 auto;
     margin-top: 20px;
@@ -2606,6 +2607,30 @@ body {
     margin: 0 auto;
     background-color: #D4D4D4;
 }
+
+.valuepicker-mobile-legend {
+  font-size: 0px;
+  padding: 0px 35px;
+  padding-bottom: 20px;
+}
+
+.valuepicker-mobile-legend-elem {
+  display: inline-block;
+  font-size: 16px;
+  font-family: PTSans-Regular;
+  color: #93A1A8;
+  width: 50%
+}
+
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
 .answers-mobile {
     width: 100%;
     padding: 0 0;
@@ -2707,7 +2732,7 @@ body {
 .key-reason-mobile .key-reason-legend {
     margin-bottom: 15px;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate1-after {
       background-image: url("../ribon1-Mobile.png");
       background-repeat: repeat-x;
@@ -2715,13 +2740,13 @@ body {
 
     }
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate3-after {
         background-image: url("../ribon2-Mobile.png");
         background-position: 50% 141px;
     }
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
     .plate10-after {
         background-position: 50% 258px;
     }
@@ -2749,4 +2774,9 @@ body {
     left: 260px;
     border-right: 2px dotted #1F424F;
     z-index: -1;
+}
+
+
+.whiteDotline {
+background-image: url("../whiteDotLine.png");
 }

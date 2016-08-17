@@ -48,7 +48,6 @@
    let helperElem = $('.prop');
 
    let setHelperPosotin = (winHeight,$elem) => {
-     console.log($elem);
      let helperPosition = ($elem.offset().top + winHeight);
 
      if ( helperPosition > helperElem.offset().top) {
@@ -592,7 +591,9 @@
     let stateNameFeald = popUp.find(".head .region span");
     let infectedFeald = dataFields.find(".infected");
     let diedFeald = dataFields.find(".dead");
-    let infectedTextFeald = $(dataFields.find(".leble")[0]);
+    // console.log(infectedFeald);
+    let infectedTextFeald = $(dataFields.find(".label")[0]);
+    // console.log(dataFields.find(".label")[0],infectedTextFeald);
 
     let close = function() {
       hide();
@@ -642,7 +643,7 @@
         });
         died = null;
         infected = mapMain.data[mapMain.state.regionId].relInfected[mapMain.state.year] || "н/д";
-        infectedText = "Число инфицированных на 100 тысяч населения";
+        infectedText = "Число инфицированных на&nbsp;100 тысяч населения";
       } else {
         infected = mapMain.data[mapMain.state.regionId].absInfected[mapMain.state.year] || "н/д";
         died = mapMain.data[mapMain.state.regionId].absDied[mapMain.state.year] || "н/д";
@@ -657,7 +658,7 @@
 
       stateNameFeald.text(name);
       infectedFeald.text(infected);
-      infectedTextFeald.text(infectedText);
+      infectedTextFeald.html(infectedText);
       diedFeald.text(died);
 
       // if (mapMain.state.regionId && !isMobile) {
@@ -986,7 +987,7 @@
 
     // -------------Map State------------
     this.state = {
-      year: 1994,
+      year: 2012,
       regionId: "",
       display: "abs",
       isPlaing: true,
@@ -1374,6 +1375,16 @@
 
     })();
 
+
+    /*
+    ██    ██  █████  ██      ██████  ██  ██████ ██   ██ ███████ ██████
+    ██    ██ ██   ██ ██      ██   ██ ██ ██      ██  ██  ██      ██   ██
+    ██    ██ ███████ ██      ██████  ██ ██      █████   █████   ██████
+     ██  ██  ██   ██ ██      ██      ██ ██      ██  ██  ██      ██   ██
+      ████   ██   ██ ███████ ██      ██  ██████ ██   ██ ███████ ██   ██
+    */
+
+
     let valPicker = function(fn, state) {
 
       let meter = document.querySelector('.red-meter-9');
@@ -1451,6 +1462,14 @@
         isRight
       }
     };
+
+    /*
+    ██    ██  █████  ██      ██████  ██  ██████ ██   ██ ███████ ██████  ██████
+    ██    ██ ██   ██ ██      ██   ██ ██ ██      ██  ██  ██      ██   ██      ██
+    ██    ██ ███████ ██      ██████  ██ ██      █████   █████   ██████   █████
+     ██  ██  ██   ██ ██      ██      ██ ██      ██  ██  ██      ██   ██ ██
+      ████   ██   ██ ███████ ██      ██  ██████ ██   ██ ███████ ██   ██ ███████
+    */
 
 
     let valPicker2 = function(fn, state) {
@@ -1533,13 +1552,25 @@
 
     };
 
+    /*
+    ██    ██  █████  ██      ██████  ██  ██████ ██   ██ ███████ ██████  ██████
+    ██    ██ ██   ██ ██      ██   ██ ██ ██      ██  ██  ██      ██   ██      ██
+    ██    ██ ███████ ██      ██████  ██ ██      █████   █████   ██████   █████
+     ██  ██  ██   ██ ██      ██      ██ ██      ██  ██  ██      ██   ██      ██
+      ████   ██   ██ ███████ ██      ██  ██████ ██   ██ ███████ ██   ██ ██████
+    */
+
 
     let valPicker3 = function(fn, state) {
       let circle = document.querySelector('.guess-growth-main-small');
       let textFeald = document.querySelector('.guess-growth-main-text');
-      let r = 46;
+      let baseR = 38.3333333333;
+      let r = 38.3333333333;
+      let h = 0;
       let text = "1 000 000";
-      let selectedVal = 1000000;
+      let selectedVal = 0;
+      let baseVal = 1000000;
+      let totalVal = 1000000;
 
       let valToText = val => {
         val = Math.round(val / 100) * 100;
@@ -1558,15 +1589,16 @@
 
       let changeText = () => textFeald.innerHTML = text;
 
-      let calculeteNewR = h => 46 + (230 - 46) * (1 - h / 230);
+      let calculeteNewR = persent => baseR + baseR*persent ;
 
-      let calculeteNewVal = h => 1000000 + (4000000) * (1 - h / 230);
+      let calculeteNewVal = persent => baseVal + baseVal*persent;
 
       let onDrag = (event, ui) => {
 
-        let h = ui.position.top;
-        r = calculeteNewR(ui.position.top);
-        selectedVal = calculeteNewVal(h)
+        h = ui.position.top;
+        let persent  = (1 - h / 230) * 5
+        r = calculeteNewR(persent);
+        selectedVal = calculeteNewVal(persent)
         text = valToText(selectedVal);
         requestAnimationFrame(changeR);
         requestAnimationFrame(changeText);
@@ -1576,10 +1608,10 @@
       };
 
       let onDragY = (event, ui) => {
-
-        let h = 230 - ui.position.left;
-        r = calculeteNewR(h);
-        selectedVal = calculeteNewVal(h)
+        h = ui.position.left;
+        let persent  = ( h / 230) * 5
+        r = calculeteNewR(persent);
+        selectedVal = calculeteNewVal(persent)
         text = valToText(selectedVal);
         requestAnimationFrame(changeR);
         requestAnimationFrame(changeText);
@@ -1601,7 +1633,7 @@
       });
 
 
-      let isRight = () => (selectedVal < 3000000 && selectedVal > 2000000)
+      let isRight = () => (selectedVal > 3000000 && selectedVal < 4000000)
 
       return {
         isRight
@@ -1916,7 +1948,7 @@
     })
     }
 
-    // getDataAndMap();
+    getDataAndMap();
 
     // keyReasonChart.show();
 

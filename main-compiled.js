@@ -45,7 +45,6 @@
     var helperElem = $('.prop');
 
     var setHelperPosotin = function setHelperPosotin(winHeight, $elem) {
-      console.log($elem);
       var helperPosition = $elem.offset().top + winHeight;
 
       if (helperPosition > helperElem.offset().top) {
@@ -532,7 +531,9 @@
     var stateNameFeald = popUp.find(".head .region span");
     var infectedFeald = dataFields.find(".infected");
     var diedFeald = dataFields.find(".dead");
-    var infectedTextFeald = $(dataFields.find(".leble")[0]);
+    // console.log(infectedFeald);
+    var infectedTextFeald = $(dataFields.find(".label")[0]);
+    // console.log(dataFields.find(".label")[0],infectedTextFeald);
 
     var close = function close() {
       hide();
@@ -582,7 +583,7 @@
         });
         died = null;
         infected = mapMain.data[mapMain.state.regionId].relInfected[mapMain.state.year] || "н/д";
-        infectedText = "Число инфицированных на 100 тысяч населения";
+        infectedText = "Число инфицированных на&nbsp;100 тысяч населения";
       } else {
         infected = mapMain.data[mapMain.state.regionId].absInfected[mapMain.state.year] || "н/д";
         died = mapMain.data[mapMain.state.regionId].absDied[mapMain.state.year] || "н/д";
@@ -597,7 +598,7 @@
 
       stateNameFeald.text(name);
       infectedFeald.text(infected);
-      infectedTextFeald.text(infectedText);
+      infectedTextFeald.html(infectedText);
       diedFeald.text(died);
 
       // if (mapMain.state.regionId && !isMobile) {
@@ -900,7 +901,7 @@
 
     // -------------Map State------------
     this.state = {
-      year: 1994,
+      year: 2012,
       regionId: "",
       display: "abs",
       isPlaing: true
@@ -1199,6 +1200,14 @@
       };
     }();
 
+    /*
+    ██    ██  █████  ██      ██████  ██  ██████ ██   ██ ███████ ██████
+    ██    ██ ██   ██ ██      ██   ██ ██ ██      ██  ██  ██      ██   ██
+    ██    ██ ███████ ██      ██████  ██ ██      █████   █████   ██████
+     ██  ██  ██   ██ ██      ██      ██ ██      ██  ██  ██      ██   ██
+      ████   ██   ██ ███████ ██      ██  ██████ ██   ██ ███████ ██   ██
+    */
+
     var valPicker = function valPicker(fn, state) {
 
       var meter = document.querySelector('.red-meter-9');
@@ -1275,6 +1284,14 @@
         isRight: isRight
       };
     };
+
+    /*
+    ██    ██  █████  ██      ██████  ██  ██████ ██   ██ ███████ ██████  ██████
+    ██    ██ ██   ██ ██      ██   ██ ██ ██      ██  ██  ██      ██   ██      ██
+    ██    ██ ███████ ██      ██████  ██ ██      █████   █████   ██████   █████
+     ██  ██  ██   ██ ██      ██      ██ ██      ██  ██  ██      ██   ██ ██
+      ████   ██   ██ ███████ ██      ██  ██████ ██   ██ ███████ ██   ██ ███████
+    */
 
     var valPicker2 = function valPicker2(fn, state) {
       var meter = document.querySelector('.red-meter-8');
@@ -1353,12 +1370,24 @@
       };
     };
 
+    /*
+    ██    ██  █████  ██      ██████  ██  ██████ ██   ██ ███████ ██████  ██████
+    ██    ██ ██   ██ ██      ██   ██ ██ ██      ██  ██  ██      ██   ██      ██
+    ██    ██ ███████ ██      ██████  ██ ██      █████   █████   ██████   █████
+     ██  ██  ██   ██ ██      ██      ██ ██      ██  ██  ██      ██   ██      ██
+      ████   ██   ██ ███████ ██      ██  ██████ ██   ██ ███████ ██   ██ ██████
+    */
+
     var valPicker3 = function valPicker3(fn, state) {
       var circle = document.querySelector('.guess-growth-main-small');
       var textFeald = document.querySelector('.guess-growth-main-text');
-      var r = 46;
+      var baseR = 38.3333333333;
+      var r = 38.3333333333;
+      var h = 0;
       var text = "1 000 000";
-      var selectedVal = 1000000;
+      var selectedVal = 0;
+      var baseVal = 1000000;
+      var totalVal = 1000000;
 
       var valToText = function valToText(val) {
         val = Math.round(val / 100) * 100;
@@ -1378,19 +1407,20 @@
         return textFeald.innerHTML = text;
       };
 
-      var calculeteNewR = function calculeteNewR(h) {
-        return 46 + (230 - 46) * (1 - h / 230);
+      var calculeteNewR = function calculeteNewR(persent) {
+        return baseR + baseR * persent;
       };
 
-      var calculeteNewVal = function calculeteNewVal(h) {
-        return 1000000 + 4000000 * (1 - h / 230);
+      var calculeteNewVal = function calculeteNewVal(persent) {
+        return baseVal + baseVal * persent;
       };
 
       var onDrag = function onDrag(event, ui) {
 
-        var h = ui.position.top;
-        r = calculeteNewR(ui.position.top);
-        selectedVal = calculeteNewVal(h);
+        h = ui.position.top;
+        var persent = (1 - h / 230) * 5;
+        r = calculeteNewR(persent);
+        selectedVal = calculeteNewVal(persent);
         text = valToText(selectedVal);
         requestAnimationFrame(changeR);
         requestAnimationFrame(changeText);
@@ -1400,10 +1430,10 @@
       };
 
       var onDragY = function onDragY(event, ui) {
-
-        var h = 230 - ui.position.left;
-        r = calculeteNewR(h);
-        selectedVal = calculeteNewVal(h);
+        h = ui.position.left;
+        var persent = h / 230 * 5;
+        r = calculeteNewR(persent);
+        selectedVal = calculeteNewVal(persent);
         text = valToText(selectedVal);
         requestAnimationFrame(changeR);
         requestAnimationFrame(changeText);
@@ -1425,7 +1455,7 @@
       });
 
       var isRight = function isRight() {
-        return selectedVal < 3000000 && selectedVal > 2000000;
+        return selectedVal > 3000000 && selectedVal < 4000000;
       };
 
       return {
@@ -1730,7 +1760,7 @@
       });
     };
 
-    // getDataAndMap();
+    getDataAndMap();
 
     // keyReasonChart.show();
 
