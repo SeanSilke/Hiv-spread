@@ -11,7 +11,7 @@
    ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
   */
 
-  let scrollInProgress = false;
+  let disableScroll = false;
 
 
   /*
@@ -65,7 +65,7 @@
       scrollTop: $elem.offset().top,
     }, {
       duration: 1000,
-      done: ()=> scrollInProgress = false
+      done: ()=> disableScroll = false
     });
 
 
@@ -84,7 +84,7 @@
       }
     }
 
-    scrollInProgress = true;
+    disableScroll = true;
 
     let winHeight = $(window).height()
 
@@ -110,7 +110,7 @@
         scrollTop: scrollTo
       }, {
         duration: 1000,
-        done: ()=> scrollInProgress = false
+        done: ()=> disableScroll = false
       });
 
   }
@@ -1679,6 +1679,7 @@
       let render = function() {
         if (state.isAnswered) {
           removeButton();
+          disableScroll = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1765,6 +1766,7 @@
 
       let render = function() {
         if (state.isAnswered) {
+          disableScroll = true;
           removeButton();
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
@@ -2025,7 +2027,7 @@
     function onWheel(e) {
       e = e || window.event;
 
-      if (scrollInProgress) {
+      if (disableScroll) {
         e.preventDefault ? e.preventDefault() : (e.returnValue = false);
         return;
       }

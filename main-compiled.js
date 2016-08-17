@@ -10,7 +10,7 @@
    ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
   */
 
-  var scrollInProgress = false;
+  var disableScroll = false;
 
   /*
   ██      ██ ██████  ██████   █████  ██████  ██    ██     ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████
@@ -62,7 +62,7 @@
     }, {
       duration: 1000,
       done: function done() {
-        return scrollInProgress = false;
+        return disableScroll = false;
       }
     });
   };
@@ -79,7 +79,7 @@
       }
     };
 
-    scrollInProgress = true;
+    disableScroll = true;
 
     var winHeight = $(window).height();
 
@@ -104,7 +104,7 @@
     }, {
       duration: 1000,
       done: function done() {
-        return scrollInProgress = false;
+        return disableScroll = false;
       }
     });
   };
@@ -1499,6 +1499,7 @@
       var render = function render() {
         if (state.isAnswered) {
           removeButton();
+          disableScroll = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -1581,6 +1582,7 @@
 
       var render = function render() {
         if (state.isAnswered) {
+          disableScroll = true;
           removeButton();
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
@@ -1823,7 +1825,7 @@
     function onWheel(e) {
       e = e || window.event;
 
-      if (scrollInProgress) {
+      if (disableScroll) {
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
         return;
       }
