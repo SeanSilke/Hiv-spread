@@ -1590,6 +1590,19 @@ body {
     position: absolute;
     bottom: 0px;
 }
+
+.guess-growth-legend>div:nth-child(2) {
+    position: absolute;
+    bottom: 112px;
+    opacity: 0;
+    transition: opacity 1s;
+    color: #18B3AC;
+}
+
+.answered .guess-growth-legend>div:nth-child(2){
+    opacity: 1;
+}
+
 .plate7 .head {
     background-image: url("../women1.png");
     background-repeat: no-repeat;
@@ -2619,7 +2632,18 @@ body {
   font-size: 16px;
   font-family: PTSans-Regular;
   color: #93A1A8;
-  width: 50%
+  width: 33.33333%
+}
+
+
+.valuepicker-mobile-legend-elem:nth-child(2) {
+    transition: opacity 1s;
+    color: #18B3AC;
+    opacity: 0;
+}
+
+.answered .valuepicker-mobile-legend-elem:nth-child(2){
+    opacity: 1;
 }
 
 

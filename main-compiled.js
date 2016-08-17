@@ -750,7 +750,8 @@
 
     var that = this;
     var isOpen = false;
-    var $select = mainElem.find(" .head");
+
+    var $select = mainElem.find(".drop_down .head");
     var scrollable = mainElem.find(".scrollable");
     var closeImg = mainElem.find(" .close_button img");
 
@@ -811,7 +812,6 @@
         container.append(elem);
 
         elem.click(function (e) {
-          console.log("click");
           e.stopPropagation();
           mapMain.state.regionId = this.dataset.regionid;
           mapMain.render();
@@ -1760,7 +1760,7 @@
       });
     };
 
-    getDataAndMap();
+    // getDataAndMap();
 
     // keyReasonChart.show();
 
@@ -1769,9 +1769,7 @@
       newInfectedChartMobile.show();
     }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    mainElems.forEach(function (elem) {
-      return elem.init();
-    });
+    // mainElems.forEach(elem => elem.init());
 
     // mainElems.forEach(elem => elem.show());
 

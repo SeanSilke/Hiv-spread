@@ -821,7 +821,8 @@
 
     let that = this;
     let isOpen = false;
-    let $select = mainElem.find(" .head");
+
+    let $select = mainElem.find(".drop_down .head");
     let scrollable = mainElem.find(".scrollable");
     let closeImg = mainElem.find(" .close_button img");
 
@@ -888,7 +889,6 @@
           container.append(elem);
 
           elem.click(function(e) {
-            console.log("click");
             e.stopPropagation();
             mapMain.state.regionId = this.dataset.regionid;
             mapMain.render();
@@ -1948,7 +1948,7 @@
     })
     }
 
-    getDataAndMap();
+    // getDataAndMap();
 
     // keyReasonChart.show();
 
@@ -1968,7 +1968,7 @@
     ];
 
 
-    mainElems.forEach(elem => elem.init());
+    // mainElems.forEach(elem => elem.init());
 
 
     // mainElems.forEach(elem => elem.show());
