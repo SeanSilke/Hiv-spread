@@ -56,15 +56,33 @@
 
     if (!isLast) setHelperPosotin(winHeight, $elem);
 
+    var topPosition = $elem.offset().top;
+
     //перемотка к нужному месту
-    $('html, body').clearQueue().animate({
-      scrollTop: $elem.offset().top
-    }, {
-      duration: 1000,
-      done: function done() {
-        return disableScroll = false;
+    // $('body').clearQueue()
+    //   .animate({
+    //     scrollTop: topPosition,
+    //   }, {
+    //     duration: 1000,
+    //     done: ()=> disableScroll = false
+    //   });
+
+
+    $('body').velocity('stop').velocity('scroll', { duration: 750, offset: topPosition,
+      complete: function complete() {
+        console.log("hi");
+        disableScroll = false;
       }
     });
+
+    // window.scrollTo(0,topPosition);
+    // disableScroll = false
+
+    // console.log("hi",$('.main-container'),$elem.offset().top);
+    // $('.main-container').css({
+    //   "transform": "translateY("+ "-" +$elem.offset().top + "px)",
+    // })
+
   };
 
   var scrollToElemCenter = function scrollToElemCenter($elem, isLast) {
