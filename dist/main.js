@@ -150,6 +150,7 @@
 
   // ------------Data process functions------
 
+
   var newDataProseed = function newDataProseed(csvFile) {
     var r = {};
     var regionsArr = csvFile.split("\n");
@@ -1122,6 +1123,7 @@
 
     // newInfectedChart.show();
 
+
     var keyReasonChart = function () {
 
       //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
@@ -1776,6 +1778,7 @@
     });
 
     // mainElems.forEach(elem => elem.show());
+
 
     var results = [{
       text: "СПИД, как известно, не спит. А вы почти ничего о нём не знаете"
