@@ -303,7 +303,6 @@ body {
     position: relative;
     width: 1px;
     height: 1px;
-    /*top: 15000px;*/
 }
 .line {
     background-color: #A9242C;
@@ -332,7 +331,7 @@ body {
 }
 .ramblerIG {
   padding-top: 18px;
-    background-image: url("../ramblerIG.svg");
+    background-image: url("../img/ramblerIG.svg");
     float: right;
     width: 300px;
     height: 14px;
@@ -384,7 +383,7 @@ body {
     position: relative;
 }
 .plate1-after {
-    background-image: url("../ribon1.png");
+    background-image: url("../img/ribon1.png");
     background-repeat: repeat-x;
     background-position: center 394px;
     position: absolute;
@@ -443,13 +442,76 @@ body {
         font-family: 'PTSerif-Regular';
     }
 }
-.plate1 .content .item img:first-child {
-    padding-left: 338px;
-    padding-top: 15px;
+
+.plate1 .content .item:nth-child(2){
+  /*background: orange;*/
+  text-align: right;
+  font-size: 0px;
 }
+
+.social-btn {
+  font-size: 0;
+}
+
 .share-btn {
-    cursor: pointer;
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  /*background: tomato;*/
+  cursor: pointer;
 }
+
+.share-btn-big {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  /*background: tomato;*/
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.share-btn:nth-child(2) {
+  margin: 0 15px;
+}
+
+.share-btn-big:nth-child(2) {
+  margin: 0 25px;
+}
+
+.fb {
+  background-image: url("../img/fbIcon.png")
+}
+
+.tw {
+  background-image: url("../img/twIcon.png")
+}
+
+.vk {
+  background-image: url("../img/vkIcon.png")
+}
+
+
+.fb-big {
+  background-image: url("../img/fbIconBig.png")
+}
+
+.tw-big {
+  background-image: url("../img/twIconBig.png")
+}
+
+.vk-big {
+  background-image: url("../img/fbIconBig.png")
+}
+
+.scrollBtn {
+  background-image: url("../img/scrollDown.png");
+  width: 74px;
+  height: 74px;
+  margin: auto;
+  cursor: pointer;
+}
+
+
 .plate1 .content .item .head .important {
     color: #B42025;
 }
@@ -472,11 +534,7 @@ body {
 .footer {
     width: 100%;
 }
-.footer img {
-    display: block;
-    margin: auto;
-    cursor: pointer;
-}
+
 .plate1 .footer {
   padding-top: 40px;
 }
@@ -510,7 +568,7 @@ body {
     margin-top: 10px;
     width: 100%;
     height: 5px;
-    background-image: url("../redDotLine.png");
+    background-image: url("../img/redDotLine.png");
     background-repeat: no-repeat;
     background-position: bottom;
 }
@@ -718,7 +776,7 @@ body {
     position: relative;
 }
 .plate3-after {
-    background-image: url("../ribon2.png");
+    background-image: url("../img/ribon2.png");
     background-repeat: repeat-x;
     background-position: 50% 120px;
     position: absolute;
@@ -1113,7 +1171,7 @@ body {
         margin: 0 30px;
     }
     .year-select.less {
-        background-image: url("../arrowLeft.png");
+        background-image: url("../img/arrowLeft.png");
         width: 11px;
         height: 26px;
         background-repeat: no-repeat;
@@ -1121,7 +1179,7 @@ body {
         cursor: pointer;
     }
     .year-select.more {
-        background-image: url("../arrowRight.png");
+        background-image: url("../img/arrowRight.png");
         width: 11px;
         height: 26px;
         background-repeat: no-repeat;
@@ -1273,7 +1331,7 @@ body {
     position: absolute;
     right: 15px;
     top: 15px;
-    background-image: url("../close_button.svg");
+    background-image: url("../img/close_button.svg");
     cursor: pointer;
 }
 .banner .body .pie {
@@ -1443,7 +1501,7 @@ body {
     position: relative;
 }
 .plate6-after {
-    background-image: url("../ribon3.png");
+    background-image: url("../img/ribon3.png");
     background-repeat: repeat-x;
     background-position: 50% 775px;
     position: absolute;
@@ -1468,7 +1526,7 @@ body {
 @media screen and (max-width: 1023px) {
     .plate6-after {
         margin-top: 45px;
-        background-image: url("../ribon3-Mobile.png");
+        background-image: url("../img/ribon3-Mobile.png");
         background-position: 50% 1311px;
     }
     .plate6 .content {
@@ -1676,7 +1734,7 @@ body {
 }
 .plate7-after {
     content: "";
-    background-image: url("../ribon4.png");
+    background-image: url("../img/ribon4.png");
     background-repeat: repeat-x;
     background-position: 50% 335px;
     position: absolute;
@@ -1886,7 +1944,7 @@ body {
 }
 
 .plate7 .head {
-    background-image: url("../women1.png");
+    background-image: url("../img/women1.png");
     background-repeat: no-repeat;
     width: 194px;
     height: 194px;
@@ -1972,7 +2030,7 @@ body {
     position: relative;
 }
 .ribbon-slider-active {
-    background-image: url("../ribbon-slider.png");
+    background-image: url("../img/ribbon-slider.png");
     position: absolute;
     top: 0;
     left: 0;
@@ -1988,7 +2046,7 @@ body {
     opacity: 0;
 }
 .ribbon-slider-inactive {
-    background-image: url("../ribbon-slider-inactive.png");
+    background-image: url("../img/ribbon-slider-inactive.png");
     position: absolute;
     top: 0;
     left: 0;
@@ -2431,7 +2489,7 @@ body {
 }
 .plate10-after {
     content: "";
-    background-image: url("../ribon5.png");
+    background-image: url("../img/ribon5.png");
     background-repeat: repeat-x;
     ;
     background-position: 50% 166px;
@@ -2531,7 +2589,7 @@ body {
 }
 .plate10 .head {
     margin: 0 auto;
-    background-image: url("../men1.png");
+    background-image: url("../img/men1.png");
     background-repeat: no-repeat;
     width: 194px;
     height: 194px;
@@ -2690,7 +2748,7 @@ body {
     display: inline-block;
     width: 380px;
     height: 368px;
-    background-image: url("../top-spread.png");
+    background-image: url("../img/top-spread.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
@@ -2699,7 +2757,7 @@ body {
         display: inline-block;
         width: 100%;
         height: 314px;
-        background-image: url("../top-spread.png");
+        background-image: url("../img/top-spread.png");
         background-size: 100%;
         background-repeat: no-repeat;
         margin-bottom: 30px
@@ -2739,7 +2797,7 @@ body {
 }
 
 .plate11-after {
-  background-image: url("../ribon6.png");
+  background-image: url("../img/ribon6.png");
   background-repeat: repeat-x;
   background-position: 50% 185px;
   position: absolute;
@@ -2763,7 +2821,7 @@ body {
 }
 @media screen and (max-width: 1023px) {
     .plate11-after {
-        background-image: url("../ribon6-Mobile.png");
+        background-image: url("../img/ribon6-Mobile.png");
         background-repeat: repeat-x;
         background-position: 50% 247px;
     }
@@ -3099,7 +3157,7 @@ body {
 }
 @media screen and (max-width: 1023px) {
     .plate1-after {
-      background-image: url("../ribon1-Mobile.png");
+      background-image: url("../img/ribon1-Mobile.png");
       background-repeat: repeat-x;
       background-position: center 309px;
 
@@ -3107,7 +3165,7 @@ body {
 }
 @media screen and (max-width: 1023px) {
     .plate3-after {
-        background-image: url("../ribon2-Mobile.png");
+        background-image: url("../img/ribon2-Mobile.png");
         background-position: 50% 141px;
     }
 }
@@ -3143,7 +3201,7 @@ body {
 
 
 .whiteDotline {
-background-image: url("../whiteDotLine.png");
+background-image: url("../img/whiteDotLine.png");
 }
 
 
@@ -3162,3 +3220,5 @@ background-image: url("../whiteDotLine.png");
   text-decoration: none;
   color: #ffffff;
 }
+
+/*# sourceMappingURL=master.css.map */

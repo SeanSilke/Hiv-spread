@@ -1533,7 +1533,7 @@
       });
 
       //Show question
-      $('.footer img')[id].onclick = function () {
+      $('.scrollBtn')[id].onclick = function () {
         that.show();
       };
 
@@ -1643,7 +1643,7 @@
         render();
       });
 
-      $('.footer img')[id].onclick = function () {
+      $('.scrollBtn')[id].onclick = function () {
         that.show();
       };
 
@@ -1676,7 +1676,7 @@
 
       var that = this;
 
-      $('.footer img')[id].onclick = function () {
+      $('.scrollBtn')[id].onclick = function () {
         that.show();
       };
 
@@ -1764,7 +1764,7 @@
       });
     };
 
-    // getDataAndMap();
+    getDataAndMap();
 
     // keyReasonChart.show();
 
@@ -1773,9 +1773,8 @@
       newInfectedChartMobile.show();
     }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    quizElems.forEach(function (elem) {
-      return elem.init();
-    });
+    // quizElems.forEach(elem => elem.init());
+
 
     // quizElems.forEach(elem => elem.show());
 

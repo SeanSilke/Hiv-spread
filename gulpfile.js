@@ -3,17 +3,24 @@
 const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
 
 gulp.task("default", ["css","js"])
 
+
 gulp.task('css', () =>
     gulp.src('css/master.css')
+        .pipe(sourcemaps.init())
         .pipe(autoprefixer({
             browsers: ['last 20 version'],
             cascade: false
         }))
+        // .pipe(concat('all.css'))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist'))
 );
+
+
 
 
 

@@ -1714,7 +1714,7 @@
       });
 
       //Show question
-      $('.footer img')[id].onclick = function() {
+      $('.scrollBtn')[id].onclick = function() {
         that.show();
       }
 
@@ -1828,7 +1828,7 @@
         render();
       });
 
-      $('.footer img')[id].onclick = function() {
+      $('.scrollBtn')[id].onclick = function() {
         that.show();
       }
 
@@ -1861,7 +1861,7 @@
 
       let that = this;
 
-      $('.footer img')[id].onclick = function() {
+      $('.scrollBtn')[id].onclick = function() {
         that.show();
       };
 
@@ -1953,7 +1953,7 @@
     })
     }
 
-    // getDataAndMap();
+    getDataAndMap();
 
     // keyReasonChart.show();
 
@@ -1973,7 +1973,7 @@
     ];
 
 
-    quizElems.forEach(elem => elem.init());
+    // quizElems.forEach(elem => elem.init());
 
 
     // quizElems.forEach(elem => elem.show());
