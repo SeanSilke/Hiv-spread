@@ -749,18 +749,18 @@
   ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
   */
 
-  function DropDown(mapMain, mainElem) {
+  function DropDown(mapMain, dropDownElem) {
 
     var that = this;
     var isOpen = false;
 
-    var $select = mainElem.find(".head");
-    var scrollable = mainElem.find(".scrollable");
-    var closeImg = mainElem.find(" .close_button img");
+    var $select = dropDownElem.find(".head");
+    var scrollable = dropDownElem.find(".scrollable");
+    var closeImg = dropDownElem.find(" .close_button img");
 
     var container = scrollable.find(".content");
 
-    var head = mainElem.find(".text");
+    var head = dropDownElem.find(".text");
 
     $select.click(function (e) {
       e.stopPropagation();
@@ -824,21 +824,21 @@
       that.close();
     };
 
-    this.scroller = new Scroller(mainElem.find(".scrollable"));
+    this.scroller = new Scroller(dropDownElem.find(".scrollable"));
   }
 
-  function DropDownMobile(mapMain, mainElem) {
+  function DropDownMobile(mapMain, dropDownElem) {
     var that = this;
     var isOpen = false;
-    var $select = mainElem.find(" .head");
-    var scrollable = mainElem.find(".scrollable");
-    var closeImg = mainElem.find(" .close_button img");
+    var $select = dropDownElem.find(" .head");
+    var scrollable = dropDownElem.find(".scrollable");
+    var closeImg = dropDownElem.find(" .close_button img");
 
     var container = scrollable.find(".content");
 
-    var head = mainElem.find(".text");
+    var head = dropDownElem.find(".text");
 
-    var dropDownElems = mainElem.find(".togle-abs-rel");
+    var dropDownElems = dropDownElem.find(".togle-abs-rel");
 
     $select.click(function (e) {
       e.stopPropagation();
@@ -915,7 +915,7 @@
     var map = new Map(this);
     var legend = new Legend(this);
     var years = new Years(this);
-    var dropDown = new DropDown(this, $(".map.hide-mobile"));
+    var dropDown = new DropDown(this, $(".map.hide-mobile .item.drop_down"));
     var popUp = new PopUp(this, this.popUpElem, 40, false);
     var togleBtn = new TogleBtn(this);
     var play = new Play(this);
