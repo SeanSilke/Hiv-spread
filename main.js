@@ -819,18 +819,18 @@
   ██████  ██   ██  ██████  ██          ██████   ██████   ███ ███  ██   ████
   */
 
-  function DropDown(mapMain, mainElem) {
+  function DropDown(mapMain, dropDownElem) {
 
     let that = this;
     let isOpen = false;
 
-    let $select = mainElem.find(".head");
-    let scrollable = mainElem.find(".scrollable");
-    let closeImg = mainElem.find(" .close_button img");
+    let $select = dropDownElem.find(".head");
+    let scrollable = dropDownElem.find(".scrollable");
+    let closeImg = dropDownElem.find(" .close_button img");
 
     let container = scrollable.find(".content");
 
-    let head = mainElem.find(".text");
+    let head = dropDownElem.find(".text");
 
     $select.click(
       function(e) {
@@ -901,22 +901,22 @@
       that.close();
     };
 
-    this.scroller = new Scroller(mainElem.find(".scrollable"));
+    this.scroller = new Scroller(dropDownElem.find(".scrollable"));
   }
 
 
-  function DropDownMobile(mapMain, mainElem) {
+  function DropDownMobile(mapMain, dropDownElem) {
     let that = this;
     let isOpen = false;
-    let $select = mainElem.find(" .head");
-    let scrollable = mainElem.find(".scrollable");
-    let closeImg = mainElem.find(" .close_button img");
+    let $select = dropDownElem.find(" .head");
+    let scrollable = dropDownElem.find(".scrollable");
+    let closeImg = dropDownElem.find(" .close_button img");
 
     let container = scrollable.find(".content");
 
-    let head = mainElem.find(".text");
+    let head = dropDownElem.find(".text");
 
-    let dropDownElems = mainElem.find(".togle-abs-rel");
+    let dropDownElems = dropDownElem.find(".togle-abs-rel");
 
     $select.click(
       function(e) {
@@ -1000,7 +1000,7 @@
     let map = new Map(this);
     let legend = new Legend(this);
     let years = new Years(this);
-    let dropDown = new DropDown(this, $(".map.hide-mobile"));
+    let dropDown = new DropDown(this, $(".map.hide-mobile .item.drop_down"));
     let popUp = new PopUp(this, this.popUpElem, 40, false);
     let togleBtn = new TogleBtn(this);
     let play = new Play(this);
