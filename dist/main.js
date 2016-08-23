@@ -59,30 +59,14 @@
     var topPosition = $elem.offset().top;
 
     //перемотка к нужному месту
-    // $('body').clearQueue()
-    //   .animate({
-    //     scrollTop: topPosition,
-    //   }, {
-    //     duration: 1000,
-    //     done: ()=> disableScroll = false
-    //   });
-
-
-    $('body').velocity('stop').velocity('scroll', { duration: 750, offset: topPosition,
-      complete: function complete() {
-        console.log("hi");
-        disableScroll = false;
+    $('body').clearQueue().animate({
+      scrollTop: topPosition
+    }, {
+      duration: 1000,
+      done: function done() {
+        return disableScroll = false;
       }
     });
-
-    // window.scrollTo(0,topPosition);
-    // disableScroll = false
-
-    // console.log("hi",$('.main-container'),$elem.offset().top);
-    // $('.main-container').css({
-    //   "transform": "translateY("+ "-" +$elem.offset().top + "px)",
-    // })
-
   };
 
   var scrollToElemCenter = function scrollToElemCenter($elem, isLast) {
@@ -770,7 +754,7 @@
     var that = this;
     var isOpen = false;
 
-    var $select = mainElem.find(".drop_down .head");
+    var $select = mainElem.find(".head");
     var scrollable = mainElem.find(".scrollable");
     var closeImg = mainElem.find(" .close_button img");
 
@@ -1086,8 +1070,6 @@
         show: show
       };
     }();
-
-    // newInfectedChartMobile.show();
 
     var newInfectedChart = function () {
 
@@ -1729,13 +1711,13 @@
       };
 
       $sideBars.click(function () {
-        mainElems[parseInt(this.dataset.id)].show();
+        quizElems[parseInt(this.dataset.id)].show();
         select(parseInt(this.dataset.id));
       });
 
       var render = function render() {
 
-        mainElems.forEach(function (e, i) {
+        quizElems.forEach(function (e, i) {
           if (e.result && e.result) {
             $sideBars[i].classList.add("box-true");
           } else if (e.result === false) {
@@ -1786,16 +1768,16 @@
 
     // keyReasonChart.show();
 
-    var mainElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap), new hookUpQueston(2, $(".question-three"), 2, ".answer-three, .plate6-after", function () {
+    var quizElems = [new hookUpQueston(0, $(".question-one"), 2, ".plate3"), new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap), new hookUpQueston(2, $(".question-three"), 2, ".answer-three, .plate6-after", function () {
       newInfectedChart.show();
       newInfectedChartMobile.show();
     }), new hookUpValQueston(3, $(".question-four"), valPicker3, ".answer-four, .plate7-after"), new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show), new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"), new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"), new Footer(7)];
 
-    mainElems.forEach(function (elem) {
+    quizElems.forEach(function (elem) {
       return elem.init();
     });
 
-    // mainElems.forEach(elem => elem.show());
+    // quizElems.forEach(elem => elem.show());
 
 
     var results = [{
@@ -1808,7 +1790,7 @@
 
     var renderResult = function renderResult() {
 
-      var resultVal = mainElems.reduce(function (val, e) {
+      var resultVal = quizElems.reduce(function (val, e) {
         if (e instanceof hookUpValQueston || e instanceof hookUpQueston) {
           val = e.result ? val + 1 : val;
         }
@@ -1822,15 +1804,15 @@
     };
 
     var showNext = function showNext() {
-      for (var i = mainElems.length - 1; i >= 0; i--) {
-        var e = mainElems[i];
+      for (var i = quizElems.length - 1; i >= 0; i--) {
+        var e = quizElems[i];
         if (i == 0 && !e.isShown) {
-          mainElems[i].show();
+          quizElems[i].show();
           sideBars.show();
           return;
         }
-        if (e.isShown && e.result !== null && i < mainElems.length - 1) {
-          if (!mainElems[i + 1].isShown) mainElems[i + 1].show();
+        if (e.isShown && e.result !== null && i < quizElems.length - 1) {
+          if (!quizElems[i + 1].isShown) quizElems[i + 1].show();
           return;
         }
       }

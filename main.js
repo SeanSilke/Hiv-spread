@@ -62,33 +62,13 @@
   let topPosition =  $elem.offset().top
 
   //перемотка к нужному месту
-  // $('body').clearQueue()
-  //   .animate({
-  //     scrollTop: topPosition,
-  //   }, {
-  //     duration: 1000,
-  //     done: ()=> disableScroll = false
-  //   });
-
-
-    $('body')
-   .velocity('stop')
-   .velocity('scroll',
-      { duration: 750, offset: topPosition ,
-        complete: ()=> {
-            console.log("hi");
-            disableScroll = false}
-      });
-
-    // window.scrollTo(0,topPosition);
-    // disableScroll = false
-
-    // console.log("hi",$('.main-container'),$elem.offset().top);
-    // $('.main-container').css({
-    //   "transform": "translateY("+ "-" +$elem.offset().top + "px)",
-    // })
-
-
+  $('body').clearQueue()
+    .animate({
+      scrollTop: topPosition,
+    }, {
+      duration: 1000,
+      done: ()=> disableScroll = false
+    });
 
 
  }
@@ -844,7 +824,7 @@
     let that = this;
     let isOpen = false;
 
-    let $select = mainElem.find(".drop_down .head");
+    let $select = mainElem.find(".head");
     let scrollable = mainElem.find(".scrollable");
     let closeImg = mainElem.find(" .close_button img");
 
@@ -1109,9 +1089,12 @@
       display: "abs"
     };
 
-
-    let dropDown = new DropDown(this, $(".map.hide-desktop .item.drop_down:last-of-type"));
-    let dropDownMobile = new DropDownMobile(this, $(".map.hide-desktop .item.drop_down").first());
+    let dropDown = new DropDown(this,
+                        $(".map.hide-desktop .item.drop_down:last-of-type")
+                      );
+    let dropDownMobile = new DropDownMobile(this,
+                            $(".map.hide-desktop .item.drop_down").first()
+                      );
     let popUp = new PopUp(this, $(".hide-desktop .banner"), 50, true);
     let yearSelect = new YearSelect(this, $('.year-select'));
 
@@ -1213,8 +1196,6 @@
       }
 
     })();
-
-    // newInfectedChartMobile.show();
 
     let newInfectedChart = (() => {
 
@@ -1916,13 +1897,13 @@
       }
 
       $sideBars.click(function() {
-        mainElems[parseInt(this.dataset.id)].show();
+        quizElems[parseInt(this.dataset.id)].show();
         select(parseInt(this.dataset.id))
       })
 
       let render = () => {
 
-        mainElems.forEach((e, i) => {
+        quizElems.forEach((e, i) => {
           if (e.result && e.result) {
             $sideBars[i].classList.add("box-true")
           } else if (e.result === false) {
@@ -1976,7 +1957,7 @@
 
     // keyReasonChart.show();
 
-    let mainElems = [
+    let quizElems = [
       new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
       new hookUpQueston(1, $(".question-two"), 3, ".plate5", getDataAndMap),
       new hookUpQueston(2, $(".question-three"), 2, ".answer-three, .plate6-after",
@@ -1992,10 +1973,10 @@
     ];
 
 
-    mainElems.forEach(elem => elem.init());
+    quizElems.forEach(elem => elem.init());
 
 
-    // mainElems.forEach(elem => elem.show());
+    // quizElems.forEach(elem => elem.show());
 
 
     let results = [{
@@ -2009,7 +1990,7 @@
 
     let renderResult = function() {
 
-      let resultVal = mainElems.reduce((val, e) => {
+      let resultVal = quizElems.reduce((val, e) => {
         if (e instanceof hookUpValQueston || e instanceof hookUpQueston) {
           val = (e.result) ? val + 1 : val
         }
@@ -2024,15 +2005,15 @@
 
 
     let showNext = () => {
-      for (let i = mainElems.length - 1; i >= 0; i--) {
-        let e = mainElems[i];
+      for (let i = quizElems.length - 1; i >= 0; i--) {
+        let e = quizElems[i];
         if (i == 0 && !e.isShown) {
-          mainElems[i].show();
+          quizElems[i].show();
           sideBars.show()
           return;
         }
-        if (e.isShown && e.result !== null && i < mainElems.length - 1) {
-          if (!mainElems[i + 1].isShown) mainElems[i + 1].show();
+        if (e.isShown && e.result !== null && i < quizElems.length - 1) {
+          if (!quizElems[i + 1].isShown) quizElems[i + 1].show();
           return;
         }
       }
