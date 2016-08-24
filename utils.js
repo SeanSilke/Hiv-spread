@@ -42,4 +42,22 @@ let addMouseewheelEvent = function(elem, fn) {
 
 }
 
-export {getColor,addMouseewheelEvent, getColorMeta}
+let showElem = ($elem) => {
+
+  $elem.css({
+      display: "block",
+    }).clearQueue()
+    .animate({
+      opacity: 1
+    }, 1000);
+};
+
+let hideElem = ($elem) => {
+  $elem.css({
+    display: "none",
+    opacity: 0,
+    transition: "opacity 1s"
+  });
+};
+
+export {getColor,addMouseewheelEvent, getColorMeta,showElem, hideElem}

@@ -1,13 +1,26 @@
 "use strict";
 
+  let a = 10;
   import {addMouseewheelEvent} from "./utils";
-  import {getColor} from "./utils";
+  import {getColor,showElem,hideElem} from "./utils";
 
 
   import RegInfo from "./RegInfo"
   import RegInfoMobile from "./RegInfoMobile";
 
-  import newInfectedChartMobile from "./newInfectedChartMobile"
+  import newInfectedChartMobile from "./newInfectedChartMobile";
+  import newInfectedChart from "./newInfectedChart";
+  import keyReasonChart from "./keyReasonChart";
+
+  import share from "./share.js";
+  import SideBars from "./SideBars"
+
+  import Footer from "./Footer"
+
+  // import eventEmitter from "wolfy87-eventemitter"
+
+  // console.log(eventEmitter);
+
 
 
 (function() {
@@ -20,7 +33,7 @@
    ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
   */
 
-  let disableScroll = false;
+  let  disableScroll = false;
 
 
   /*
@@ -34,6 +47,8 @@
 
 
  let scrollToElemTop = ($elem, isLast) => {
+
+   console.log(disableScroll);
 
    let winHeight = $(window).height()
 
@@ -110,23 +125,6 @@
 
   }
 
-  let showElem = ($elem) => {
-
-    $elem.css({
-        display: "block",
-      }).clearQueue()
-      .animate({
-        opacity: 1
-      }, 1000);
-  };
-
-  let hideElem = ($elem) => {
-    $elem.css({
-      display: "none",
-      opacity: 0,
-      transition: "opacity 1s"
-    });
-  };
 
   let doElsCollide = function(el1, el2) {
 
@@ -294,188 +292,6 @@
 
 
   $(function() {
-
-
-    let newInfectedChart = (() => {
-
-      let data = [
-        100,
-        203,
-        1513,
-        4315,
-        3971,
-        19758,
-        59609,
-        88739,
-        52170,
-        39232,
-        37002,
-        39407,
-        43007,
-        44713,
-        54563,
-        58410,
-        58298,
-        62387,
-        70832,
-        79764,
-        89667,
-        93000,
-      ];
-
-
-      let bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
-
-
-      let startColor = [228, 152, 152];
-      let endColor = [190, 32, 37];
-      let max = 100 * 1000;
-
-      let i = 0;
-
-      let rendernewInfected = function() {
-        if (i >= data.length) {
-          let labels = document.querySelectorAll('.newInfected_label_text');
-          [].forEach.call(labels, elem => elem.style.opacity = 0.9);
-          return;
-        }
-        let val = data[i];
-        if (val < 4000) {
-          bars[i].style.backgroundColor = 'rgb(24,179,172)';
-          bars[i].style.marginTop = 260 * 0.98 + "px";
-        } else {
-          let color = getColorMeta(startColor, endColor, val / max);
-          bars[i].style.backgroundColor = `rgb(${color})`;
-          bars[i].style.marginTop = (1 - val / max) * 260 + "px";
-        }
-
-        if (i == 3) {
-          bars[i].style.backgroundColor = 'rgb(24,179,172)';
-        }
-
-        i++;
-        setTimeout(rendernewInfected, 30);
-      };
-
-      let show = () => {
-
-        setTimeout(function() {
-          rendernewInfected();
-        }, 1000);
-
-      };
-
-      return {
-        show
-      }
-
-    })();
-
-
-    // newInfectedChart.show();
-
-
-    let keyReasonChart = (() => {
-
-      //	Наркотики	Гетеросекс.	Гомосекс.	От матерей
-
-      //как расположенны бары на диаграмме
-      let barsPosition = ["drags", "fromMather", "hetero", "homo"];
-
-
-      //как представленые данные в элементе матрици
-      let legend = {
-        drags: 0,
-        hetero: 1,
-        homo: 2,
-        fromMather: 3
-      };
-
-      let valMatrix = [
-        [3.3, 43, 53, 0.7],
-        [6, 41, 52.9, 0.1],
-        [84, 7, 8.7, 0.3],
-        [87, 10.9, 1.9, 0.2],
-        [79.1, 17.8, 2.7, 0.4],
-        [91.8, 7.4, 0.6, 0.1],
-        [95.5, 4.2, 0.2, 0.1],
-        [93.2, 6.4, 0.2, 0.2],
-        [81.2, 17.7, 0.4, 0.7],
-        [72.3, 25.4, 0.5, 1.7],
-        [66.7, 29.9, 0.8, 2.5],
-        [64.1, 31.8, 1.1, 3.0],
-        [63.3, 33.0, 0.7, 2.9],
-        [61.5, 35.2, 1.0, 2.3],
-        [61.3, 35.6, 1.1, 2.0],
-        [59.8, 37, 1.4, 1.8],
-        [57.9, 39.7, 1.3, 1.1],
-        [56.2, 41.4, 1.3, 1.1],
-        [56.4, 41.7, 1.1, 0.8],
-        [54.9, 43.1, 1, 1.0],
-        [58.4, 39.7, 1.1, 0.8]
-      ];
-
-      let defYearVal = [25, 25, 25, 25];
-
-      let years = document.querySelectorAll('.key-reason-canvas .year');
-
-      let yearsMobile = document.querySelectorAll(".key-reason-mobile .year");
-
-      let setValue = function(year, valArr) {
-        let bars = year.querySelectorAll(".bar");
-        [].forEach.call(bars, function(elem, i) {
-          let name = barsPosition[i];
-          let percent = valArr[legend[name]];
-          elem.classList.add(name);
-          elem.style.height = percent + "%";
-        });
-      };
-
-      let setValueMobile = function(year, valArr) {
-        let bars = year.querySelectorAll(".bar");
-        [].forEach.call(bars, function(elem, i) {
-          let name = barsPosition[i];
-          let percent = valArr[legend[name]];
-          elem.classList.add(name);
-          elem.style.width = percent + "%";
-        });
-      };
-
-      let setYears = (i, fn, years) => {
-        if (i > years.length - 1) {
-          $(".key-reason-mobile-year-text").css({
-            opacity: 0.9,
-          })
-          return;
-        }
-        fn(years[i], valMatrix[i]);
-        setTimeout(setYears, 80, ++i, fn, years);
-      };
-
-      let startIndex = 0;
-
-      let show = () => {
-        // setYears(startIndex, setValue, years)
-        setTimeout(setYears, 1000, 0, setValue, years);
-        setTimeout(setYears, 1000, 0, setValueMobile, yearsMobile);
-      }
-
-      //move init to some global init
-
-      let initYears = (i, fn, years) => {
-        if (i > 20) return;
-        fn(years[i], defYearVal);
-        initYears(++i, fn, years);
-      };
-
-      initYears(startIndex, setValue, years);
-      initYears(startIndex, setValueMobile, yearsMobile)
-
-      return {
-        show: show,
-      }
-
-    })();
 
 
     /*
@@ -950,110 +766,43 @@
       this.init = init;
     };
 
-    function Footer(id) {
-
-      let footer = $(".plate11, .line.bottom");
-
-      this.init = function() {
-        hideElem(footer)
-      };
-
-      let that = this;
-
-      $('.scrollBtn')[id].onclick = function() {
-        that.show();
-      };
-
-      this.show = function() {
-        sideBars.select(id);
-        this.isShown = true;
-        showElem(footer)
-        scrollToElemTop($($('.footer')[id]),true)
-        renderResult();
-      };
-
-    }
-
-    /*
-    ███████ ██ ██████  ███████ ██████   █████  ██████  ███████
-    ██      ██ ██   ██ ██      ██   ██ ██   ██ ██   ██ ██
-    ███████ ██ ██   ██ █████   ██████  ███████ ██████  ███████
-         ██ ██ ██   ██ ██      ██   ██ ██   ██ ██   ██      ██
-    ███████ ██ ██████  ███████ ██████  ██   ██ ██   ██ ███████
-    */
-
-    function SideBars() {
-      let state = {
-        isVisible: null,
-      }
-
-      let $mainElem = $(".side-panel");
-      let $sideBars = $(".side-box");
-
-      let select = (i) => {
-        $sideBars.removeClass("box-selected")
-        $sideBars[i] && $sideBars[i].classList.add("box-selected");
-      }
-
-      $sideBars.click(function() {
-        quizElems[parseInt(this.dataset.id)].show();
-        select(parseInt(this.dataset.id))
-      })
-
-      let render = () => {
-
-        quizElems.forEach((e, i) => {
-          if (e.result && e.result) {
-            $sideBars[i].classList.add("box-true")
-          } else if (e.result === false) {
-            $sideBars[i].classList.add("box-false")
-          }
-        })
-      }
 
 
-      this.isShown = false
-      this.select = select;
-      this.render = render;
-      this.show = function(){
-        this.isShown = true;
-        showElem($mainElem)
-      }
-    }
-
-    let sideBars = new SideBars();
 
     let getDataAndMap = function() {
-      $(".map_body").load("map.svg",function() {
+      $(".map_body").load("map.svg", function() {
 
-      let blob = null;
-      let xhr = new XMLHttpRequest();
-      xhr.open("GET", "HIV_Data_by_reg.csv");
-      xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
-      xhr.onload = function() {
-        blob = xhr.response; //xhr.response is now a blob object
-        myReader.readAsText(blob);
-      };
-      xhr.send();
+          let blob = null;
+          let xhr = new XMLHttpRequest();
+          xhr.open("GET", "HIV_Data_by_reg.csv");
+          xhr.responseType = "blob"; //force the HTTP response, response-type header to be blob
+          xhr.onload = function() {
+            blob = xhr.response; //xhr.response is now a blob object
+            myReader.readAsText(blob);
+          };
+          xhr.send();
 
-      let myReader = new FileReader();
-      myReader.addEventListener("loadend", function(e) {
+          let myReader = new FileReader();
+          myReader.addEventListener("loadend", function(e) {
 
-        let data = newDataProseed(e.srcElement.result);
-        let regInfo = new RegInfo(data);
-        let regInfoMobile = new RegInfoMobile(data)
-        regInfo.init()
-        regInfo.render();
-        regInfoMobile.init();
-        regInfoMobile.render();
-      });
-    })
-    }
+            let data = newDataProseed(e.srcElement.result);
+            let regInfo = new RegInfo(data);
+            let regInfoMobile = new RegInfoMobile(data)
+            regInfo.init()
+            regInfo.render();
+            regInfoMobile.init();
+            regInfoMobile.render();
+          });
+        })
+      }
 
     getDataAndMap();
 
     // keyReasonChart.show();
-      newInfectedChartMobile.show();
+    // newInfectedChartMobile.show();
+
+    let footer = new Footer(7);
+
 
     let quizElems = [
       new hookUpQueston(0, $(".question-one"), 2, ".plate3"),
@@ -1067,11 +816,18 @@
       new hookUpValQueston(4, $(".question-five"), valPicker2, ".answer-five", keyReasonChart.show),
       new hookUpValQueston(5, $(".question-six"), valPicker, ".answer-six"),
       new hookUpQueston(6, $(".question-seven"), 1, ".answer-seven, .plate10-after"),
-      new Footer(7),
+      footer,
     ];
 
+    let sideBars = new SideBars(quizElems);
 
-    // quizElems.forEach(elem => elem.init());
+    footer.ee.on("show", (e)=>{
+      sideBars.select(e);
+      renderResult();
+    })
+
+
+    quizElems.forEach(elem => elem.init());
 
 
     // quizElems.forEach(elem => elem.show());
@@ -1145,45 +901,10 @@
     }
   });
 
-  /*
-  ███████ ██   ██  █████  ██████  ███████     ██████  ████████ ███    ██
-  ██      ██   ██ ██   ██ ██   ██ ██          ██   ██    ██    ████   ██
-  ███████ ███████ ███████ ██████  █████       ██████     ██    ██ ██  ██
-       ██ ██   ██ ██   ██ ██   ██ ██          ██   ██    ██    ██  ██ ██
-  ███████ ██   ██ ██   ██ ██   ██ ███████     ██████     ██    ██   ████
-  */
 
-  $(".share-btn").click(function() {
-    console.log(this.dataset.network);
+
+  $(".share-btn, .share-btn-big").click(function() {
     share(this.dataset.network);
   })
-
-
-  let share = (network) => {
-
-    let title = "Россия на пороге эпидемии ВИЧ";
-    let description = "Тревожные факты о масштабах бедствия — в спецпроекте «Газеты.Ru»";
-    let link = "http://dyn.ig.rambler.ru/HIV-spread/";
-    let closeLink = "http://dyn.ig.rambler.ru/HIV-spread/close.html"
-    let twitterText = title + "." + " " + description;
-    let image = "http://dyn.ig.rambler.ru/HIV-spread/share-img.png"
-
-    if (network == "vk") {
-      let url = "http://vk.com/share.php?url=" + link + "&description=" +
-        description + "&image=" + image + "&title=" + title;
-      window.open(url, "_blank", "width=400,height=500");
-    } else if (network == "fb") {
-      let appId = 610415715785775;
-      let url = "https://www.facebook.com/dialog/feed?app_id=" + appId +
-        "&description=" + description + "&display=popup&link=" + link + "&name=" + title + "&next=" +
-        closeLink + "&picture=" + image;
-      window.open(url, "_blank", "width=400,height=500");
-    } else if (network == "tw") {
-      let url = "https://twitter.com/intent/tweet?original_referer=" + link +
-        "&text=" + twitterText + "&tw_p=tweetbutton&url=" + link;
-      window.open(url, "_blank", "width=400,height=500");
-    }
-
-  }
 
 })();

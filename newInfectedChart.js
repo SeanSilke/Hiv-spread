@@ -1,14 +1,12 @@
-
 import {getColorMeta} from "./utils";
 import {newInfectedData} from "./Data.js"
 
-
-let newInfectedChartMobile = (() => {
+let newInfectedChart = (() => {
 
   let data = newInfectedData;
 
 
-  let bars = document.querySelectorAll('.chart.newInfected-mobile .body .canvas .block');
+  let bars = document.querySelectorAll('.chart.newInfected .body .canvas .bar');
 
 
   let startColor = [228, 152, 152];
@@ -26,11 +24,11 @@ let newInfectedChartMobile = (() => {
     let val = data[i];
     if (val < 4000) {
       bars[i].style.backgroundColor = 'rgb(24,179,172)';
-      bars[i].style.marginLeft = -190 * 0.98 + "px";
+      bars[i].style.marginTop = 260 * 0.98 + "px";
     } else {
       let color = getColorMeta(startColor, endColor, val / max);
       bars[i].style.backgroundColor = `rgb(${color})`;
-      bars[i].style.marginLeft = (0 - 190) * (1 - val / max) + "px";
+      bars[i].style.marginTop = (1 - val / max) * 260 + "px";
     }
 
     if (i == 3) {
@@ -55,4 +53,5 @@ let newInfectedChartMobile = (() => {
 
 })();
 
-export default  newInfectedChartMobile;
+
+export default newInfectedChart;
