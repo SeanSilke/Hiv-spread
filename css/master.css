@@ -424,7 +424,6 @@ body {
 }
 
 .plate1 .content .item:nth-child(2){
-  /*background: orange;*/
   text-align: right;
   font-size: 0px;
 }
