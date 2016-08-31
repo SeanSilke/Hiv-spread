@@ -2,7 +2,7 @@
 
   let a = 10;
   import {addMouseewheelEvent} from "./utils";
-  import {getColor,showElem,hideElem} from "./utils";
+  import {getColor,showElem,hideElem, scrollToElemTop} from "./utils";
 
 
   import RegInfo from "./RegInfo"
@@ -33,7 +33,7 @@
    ██████  ███████  ██████  ██████  ██   ██ ███████ ███████
   */
 
-  let  disableScroll = false;
+  window.disableScroll = false;
 
 
   /*
@@ -44,86 +44,6 @@
   ███████ ██ ██████  ██   ██ ██   ██ ██   ██    ██        ██       ██████  ██   ████  ██████    ██    ██  ██████  ██   ████ ███████
   */
 
-
-
- let scrollToElemTop = ($elem, isLast) => {
-
-   console.log(disableScroll);
-
-   let winHeight = $(window).height()
-
-   let helperElem = $('.prop');
-
-   let setHelperPosotin = (winHeight,$elem) => {
-     let helperPosition = ($elem.offset().top + winHeight);
-
-     if ( helperPosition > helperElem.offset().top) {
-       helperElem.css({
-         top: helperPosition
-       });
-     }
-   }
-
-  if(!isLast) setHelperPosotin(winHeight ,$elem);
-
-
-  let topPosition =  $elem.offset().top
-
-  //перемотка к нужному месту
-  $('body').clearQueue()
-    .animate({
-      scrollTop: topPosition,
-    }, {
-      duration: 1000,
-      done: ()=> disableScroll = false
-    });
-
-
- }
-
-
-  let scrollToElemCenter = ($elem, isLast) => {
-
-    let setHelperPosotin = (winHeight,$elem) => {
-      let helperPosition = ($elem.offset().top + $elem.height() / 2 + winHeight / 2);
-
-      if ( helperPosition > $('.prop').offset().top) {
-        $('.prop').css({
-          top: helperPosition
-        });
-      }
-    }
-
-    disableScroll = true;
-
-    let winHeight = $(window).height()
-
-    //Добавление элемента
-    if (!isLast) {
-      setHelperPosotin(winHeight,$elem);
-    }
-
-    //определение финальной позиции
-    let scrollTo;
-
-
-    // если элемнет больше размера экрана то прокрутка будте до его верха
-    // if ( $elem.height() < winHeight){
-      scrollTo =  $elem.offset().top - winHeight / 2 + $elem.height() / 2
-    // }else {
-    //   scrollTo =  $elem.offset().top;
-    // }
-
-    //перемотка к нужному месту
-    $('html, body').clearQueue()
-      .animate({
-        scrollTop: scrollTo
-      }, {
-        duration: 1000,
-        done: ()=> disableScroll = false
-      });
-
-  }
 
 
   let doElsCollide = function(el1, el2) {
@@ -599,7 +519,7 @@
       let render = function() {
         if (state.isAnswered) {
           removeButton();
-          disableScroll = true;
+          window.disableScroll = true;
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
           sideBars.render();
@@ -686,7 +606,7 @@
 
       let render = function() {
         if (state.isAnswered) {
-          disableScroll = true;
+          window.disableScroll = true;
           removeButton();
           setTimeout(showAnswers, 1000);
           question.addClass("answered");
@@ -881,7 +801,7 @@
     function onWheel(e) {
       e = e || window.event;
 
-      if (disableScroll) {
+      if (window.disableScroll) {
         e.preventDefault ? e.preventDefault() : (e.returnValue = false);
         return;
       }
